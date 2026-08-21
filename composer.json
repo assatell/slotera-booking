@@ -1,0 +1,19 @@
+{
+  "name": "slotera/booking-release",
+  "description": "Reproducible QA entry points for the Slotera Booking production package.",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=8.0"
+  },
+  "scripts": {
+    "lint": "@php tools/qa.php lint",
+    "test": "@php tools/qa.php test",
+    "verify-release": "@php tools/qa.php verify-release",
+    "qa": [
+      "@lint",
+      "@test",
+      "@verify-release"
+    ]
+  },
+  "license": "GPL-2.0-or-later"
+}

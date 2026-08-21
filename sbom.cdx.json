@@ -1,0 +1,52 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:3ca5825e-cc42-4f9e-8bc2-66f0d8f0059d",
+  "version": 1,
+  "metadata": {
+    "component": {
+      "type": "application",
+      "name": "Slotera Booking",
+      "version": "1.0.1038",
+      "licenses": [
+        {
+          "license": {
+            "id": "GPL-2.0-or-later"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "slotera:release-candidate",
+          "value": "RC66.12.9"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "file",
+      "name": "NotoSans-Slotera.ttf",
+      "version": "2.015",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "478c558ea716033cd60c03438f628dfa75694dcf6b5f6d505a2f05fd2b4f3823"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "OFL-1.1"
+          }
+        }
+      ],
+      "properties": [
+        {
+          "name": "slotera:path",
+          "value": "assets/fonts/NotoSans-Slotera.ttf"
+        }
+      ]
+    }
+  ]
+}

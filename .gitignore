@@ -1,0 +1,30 @@
+/build/releases/
+
+# Environment / local configuration
+.env
+.env.*
+!.env.example
+
+# Private keys / certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# WordPress local config
+wp-config.php
+wp-config-*.php
+
+# Logs / backups / temporary files
+*.log
+*.bak
+*.backup
+*.tmp
+
+/backups/
+/dumps/
+/tmp/
+/temp/
+
+# Release archives
+*.zip

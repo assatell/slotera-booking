@@ -1,0 +1,27 @@
+<?php if (!defined('ABSPATH')) { exit; } ?>
+                        <section class="sltr-booking-block <?php echo esc_attr($sltr_active_mode === 'fixed' ? 'is-active' : ''); ?>" data-mode="fixed">
+                            <h2>
+                                <label><input type="radio" name="booking_mode_selector" value="fixed" <?php checked($sltr_active_mode, 'fixed'); ?>> <?php esc_html_e('Fixed', 'slotera-booking'); ?></label>
+                            </h2>
+                            <p class="description"><?php esc_html_e('Fixed time-slot bookings with a fixed duration and capacity per slot.', 'slotera-booking'); ?></p>
+                            <div class="sltr-booking-block-body">
+                                <p><label><?php esc_html_e('Booking button text', 'slotera-booking'); ?></label><br>
+                                    <input type="text" class="regular-text" maxlength="120" name="mode_config[fixed][booking_button_text]" value="<?php echo esc_attr((string) $sltr_mode_value('fixed', 'booking_button_text', '')); ?>" placeholder="<?php esc_attr_e('Use your own text for the button', 'slotera-booking'); ?>"><br>
+                                    <span class="description"><?php esc_html_e('Default: Book now. Leave the field empty to use the default localized text.', 'slotera-booking'); ?></span>
+                                </p>
+                                <?php $sltr_admin_render_preview_panel('fixed', __('Fixed slot setup', 'slotera-booking'), __('Use when customers choose one predefined slot with a fixed duration.', 'slotera-booking')); ?>
+                                <p><label><?php esc_html_e('Duration', 'slotera-booking'); ?></label><br><?php $sltr_mode_duration_input('fixed', 'duration_minutes', (int) $sltr_mode_value('fixed', 'duration_minutes', 60), 1); ?></p>
+                                <p><input type="hidden" name="mode_config[fixed][full_day_booking]" value="0"><label><input type="checkbox" name="mode_config[fixed][full_day_booking]" value="1" <?php checked((int) $sltr_mode_value('fixed', 'full_day_booking', 0), 1); ?>> <strong><?php esc_html_e('24-hour / multi-day booking', 'slotera-booking'); ?></strong></label><br><span class="description"><?php esc_html_e('Customer chooses a start date and time plus an end date. Each additional 24-hour day adds the package price.', 'slotera-booking'); ?></span></p>
+                                <p><input type="hidden" name="mode_config[fixed][show_duration]" value="0"><input type="hidden" name="show_duration_frontend_fixed" value="0"><label><input type="checkbox" class="sltr-show-duration-checkbox" data-mode="fixed" name="mode_config[fixed][show_duration]" value="1" <?php checked((int) (($sltr_active_mode === 'fixed' && array_key_exists('show_duration_frontend', $package)) ? ($package['show_duration_frontend'] ?? 0) : $sltr_mode_value('fixed', 'show_duration', 0)), 1); ?> onchange="this.form.querySelector('input[name=&quot;show_duration_frontend_fixed&quot;]').value=this.checked?'1':'0';"> <?php esc_html_e('Show duration on frontend', 'slotera-booking'); ?></label><br><span class="description"><?php esc_html_e('Applies to package cards, solo page and booking form summary.', 'slotera-booking'); ?></span></p>
+                                <p><label><?php esc_html_e('Max bookings per slot', 'slotera-booking'); ?></label><br><input type="number" min="1" max="999" name="mode_config[fixed][max_bookings_per_slot]" value="<?php echo esc_attr((string) $sltr_mode_value('fixed', 'max_bookings_per_slot', 1)); ?>"></p>
+                                <p><label><?php esc_html_e('Price', 'slotera-booking'); ?></label><br><input type="number" step="0.01" min="0" name="mode_config[fixed][price]" value="<?php echo esc_attr((string) $sltr_mode_value('fixed', 'price', 0)); ?>"></p>
+                                <p><label><?php esc_html_e('Discount', 'slotera-booking'); ?></label><br>
+                                    <select name="mode_config[fixed][discount_type]"><option value="none" <?php selected($sltr_mode_value('fixed', 'discount_type', 'none'), 'none'); ?>><?php esc_html_e('None', 'slotera-booking'); ?></option><option value="percent" <?php selected($sltr_mode_value('fixed', 'discount_type', ''), 'percent'); ?>><?php esc_html_e('Percent', 'slotera-booking'); ?></option><option value="fixed" <?php selected($sltr_mode_value('fixed', 'discount_type', ''), 'fixed'); ?>><?php esc_html_e('Fixed amount', 'slotera-booking'); ?></option></select>
+                                    <input type="number" step="0.01" min="0" name="mode_config[fixed][discount_value]" value="<?php echo esc_attr((string) $sltr_mode_value('fixed', 'discount_value', 0)); ?>">
+                                </p>
+                                <p><label><?php esc_html_e('Campaign note', 'slotera-booking'); ?></label><br><input class="regular-text" name="mode_config[fixed][campaign_note]" value="<?php echo esc_attr((string) $sltr_mode_value('fixed', 'campaign_note', '')); ?>"><span class="description"> <?php esc_html_e('Optional public urgency note shown on frontend, e.g. Offer ends soon.', 'slotera-booking'); ?></span></p>
+                                <?php $sltr_render_low_availability_fields('fixed'); ?>
+                                <?php sltr_render_pricing_adjustment_fields('fixed', $sltr_mode_value); ?>
+                                <?php sltr_render_payment_policy_fields('fixed', $sltr_mode_value); ?>
+                            </div>
+                        </section>

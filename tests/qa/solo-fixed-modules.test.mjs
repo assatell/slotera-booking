@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+const solo=fs.readFileSync(new URL('../../includes/Admin/Views/package-form/sections/solo-content.php',import.meta.url),'utf8');
+const js=fs.readFileSync(new URL('../../assets/js/admin-package-editor.js',import.meta.url),'utf8');
+const view=fs.readFileSync(new URL('../../includes/Frontend/Views/package-detail.php',import.meta.url),'utf8');
+const schema=fs.readFileSync(new URL('../../includes/Core/DatabaseSchemaInstaller.php',import.meta.url),'utf8');
+assert.ok(solo.includes('Solo page top title/text block'));
+assert.ok(solo.includes('Solo page down contact block'));
+assert.equal((solo.match(/Insert image\/slider/g)||[]).length,1);
+assert.equal((solo.match(/Insert \[slotera_contact\]/g)||[]).length,1);
+assert.ok(js.includes("mediaField.value = '[slotera_package_media id=\"media\"]'"));
+assert.ok(view.includes('contact-block-default.webp'));
+assert.ok(view.includes('sltr-package-contact-aside'));
+assert.ok(schema.includes('solo_contact_details_json'));
+console.log('fixed Solo modules: ok');

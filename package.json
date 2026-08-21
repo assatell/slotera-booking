@@ -1,0 +1,10 @@
+{
+  "name": "slotera-booking-release-qa",
+  "private": true,
+  "version": "1.0.1038",
+  "packageManager": "pnpm@9.15.9",
+  "scripts": {
+    "test": "node --test tests/qa/*.test.mjs"
+  },
+  "license": "GPL-2.0-or-later"
+}

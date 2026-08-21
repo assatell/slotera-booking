@@ -1,0 +1,1833 @@
+{
+  "schema_version": 1,
+  "plugin_version": "1.0.400",
+  "generated_at": "2026-05-19T13:32:06+00:00",
+  "description": "Frozen customer-facing Slotera translation key contract (frontend and emails only). Admin UI is intentionally English-only and is excluded from the public translation freeze.",
+  "key_count": 363,
+  "groups": {
+    "emails": 73,
+    "frontend": 290
+  },
+  "keys": {
+    "email.booking.confirmation_intro": {
+      "group": "emails",
+      "default_sha1": "e3b2248194a4c7e7725fb2f35eb528de1edf98ed",
+      "placeholder_signature": ""
+    },
+    "email.booking.confirmation_subject": {
+      "group": "emails",
+      "default_sha1": "09c49f847f0a592f227fc74e1ceddae8cdb12a33",
+      "placeholder_signature": ""
+    },
+    "emails.actions": {
+      "group": "emails",
+      "default_sha1": "c3cd636a585b20c40ac2df5ffb403e83cb2eef51",
+      "placeholder_signature": ""
+    },
+    "emails.admin_notification_email": {
+      "group": "emails",
+      "default_sha1": "fb6ff0902984a7d0d6172f59dd5030745acb20de",
+      "placeholder_signature": ""
+    },
+    "emails.after_booking_automation_value": {
+      "group": "emails",
+      "default_sha1": "bd68ba154943ba3fa060a93988aa5b02b0d62ba9",
+      "placeholder_signature": "%s"
+    },
+    "emails.available_placeholders": {
+      "group": "emails",
+      "default_sha1": "dc699050b385fa256b07e263d8baa3efe80abd41",
+      "placeholder_signature": ""
+    },
+    "emails.awaiting_manual_payment": {
+      "group": "emails",
+      "default_sha1": "ff9569c6d2872df200a219809066487cf4a8c49d",
+      "placeholder_signature": ""
+    },
+    "emails.awaiting_payment": {
+      "group": "emails",
+      "default_sha1": "9a08b57abd6cd47cb3b8434cad1fbf0f7497f990",
+      "placeholder_signature": ""
+    },
+    "emails.back_to_emails": {
+      "group": "emails",
+      "default_sha1": "2a0afcb8ea43ad295afb22a659b9d477a4585dd8",
+      "placeholder_signature": ""
+    },
+    "emails.book_now": {
+      "group": "emails",
+      "default_sha1": "a4fba6976adf4c2940eccf8668dc425ee8b90f1b",
+      "placeholder_signature": ""
+    },
+    "emails.campaign_preview": {
+      "group": "emails",
+      "default_sha1": "69496ed4d267c5e221caf256c56130229b102e1d",
+      "placeholder_signature": ""
+    },
+    "emails.campaign_preview_is_not_available": {
+      "group": "emails",
+      "default_sha1": "8ab08ddcb0fd6f4b3ee28211950ea1405083a9ce",
+      "placeholder_signature": ""
+    },
+    "emails.cancelled": {
+      "group": "emails",
+      "default_sha1": "a1bf92eff40dd4adea2328f9e0f7c938ae031dec",
+      "placeholder_signature": ""
+    },
+    "emails.come_back_automation_value": {
+      "group": "emails",
+      "default_sha1": "8a69c0dd7a90537462f665f3e3fee0e1bab58d27",
+      "placeholder_signature": "%s"
+    },
+    "emails.completed": {
+      "group": "emails",
+      "default_sha1": "1798b3ba42ee08ea09d9720b2d9c0181abbfe3e4",
+      "placeholder_signature": ""
+    },
+    "emails.confirmed": {
+      "group": "emails",
+      "default_sha1": "8cc7acb8f360901e81cab8460b63a515a6e9ce99",
+      "placeholder_signature": ""
+    },
+    "emails.coupon": {
+      "group": "emails",
+      "default_sha1": "31943e5ccc3c50c1fe5b1e5afbcb5bc0b8e71faa",
+      "placeholder_signature": ""
+    },
+    "emails.description": {
+      "group": "emails",
+      "default_sha1": "55f8ebc805e65b5b71ddafdae390e3be2bcd69af",
+      "placeholder_signature": ""
+    },
+    "emails.edit_subjects_and_message_templates_for_each_email_scenario": {
+      "group": "emails",
+      "default_sha1": "a28ebbce8b74313efde5f82140a8f4a423163a04",
+      "placeholder_signature": ""
+    },
+    "emails.edit_template": {
+      "group": "emails",
+      "default_sha1": "8ebcef59970bb87d7ed8dd90149d3a44e736afba",
+      "placeholder_signature": ""
+    },
+    "emails.email_templates": {
+      "group": "emails",
+      "default_sha1": "5cdc6a6d53455334bafac25120a141d5e81032ea",
+      "placeholder_signature": ""
+    },
+    "emails.emails": {
+      "group": "emails",
+      "default_sha1": "473558393914486d8e60b9968e5443e40be433e0",
+      "placeholder_signature": ""
+    },
+    "emails.enable_emails": {
+      "group": "emails",
+      "default_sha1": "046e45ec8b4f6d93349678cd971e570da9bbee15",
+      "placeholder_signature": ""
+    },
+    "emails.enabled": {
+      "group": "emails",
+      "default_sha1": "df174a3f2faa31814e06540acda7af8825403fac",
+      "placeholder_signature": ""
+    },
+    "emails.every_5_minutes": {
+      "group": "emails",
+      "default_sha1": "d4f3e0d11d65a0c9fc402c19b3c7c027e0327f15",
+      "placeholder_signature": ""
+    },
+    "emails.failed_queued_emails_are_retried_automatically_by_wp_cron": {
+      "group": "emails",
+      "default_sha1": "e622bae098b55d909cb083cd73a297c2bb4e59bf",
+      "placeholder_signature": ""
+    },
+    "emails.for_best_delivery_use_an_email_address_from_the_same_domain_as_this_we": {
+      "group": "emails",
+      "default_sha1": "d3f1ac7f229493bcec1166f0b1cc603456c1a5e5",
+      "placeholder_signature": ""
+    },
+    "emails.from_email": {
+      "group": "emails",
+      "default_sha1": "1288a2a1eeea85f700de8a037725ee83b59e3d9e",
+      "placeholder_signature": ""
+    },
+    "emails.from_name": {
+      "group": "emails",
+      "default_sha1": "1e77633a8cea91776699e1af692228b813f0b237",
+      "placeholder_signature": ""
+    },
+    "emails.general_email_settings": {
+      "group": "emails",
+      "default_sha1": "c6749a33c7718ac56dcd2edfd4bc0d3d9fe6ea1d",
+      "placeholder_signature": ""
+    },
+    "emails.html_body": {
+      "group": "emails",
+      "default_sha1": "77b5ba37e5b42ca4a3d0a69aa73500292a1b96df",
+      "placeholder_signature": ""
+    },
+    "emails.html_mode": {
+      "group": "emails",
+      "default_sha1": "4a20e411e68d5493988b6c24d0da05fe0bd672de",
+      "placeholder_signature": ""
+    },
+    "emails.no": {
+      "group": "emails",
+      "default_sha1": "816c52fd2bdd94a63cd0944823a6c0aa9384c103",
+      "placeholder_signature": ""
+    },
+    "emails.package_discount": {
+      "group": "emails",
+      "default_sha1": "93ab83d666de81f03afc69baf7d4a2ed04112a41",
+      "placeholder_signature": ""
+    },
+    "emails.package_price": {
+      "group": "emails",
+      "default_sha1": "2d0d5230ae2d76b4ee50cfb08a6d258cc52784b3",
+      "placeholder_signature": ""
+    },
+    "emails.paid": {
+      "group": "emails",
+      "default_sha1": "dc9d4584a55464cd571719ee0066acb16d411f86",
+      "placeholder_signature": ""
+    },
+    "emails.partially_paid": {
+      "group": "emails",
+      "default_sha1": "bc9fe7ce0c10e7a23f8f9fa3c15294ad5a3549ed",
+      "placeholder_signature": ""
+    },
+    "emails.pay_later": {
+      "group": "emails",
+      "default_sha1": "3c7c45b4b884fc8e10ba533c8668ab9b7fb1e34e",
+      "placeholder_signature": ""
+    },
+    "emails.pay_now": {
+      "group": "emails",
+      "default_sha1": "748c323563fa6fbdd11c83ad179d271f720fa73a",
+      "placeholder_signature": ""
+    },
+    "emails.pay_on_arrival": {
+      "group": "emails",
+      "default_sha1": "0b3f1941bcce98208d5409f14ef2a72c826c9c8f",
+      "placeholder_signature": ""
+    },
+    "emails.payment_failed": {
+      "group": "emails",
+      "default_sha1": "b1e8e75fdc7bb998da401b72a2dd4902c9f934c7",
+      "placeholder_signature": ""
+    },
+    "emails.personal_coupon_generated_by_marketing_campaign_1_d_for_2_s": {
+      "group": "emails",
+      "default_sha1": "c5e28aa9a79f4c9dcfbd8da1e928b42e59f61930",
+      "placeholder_signature": "%1$d|%2$s"
+    },
+    "emails.plain_text_body": {
+      "group": "emails",
+      "default_sha1": "030a0da0095217cdca2c1151b00a1575c0221ae1",
+      "placeholder_signature": ""
+    },
+    "emails.preview": {
+      "group": "emails",
+      "default_sha1": "f1fbb2b43dca281d0138f4fcc92543ad143ef0b1",
+      "placeholder_signature": ""
+    },
+    "emails.preview_customer": {
+      "group": "emails",
+      "default_sha1": "568716603be2a9496f9c23a75834a0ba91329418",
+      "placeholder_signature": ""
+    },
+    "emails.preview_only_no_campaign_queue_log_entry_or_real_unique_coupon_is_crea": {
+      "group": "emails",
+      "default_sha1": "254b7f55914e087edb33c58a7572a471f49fb918",
+      "placeholder_signature": ""
+    },
+    "emails.recipient": {
+      "group": "emails",
+      "default_sha1": "dc00fa84dc542e5ac62e4514eb3b87bc025ccd24",
+      "placeholder_signature": ""
+    },
+    "emails.refunded": {
+      "group": "emails",
+      "default_sha1": "d6fbc7a82d1c9314c45a539bb4028c75af26f0ee",
+      "placeholder_signature": ""
+    },
+    "emails.retry_attempts": {
+      "group": "emails",
+      "default_sha1": "2652963e431e21b9d2ae1feb59ad1f242d6bd783",
+      "placeholder_signature": ""
+    },
+    "emails.save_general_email_settings": {
+      "group": "emails",
+      "default_sha1": "47ba8ef7f67c29af090849ad22d1976a5d818f8c",
+      "placeholder_signature": ""
+    },
+    "emails.save_template": {
+      "group": "emails",
+      "default_sha1": "0885fab218733b33dc4ba0e801cc23c03d114849",
+      "placeholder_signature": ""
+    },
+    "emails.saved": {
+      "group": "emails",
+      "default_sha1": "9d4af6906a17b74308f02cb30d0e914ba0d49d37",
+      "placeholder_signature": ""
+    },
+    "emails.scenario": {
+      "group": "emails",
+      "default_sha1": "569aae5b47e464b83049959de67717fbf2ff4407",
+      "placeholder_signature": ""
+    },
+    "emails.send_email_notifications": {
+      "group": "emails",
+      "default_sha1": "2d457f68ddb719c93c96bce3be52d8d40900266d",
+      "placeholder_signature": ""
+    },
+    "emails.send_test": {
+      "group": "emails",
+      "default_sha1": "1aba33d6c2ecd5d4dccac61149a945916312d892",
+      "placeholder_signature": ""
+    },
+    "emails.send_test_email": {
+      "group": "emails",
+      "default_sha1": "fc552c754dd8f66b415bc0e0df960c5ad545e7bb",
+      "placeholder_signature": ""
+    },
+    "emails.send_this_email_when_the_scenario_is_triggered": {
+      "group": "emails",
+      "default_sha1": "b422fd22f7f10b8c1937229eb30a4177a798e2b2",
+      "placeholder_signature": ""
+    },
+    "emails.slotera_marketing_queue_every_value_minutes": {
+      "group": "emails",
+      "default_sha1": "97ba4be6589ce6d9d410787bce76ec5436a2d842",
+      "placeholder_signature": "%d"
+    },
+    "emails.something_went_wrong": {
+      "group": "emails",
+      "default_sha1": "bee54c9cc30c539ab2ed15c0c936e055cf8ef67e",
+      "placeholder_signature": ""
+    },
+    "emails.special_offer": {
+      "group": "emails",
+      "default_sha1": "52637d8f1be41cd3a8210df802723cde8629f50e",
+      "placeholder_signature": ""
+    },
+    "emails.subject": {
+      "group": "emails",
+      "default_sha1": "cdcae857019184dd9748799d920aa18a96162611",
+      "placeholder_signature": ""
+    },
+    "emails.subject_2": {
+      "group": "emails",
+      "default_sha1": "8d183dbdcea3b29906090bd83fa6fa37923cc8ec",
+      "placeholder_signature": ""
+    },
+    "emails.tax": {
+      "group": "emails",
+      "default_sha1": "9be70f66f8dd4da98c04e092dd7dc12331ce3e09",
+      "placeholder_signature": ""
+    },
+    "emails.template": {
+      "group": "emails",
+      "default_sha1": "3ec1ae061c27325c7ecb543adf91235e22cbc9ed",
+      "placeholder_signature": ""
+    },
+    "emails.test_email_sent": {
+      "group": "emails",
+      "default_sha1": "7b5b6f92b4b57a3d35f956722e1521ea2113b57d",
+      "placeholder_signature": ""
+    },
+    "emails.theme_color_placeholders_are_available_for_example_theme_primary_color": {
+      "group": "emails",
+      "default_sha1": "a495af9a2f569600ddef2096217af7345e5eca7b",
+      "placeholder_signature": ""
+    },
+    "emails.these_settings_control_sender_details_and_global_email_delivery": {
+      "group": "emails",
+      "default_sha1": "ce45bee132dc3d9be859c95b78f121dc91da78cb",
+      "placeholder_signature": ""
+    },
+    "emails.total": {
+      "group": "emails",
+      "default_sha1": "b25928c69902557b0ef0a628490a3a1768d7b82f",
+      "placeholder_signature": ""
+    },
+    "emails.unpaid": {
+      "group": "emails",
+      "default_sha1": "50cc12f69e8ff3ceee134780342567ff10a2014a",
+      "placeholder_signature": ""
+    },
+    "emails.use_html_template_for_this_email": {
+      "group": "emails",
+      "default_sha1": "45be0040f4d110847f87f2066475ae9478d3f756",
+      "placeholder_signature": ""
+    },
+    "emails.used_when_html_mode_is_disabled_and_as_a_fallback_for_older_templates": {
+      "group": "emails",
+      "default_sha1": "57c4c4658adc98b4b485eab2807a245a0401946c",
+      "placeholder_signature": ""
+    },
+    "emails.write_only_the_content_part_slotera_adds_the_email_header_white_card_f": {
+      "group": "emails",
+      "default_sha1": "e9150051fd0bc17828434444cc43542f6c818e67",
+      "placeholder_signature": ""
+    },
+    "emails.yes": {
+      "group": "emails",
+      "default_sha1": "5397e0583f14f6c88de06b1ef28f460a1fb5b0ae",
+      "placeholder_signature": ""
+    },
+    "frontend.1_night": {
+      "group": "frontend",
+      "default_sha1": "bd6ba86e0249d787efea82b9675aa86872bdb464",
+      "placeholder_signature": ""
+    },
+    "frontend.1_place_left": {
+      "group": "frontend",
+      "default_sha1": "952fb9947acc4cbc43b9c99eea1745aaabe6c747",
+      "placeholder_signature": ""
+    },
+    "frontend.account.no_upcoming_bookings": {
+      "group": "frontend",
+      "default_sha1": "c5ee5b2fee5c8ec517b60d5a02106f76ac951a37",
+      "placeholder_signature": ""
+    },
+    "frontend.account.upcoming_bookings": {
+      "group": "frontend",
+      "default_sha1": "ec9472589e5a83fd6a0004097b281ac31781820a",
+      "placeholder_signature": ""
+    },
+    "frontend.action_confirmation_failed_please_refresh_the_page_and_try_again": {
+      "group": "frontend",
+      "default_sha1": "748557d3f606643f358217ceb6b4c9bd4a7f411b",
+      "placeholder_signature": ""
+    },
+    "frontend.activity": {
+      "group": "frontend",
+      "default_sha1": "81c0d915fa6d82fd30661c5e66e204cea52bb2b5",
+      "placeholder_signature": ""
+    },
+    "frontend.additional_notes_wishes": {
+      "group": "frontend",
+      "default_sha1": "9c0a473d9577c09375527192c46db0e0cd857ec1",
+      "placeholder_signature": ""
+    },
+    "frontend.address": {
+      "group": "frontend",
+      "default_sha1": "d70f93df5e8f9b55be44fbeee9d203972e3383d4",
+      "placeholder_signature": ""
+    },
+    "frontend.apply_coupon": {
+      "group": "frontend",
+      "default_sha1": "371fa87fc32988f5315409cbbad03084a7076112",
+      "placeholder_signature": ""
+    },
+    "frontend.availability_could_not_be_loaded_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "a45f1bac61a5704ed13272de48e68e3801319eeb",
+      "placeholder_signature": ""
+    },
+    "frontend.availability_rest_requests_require_a_valid_same_site_rest_nonce": {
+      "group": "frontend",
+      "default_sha1": "cca56a7ec9e1d3b6247eee208074a046f80335b4",
+      "placeholder_signature": ""
+    },
+    "frontend.available": {
+      "group": "frontend",
+      "default_sha1": "7b231a50a498ef151e291795f46f56bee569eae5",
+      "placeholder_signature": ""
+    },
+    "frontend.available_date_this_month_count": {
+      "group": "frontend",
+      "default_sha1": "93f5a937cff5677d94f634adea71e746a7918369",
+      "placeholder_signature": "%d"
+    },
+    "frontend.available_dates": {
+      "group": "frontend",
+      "default_sha1": "d4ddba1ef6b683e6ac1404ef0aa4403f3c10eadc",
+      "placeholder_signature": ""
+    },
+    "frontend.available_dates_this_month_count": {
+      "group": "frontend",
+      "default_sha1": "8293c770418ab2e251b496e328722f3a233b6fc0",
+      "placeholder_signature": "%d"
+    },
+    "frontend.available_time_for_date_count": {
+      "group": "frontend",
+      "default_sha1": "8a2bc2d13d1fe241e7a27d86ee6855dad66d2aab",
+      "placeholder_signature": "%d|%s"
+    },
+    "frontend.available_times": {
+      "group": "frontend",
+      "default_sha1": "ae6c6161552b02e0489bf963614456478f25dd58",
+      "placeholder_signature": ""
+    },
+    "frontend.available_times_for_date_count": {
+      "group": "frontend",
+      "default_sha1": "eee44a91d76551c4dd2584ca14d2373e4ad9e2ca",
+      "placeholder_signature": "%d|%s"
+    },
+    "frontend.back_to_all_bookings": {
+      "group": "frontend",
+      "default_sha1": "5dfe2c93b5e10264f83e91f46385a29d029cd8ea",
+      "placeholder_signature": ""
+    },
+    "frontend.back_to_calendar": {
+      "group": "frontend",
+      "default_sha1": "7c41e8333f8acf8c717142685dcceecca538f2c6",
+      "placeholder_signature": ""
+    },
+    "frontend.back_to_services": {
+      "group": "frontend",
+      "default_sha1": "ffd685b6fa27b12ad864b8713aac2f4a7c21cbfc",
+      "placeholder_signature": ""
+    },
+    "frontend.back_to_site": {
+      "group": "frontend",
+      "default_sha1": "d6b5144e92b77c2845fdff619a2f3156f0ada5f3",
+      "placeholder_signature": ""
+    },
+    "frontend.back_to_time": {
+      "group": "frontend",
+      "default_sha1": "8e45bcd2a2107bd233f68dc4d536b7f0873eb777",
+      "placeholder_signature": ""
+    },
+    "frontend.book": {
+      "group": "frontend",
+      "default_sha1": "f69f233005f15802770fd26fbf7ead52ec13d9e6",
+      "placeholder_signature": ""
+    },
+    "frontend.book_now": {
+      "group": "frontend",
+      "default_sha1": "a4fba6976adf4c2940eccf8668dc425ee8b90f1b",
+      "placeholder_signature": ""
+    },
+    "frontend.book_this_date": {
+      "group": "frontend",
+      "default_sha1": "b9de0cc74e699ff9f4e6eae073f3a59724661f4b",
+      "placeholder_signature": ""
+    },
+    "frontend.booking": {
+      "group": "frontend",
+      "default_sha1": "30f90bd686dd69a715f1ff014df56af789828871",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_cancelled_confirmation_email_has_been_queued": {
+      "group": "frontend",
+      "default_sha1": "e7f9e2637938d4fbd60fcaa48d6b1c01442b1f64",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_could_not_be_cancelled": {
+      "group": "frontend",
+      "default_sha1": "9e792b10b32e26f6410a22cb5f658126ead947ea",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_could_not_be_rescheduled_please_check_availability_or_contact_": {
+      "group": "frontend",
+      "default_sha1": "691cfc2536fb726e5291e1628927b90a8a9e79cb",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_details": {
+      "group": "frontend",
+      "default_sha1": "dd0ec35f57c792f4a6cd3c58ad677d54f954e476",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_failed": {
+      "group": "frontend",
+      "default_sha1": "1322df0b88c0ef3bc3cb6d91d6b025103c8312fa",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_failed_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "cf58e43b2a80e98868e9752b7b76f0f8e27d77e3",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_number": {
+      "group": "frontend",
+      "default_sha1": "3f492b5a8e629f614d01a045cfe8852777bafd3b",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_progress": {
+      "group": "frontend",
+      "default_sha1": "7053202df28fc3494318c8e932cc101dce4f707b",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_received_payment_needs_attention": {
+      "group": "frontend",
+      "default_sha1": "fd692e2ff032075c8d9236840a77c6d6177f433a",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_rescheduled_confirmation_email_has_been_queued": {
+      "group": "frontend",
+      "default_sha1": "58d6027a8785e019766b422376462fd314c3ead5",
+      "placeholder_signature": ""
+    },
+    "frontend.booking_successful_redirecting": {
+      "group": "frontend",
+      "default_sha1": "c2c568b7e606e198225080fe81c3a7ce4b2a5d28",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_fri": {
+      "group": "frontend",
+      "default_sha1": "bbd6e32ee1326237814b697269b4368033d50d2f",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_mon": {
+      "group": "frontend",
+      "default_sha1": "24b2a0993d0cfa93c44282d6bba72bcf58b300d6",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_sat": {
+      "group": "frontend",
+      "default_sha1": "6b782d41b0c29e2f39f93a8352c43300b042c6cd",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_sun": {
+      "group": "frontend",
+      "default_sha1": "48c98cab7866e606328c99289ed24e339393b5ab",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_thu": {
+      "group": "frontend",
+      "default_sha1": "3593ccd96f6c0fad4e362d18ac37226707f2ea46",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_tue": {
+      "group": "frontend",
+      "default_sha1": "529541bb390c76152e313351d89de3cd30a1c4bd",
+      "placeholder_signature": ""
+    },
+    "frontend.calendar_wed": {
+      "group": "frontend",
+      "default_sha1": "23408b19b29e8e8495bb4b68733ada5f85fc2fd6",
+      "placeholder_signature": ""
+    },
+    "frontend.cancel": {
+      "group": "frontend",
+      "default_sha1": "77dfd2135f4db726c47299bb55be26f7f4525a46",
+      "placeholder_signature": ""
+    },
+    "frontend.cancel_booking": {
+      "group": "frontend",
+      "default_sha1": "232ca7a7aeadc05fff8c60da831e65440560dac8",
+      "placeholder_signature": ""
+    },
+    "frontend.cancel_booking_2": {
+      "group": "frontend",
+      "default_sha1": "c6085eb5c6bd815d17d2bba1d44589bc04275dee",
+      "placeholder_signature": ""
+    },
+    "frontend.cancel_this_booking": {
+      "group": "frontend",
+      "default_sha1": "0f17b0424da1db8f0d9d5c7ce70a01675a221ed0",
+      "placeholder_signature": ""
+    },
+    "frontend.category": {
+      "group": "frontend",
+      "default_sha1": "a3c686e711e4720f99b4562bb3dbaae7ab658cf2",
+      "placeholder_signature": ""
+    },
+    "frontend.checking": {
+      "group": "frontend",
+      "default_sha1": "494d0f681c449b19789f6ce8edfc70e01f3e3262",
+      "placeholder_signature": ""
+    },
+    "frontend.checking_availability": {
+      "group": "frontend",
+      "default_sha1": "f77ca5030c48e7e66ec47dcd406c76165b997c29",
+      "placeholder_signature": ""
+    },
+    "frontend.checking_available_dates": {
+      "group": "frontend",
+      "default_sha1": "f910bd76d3954670d12572883bb157571f2d6e0f",
+      "placeholder_signature": ""
+    },
+    "frontend.checking_coupon": {
+      "group": "frontend",
+      "default_sha1": "b6aa6af1ea1aab72c1199e574253b90d13704ad9",
+      "placeholder_signature": ""
+    },
+    "frontend.checking_rooms": {
+      "group": "frontend",
+      "default_sha1": "68a15ef875146009e0c927eff75c3d3b09447a83",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_a_new_date": {
+      "group": "frontend",
+      "default_sha1": "396cef280fb79c53fc83d35c8aca88f5e34fdf3c",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_an_available_date": {
+      "group": "frontend",
+      "default_sha1": "224624e198c37ea70b43f9fff31bb860dcac1727",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_both_dates_first": {
+      "group": "frontend",
+      "default_sha1": "8f48e320714f655ee882a7eed238d617650b5d6e",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_check_in_and_check_out_dates": {
+      "group": "frontend",
+      "default_sha1": "73a6d2239d7edb63b3868848ace4f613ef7f47db",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_dates": {
+      "group": "frontend",
+      "default_sha1": "8094f2ca590840ca6c34c28d706085365fdff367",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_payment_option": {
+      "group": "frontend",
+      "default_sha1": "73d9818bbdcf99f002d72bf0be88c88edfc3c8b2",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_the_best_available_option": {
+      "group": "frontend",
+      "default_sha1": "b830461f51f52054af60e66ff4af21e6b0752bf7",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_your_date": {
+      "group": "frontend",
+      "default_sha1": "0e3db5a5a2b90304fd36d463dd33d1e53eca77f6",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_your_option": {
+      "group": "frontend",
+      "default_sha1": "963d9fd1fbbbf02a6e6bd9788cfc72f9c7373251",
+      "placeholder_signature": ""
+    },
+    "frontend.choose_your_preferred_date": {
+      "group": "frontend",
+      "default_sha1": "018b41fbebf0167e5629836d765719c272463ac0",
+      "placeholder_signature": ""
+    },
+    "frontend.city": {
+      "group": "frontend",
+      "default_sha1": "4271627f4f0bef6104a95cca7bb21cda4d74503e",
+      "placeholder_signature": ""
+    },
+    "frontend.client_account": {
+      "group": "frontend",
+      "default_sha1": "67406578c1af8d89f8ab3bfead0e70bac52d2bde",
+      "placeholder_signature": ""
+    },
+    "frontend.client_login": {
+      "group": "frontend",
+      "default_sha1": "595dbc0ee186bb522197f2b783350bd11a412650",
+      "placeholder_signature": ""
+    },
+    "frontend.close_image_preview": {
+      "group": "frontend",
+      "default_sha1": "c4d5897cbd0ccfd197cdfff39c284306987b01da",
+      "placeholder_signature": ""
+    },
+    "frontend.company": {
+      "group": "frontend",
+      "default_sha1": "7a1994999d181deea68e4304b3346e78f838ecb7",
+      "placeholder_signature": ""
+    },
+    "frontend.company_name": {
+      "group": "frontend",
+      "default_sha1": "1e5f7dc45cec3cd7bc991d3b958e0053fc564b67",
+      "placeholder_signature": ""
+    },
+    "frontend.company_website": {
+      "group": "frontend",
+      "default_sha1": "8e9e4e7a1ebfee804ae067c9ddb56d6b57bd0cfc",
+      "placeholder_signature": ""
+    },
+    "frontend.confirm_cancellation": {
+      "group": "frontend",
+      "default_sha1": "90977a5334ebf07a85fcd4a86bb6bb912ecef1d7",
+      "placeholder_signature": ""
+    },
+    "frontend.confirm_new_time": {
+      "group": "frontend",
+      "default_sha1": "ae143febe57e2f8297098c430c6d511d6dfcaf2c",
+      "placeholder_signature": ""
+    },
+    "frontend.confirm_reschedule": {
+      "group": "frontend",
+      "default_sha1": "bb330c3a63cc8bd50b48f7c5491e0813912e29a6",
+      "placeholder_signature": ""
+    },
+    "frontend.continue": {
+      "group": "frontend",
+      "default_sha1": "2e02623966f9391facf6eaefc8b079ed5b630bee",
+      "placeholder_signature": ""
+    },
+    "frontend.continue_with_apple": {
+      "group": "frontend",
+      "default_sha1": "01ca4c21ba7de75de3a0bcc6197c4bdc5f37683f",
+      "placeholder_signature": ""
+    },
+    "frontend.continue_with_facebook": {
+      "group": "frontend",
+      "default_sha1": "7a928f828ab6cd4b21ea562f9be6a50ca345aedc",
+      "placeholder_signature": ""
+    },
+    "frontend.continue_with_google": {
+      "group": "frontend",
+      "default_sha1": "ccc5b0edaae60940907b703f6736b99d7e357d78",
+      "placeholder_signature": ""
+    },
+    "frontend.copied": {
+      "group": "frontend",
+      "default_sha1": "8e3df45a49dba2b26f8ea64a22410bde72f9c8ac",
+      "placeholder_signature": ""
+    },
+    "frontend.copy_link": {
+      "group": "frontend",
+      "default_sha1": "2f84eea5d45da4f1ce1760b85db18a854f4e1b39",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_check_availability": {
+      "group": "frontend",
+      "default_sha1": "314cab3015f44d8ba0beb770149615bbe78f670e",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_check_availability_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "c22e8787d701d78a45ac3549bd0ae8d6d2c1a5ee",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_check_coupon_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "5a21c5c34155e9a6f8101d88956666c9cdf84f7d",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_load_available_dates_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "770779bcc79ffb9d0c375a2b2d51a16cc95e486c",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_load_scheduled_events": {
+      "group": "frontend",
+      "default_sha1": "e14d09cb9531a1c3b83e78dcddea79da1a14f3c4",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_load_scheduled_events_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "f614b7c4408378802aa11e8ab3a771a49c0efa78",
+      "placeholder_signature": ""
+    },
+    "frontend.could_not_load_slots_please_try_again": {
+      "group": "frontend",
+      "default_sha1": "b4d51aa2a464dbeb432b80fc9fc9ec38d1390f40",
+      "placeholder_signature": ""
+    },
+    "frontend.coupon_applied": {
+      "group": "frontend",
+      "default_sha1": "c48db4a6e5403bc024ee1fc3e6c2b5612ffc778f",
+      "placeholder_signature": ""
+    },
+    "frontend.coupon_code": {
+      "group": "frontend",
+      "default_sha1": "b227f5879bdea515264e0b9e40718a7c838d2ef9",
+      "placeholder_signature": ""
+    },
+    "frontend.coupon_could_not_be_applied": {
+      "group": "frontend",
+      "default_sha1": "8115365de3a654e75b4bdbf9a57e6dca9a70942e",
+      "placeholder_signature": ""
+    },
+    "frontend.coupon_discount": {
+      "group": "frontend",
+      "default_sha1": "bdb1a11edd2af7534d294f4516d0e947c92b4327",
+      "placeholder_signature": ""
+    },
+    "frontend.creating_booking": {
+      "group": "frontend",
+      "default_sha1": "57a05d1df79956d01b135c2aeac92b5ce0168af4",
+      "placeholder_signature": ""
+    },
+    "frontend.current_booking_1_s_2_s_3_s": {
+      "group": "frontend",
+      "default_sha1": "9a95565d9e00171a7e9b0918bcd215b98bd5b7d1",
+      "placeholder_signature": "%1$s|%2$s|%3$s"
+    },
+    "frontend.custom_payment": {
+      "group": "frontend",
+      "default_sha1": "7b53ffb077ce20dca00d2a75749ba0f2fccd17fe",
+      "placeholder_signature": ""
+    },
+    "frontend.customer": {
+      "group": "frontend",
+      "default_sha1": "0e85749a6f40d4614b87411e141fe8109099bc4f",
+      "placeholder_signature": ""
+    },
+    "frontend.date": {
+      "group": "frontend",
+      "default_sha1": "eb9a4bc1c0c153e4e4b042a79113b815b7e3021d",
+      "placeholder_signature": ""
+    },
+    "frontend.description": {
+      "group": "frontend",
+      "default_sha1": "55f8ebc805e65b5b71ddafdae390e3be2bcd69af",
+      "placeholder_signature": ""
+    },
+    "frontend.details": {
+      "group": "frontend",
+      "default_sha1": "dc3decbb93847518f1a049dcf49d0d7c6560bcc6",
+      "placeholder_signature": ""
+    },
+    "frontend.did_not_receive_it_check_spam_first_then_use_the_resend_button_above_f": {
+      "group": "frontend",
+      "default_sha1": "6784be4fd4b4ac61b7736694a48e2ed5da45eebd",
+      "placeholder_signature": ""
+    },
+    "frontend.download_pdf_invoice": {
+      "group": "frontend",
+      "default_sha1": "790e1c740ec1b6184e59ab0c8c70cb62c9154c32",
+      "placeholder_signature": ""
+    },
+    "frontend.email": {
+      "group": "frontend",
+      "default_sha1": "84add5b2952787581cb9a8851eef63d1ec75d22b",
+      "placeholder_signature": ""
+    },
+    "frontend.end": {
+      "group": "frontend",
+      "default_sha1": "a2bb9d34b8a1a79665858d354585cf147e0dee4e",
+      "placeholder_signature": ""
+    },
+    "frontend.enter_a_coupon_code_first": {
+      "group": "frontend",
+      "default_sha1": "c0802aad9decefa23e223596aaafe59fce51b80f",
+      "placeholder_signature": ""
+    },
+    "frontend.enter_coupon_code": {
+      "group": "frontend",
+      "default_sha1": "00d44f6823499ae20c8438d8c026629624bd07da",
+      "placeholder_signature": ""
+    },
+    "frontend.enter_the_email_you_used_for_booking_and_we_will_send_you_a_secure_log": {
+      "group": "frontend",
+      "default_sha1": "bc52f36ac65a37aa878f9da2a03cbe5137b6b825",
+      "placeholder_signature": ""
+    },
+    "frontend.final_amount": {
+      "group": "frontend",
+      "default_sha1": "b1bcc08f51dd7de6d9c25677c6bd727bb56e9a23",
+      "placeholder_signature": ""
+    },
+    "frontend.find_available_times": {
+      "group": "frontend",
+      "default_sha1": "da7681379f2f838b12bafe1b2f227e6639c4d54d",
+      "placeholder_signature": ""
+    },
+    "frontend.fixed_price": {
+      "group": "frontend",
+      "default_sha1": "0a3fa912f96e8ebb793d25ef54e15f3709047f49",
+      "placeholder_signature": ""
+    },
+    "frontend.for_safety_each_booking_can_be_rescheduled_from_the_client_account_onl": {
+      "group": "frontend",
+      "default_sha1": "99a1045fcfba3723b253772dabcddf0ae42098b4",
+      "placeholder_signature": ""
+    },
+    "frontend.from": {
+      "group": "frontend",
+      "default_sha1": "3f66052a107eaf9bae7cad0f61fb462f47ec2c47",
+      "placeholder_signature": ""
+    },
+    "frontend.from_value": {
+      "group": "frontend",
+      "default_sha1": "048a4d60ac8e3dae9ca58558f7eb99653b2fe1c2",
+      "placeholder_signature": "%s"
+    },
+    "frontend.gateway": {
+      "group": "frontend",
+      "default_sha1": "5a0e1818803b6bbdbb0cb77d88080aeaff8b5d2a",
+      "placeholder_signature": ""
+    },
+    "frontend.if_bookings_exist_for_this_email_we_sent_a_login_link_please_check_you": {
+      "group": "frontend",
+      "default_sha1": "1602bee8e92039166ce24b60b916da9e45d499f3",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_cancellation_link": {
+      "group": "frontend",
+      "default_sha1": "c38310d28462367351bea1e05759a3059c0161a7",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_date": {
+      "group": "frontend",
+      "default_sha1": "cf90eaa065c83bf07fc88f326466943baeabfaf3",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_invoice_link": {
+      "group": "frontend",
+      "default_sha1": "3053c61c398a4cba8e287c9037bb0c3e30b1d3a5",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_or_expired_booking_action_confirmation_please_open_the_booking": {
+      "group": "frontend",
+      "default_sha1": "60fc8369a67a1b1a5716ddb9fa962e38db009b53",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_or_expired_booking_token": {
+      "group": "frontend",
+      "default_sha1": "dcfaab232001da07514bbd1ee3d065d5ed174efb",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_or_missing_rest_nonce_please_submit_bookings_from_the_site_boo": {
+      "group": "frontend",
+      "default_sha1": "658235f64997722c85381a5e1f8f094ce7e90ef3",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_package": {
+      "group": "frontend",
+      "default_sha1": "5f5f708e60d74e60b134426243cacf40aaac9728",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_request": {
+      "group": "frontend",
+      "default_sha1": "4aa5c2d8ff6a327d262110dcc433ecb3f3d17f74",
+      "placeholder_signature": ""
+    },
+    "frontend.invalid_reschedule_link": {
+      "group": "frontend",
+      "default_sha1": "7444f3826a312066df92f253dad3fb80e135d3b9",
+      "placeholder_signature": ""
+    },
+    "frontend.invoice": {
+      "group": "frontend",
+      "default_sha1": "f9f38818c406d0878defb17a2356e1a2c658861a",
+      "placeholder_signature": ""
+    },
+    "frontend.keep_booking": {
+      "group": "frontend",
+      "default_sha1": "72ee87b1f19caa4a69b80fcb00504e9e721463e4",
+      "placeholder_signature": ""
+    },
+    "frontend.loading_available_dates": {
+      "group": "frontend",
+      "default_sha1": "47bb1be6d677884d5ccf1ec7ba4dd728985fc10f",
+      "placeholder_signature": ""
+    },
+    "frontend.loading_available_times": {
+      "group": "frontend",
+      "default_sha1": "8f3c63d3c1d458beb75191203e689038e797ccb3",
+      "placeholder_signature": ""
+    },
+    "frontend.loading_scheduled_events": {
+      "group": "frontend",
+      "default_sha1": "3d00e9b050d42918be3e972877f450d18dabe779",
+      "placeholder_signature": ""
+    },
+    "frontend.log_out": {
+      "group": "frontend",
+      "default_sha1": "6e78c91f5a05fc0d4f1a787d38e3d6fe2f856d46",
+      "placeholder_signature": ""
+    },
+    "frontend.manage_booking": {
+      "group": "frontend",
+      "default_sha1": "d76aad62a9e4aebb08a5e0fedc3c60cd7e27539d",
+      "placeholder_signature": ""
+    },
+    "frontend.missing_reschedule_data": {
+      "group": "frontend",
+      "default_sha1": "d9a85afb4b6be849364b82b9a7787b7b43796b39",
+      "placeholder_signature": ""
+    },
+    "frontend.missing_token": {
+      "group": "frontend",
+      "default_sha1": "d1d659c1b7f077bb73bd27f2b4f36d084bde5db5",
+      "placeholder_signature": ""
+    },
+    "frontend.more_info": {
+      "group": "frontend",
+      "default_sha1": "59842d981c57fb9cc87deffb5fe760f6cbaebe00",
+      "placeholder_signature": ""
+    },
+    "frontend.name": {
+      "group": "frontend",
+      "default_sha1": "709a23220f2c3d64d1e1d6d18c4d5280f8d82fca",
+      "placeholder_signature": ""
+    },
+    "frontend.new_date": {
+      "group": "frontend",
+      "default_sha1": "1a67a4d7a2c2e7cc658e8e30f6b93be3e64f4120",
+      "placeholder_signature": ""
+    },
+    "frontend.next_available": {
+      "group": "frontend",
+      "default_sha1": "6b06f84f006ce59825423e7ea25c935a23fac906",
+      "placeholder_signature": ""
+    },
+    "frontend.next_month": {
+      "group": "frontend",
+      "default_sha1": "8abf7cf1d0b36ff16ebbe26b8285a65d9d1582f6",
+      "placeholder_signature": ""
+    },
+    "frontend.nights": {
+      "group": "frontend",
+      "default_sha1": "3c0f802cce98e02b08cfa7e988449b479dfefa04",
+      "placeholder_signature": ""
+    },
+    "frontend.no_available_dates_in_this_month": {
+      "group": "frontend",
+      "default_sha1": "35f249e26fc1677664aca8d20d774c4a25135303",
+      "placeholder_signature": ""
+    },
+    "frontend.no_available_dates_in_this_month_try_the_next_month": {
+      "group": "frontend",
+      "default_sha1": "897bbec4834dfb052d4c25c5e3ed30f0ff3f14c7",
+      "placeholder_signature": ""
+    },
+    "frontend.no_available_slots_were_found_for_this_date_please_choose_another_date": {
+      "group": "frontend",
+      "default_sha1": "965f366f0590b433ef66e250780ad879a22ee10a",
+      "placeholder_signature": ""
+    },
+    "frontend.no_available_times": {
+      "group": "frontend",
+      "default_sha1": "b7c396a39a00c299d95d40c62925ad96dd665302",
+      "placeholder_signature": ""
+    },
+    "frontend.no_bookings_were_found_for_this_email": {
+      "group": "frontend",
+      "default_sha1": "c1c74a320a56a05777db498094b73332e18b603e",
+      "placeholder_signature": ""
+    },
+    "frontend.no_online_payment_is_required_now_payment_is_due_on_arrival": {
+      "group": "frontend",
+      "default_sha1": "13296f1bf2d26ed431d29fe01dac08e806a6b27f",
+      "placeholder_signature": ""
+    },
+    "frontend.no_options_are_available_for_these_dates": {
+      "group": "frontend",
+      "default_sha1": "f1dcddbe4716bbe7a85061c7a98620d1ca2c3ef9",
+      "placeholder_signature": ""
+    },
+    "frontend.no_packages_available": {
+      "group": "frontend",
+      "default_sha1": "14160fb81fa03612e149559965edae71a47dfdba",
+      "placeholder_signature": ""
+    },
+    "frontend.no_past_bookings": {
+      "group": "frontend",
+      "default_sha1": "f263023263deaa5808288597f739f874ba5e31c5",
+      "placeholder_signature": ""
+    },
+    "frontend.no_payment_now": {
+      "group": "frontend",
+      "default_sha1": "66ec87b7262c7b2dc5c8b787e9930ae734bf6703",
+      "placeholder_signature": ""
+    },
+    "frontend.no_scheduled_events_are_available": {
+      "group": "frontend",
+      "default_sha1": "e0111abef64382bba09b819f63aabeba68f28e6a",
+      "placeholder_signature": ""
+    },
+    "frontend.no_slots_available_for_this_date_choose_another_available_date": {
+      "group": "frontend",
+      "default_sha1": "b41e46d0877d76cc24ac957ed6693217ead439bd",
+      "placeholder_signature": ""
+    },
+    "frontend.not_scheduled_yet": {
+      "group": "frontend",
+      "default_sha1": "34b4a3c291598c7b7b4140f6c8dca76ce38cbd67",
+      "placeholder_signature": ""
+    },
+    "frontend.notes": {
+      "group": "frontend",
+      "default_sha1": "70440046a3dc2e079f23ee1c57dfa76669b732aa",
+      "placeholder_signature": ""
+    },
+    "frontend.offer": {
+      "group": "frontend",
+      "default_sha1": "3898b9aa06204b6c19b999c3411e15a3ba8c987b",
+      "placeholder_signature": ""
+    },
+    "frontend.online_payment_is_currently_unavailable_please_contact_us_before_booki": {
+      "group": "frontend",
+      "default_sha1": "ac21f2e721ba4806cc8093c6c95035eeed6670e7",
+      "placeholder_signature": ""
+    },
+    "frontend.online_payment_is_currently_unavailable_please_contact_us_or_choose_an": {
+      "group": "frontend",
+      "default_sha1": "9e284342f92268f8076662578c04beba42586a32",
+      "placeholder_signature": ""
+    },
+    "frontend.only_one_time_is_available_so_we_selected_it_for_you": {
+      "group": "frontend",
+      "default_sha1": "acabb20c7dcbd8d1d9ada5fd714c089687ef19b6",
+      "placeholder_signature": ""
+    },
+    "frontend.only_value_spots_left": {
+      "group": "frontend",
+      "default_sha1": "31e460b2405bb89f9a7473cec8df0b0c18823f27",
+      "placeholder_signature": "%d"
+    },
+    "frontend.open_image_preview": {
+      "group": "frontend",
+      "default_sha1": "54bb56dc5165d8a089bd17414c95497d97da28e8",
+      "placeholder_signature": ""
+    },
+    "frontend.open_my_bookings": {
+      "group": "frontend",
+      "default_sha1": "f1cf06a69ce35c0a227fcf33c98094c25f5f9227",
+      "placeholder_signature": ""
+    },
+    "frontend.open_payment_link": {
+      "group": "frontend",
+      "default_sha1": "f3fb4d9b9431c74e826e9bd0826563999db0fb32",
+      "placeholder_signature": ""
+    },
+    "frontend.open_s_package_page": {
+      "group": "frontend",
+      "default_sha1": "197edf234cbc87e72377e5da12cd8e91ef626f27",
+      "placeholder_signature": "%s"
+    },
+    "frontend.or_continue_with": {
+      "group": "frontend",
+      "default_sha1": "a1aa5858e0e7bb74686ebe81912f61fc201800cb",
+      "placeholder_signature": ""
+    },
+    "frontend.package": {
+      "group": "frontend",
+      "default_sha1": "7431e3df243c5be33cffa0b28ca2a76b93f0538c",
+      "placeholder_signature": ""
+    },
+    "frontend.package_details": {
+      "group": "frontend",
+      "default_sha1": "4fbca6f3b88e4620a694d448accf780a1b86311c",
+      "placeholder_signature": ""
+    },
+    "frontend.package_full_width_content_area": {
+      "group": "frontend",
+      "default_sha1": "ef6766fcabdc1373da5a67d4770e31385c69437c",
+      "placeholder_signature": ""
+    },
+    "frontend.package_information": {
+      "group": "frontend",
+      "default_sha1": "6e98506ac907363bc63724883628559085c20838",
+      "placeholder_signature": ""
+    },
+    "frontend.package_page_content_area": {
+      "group": "frontend",
+      "default_sha1": "5e881903a60dc1fbd98b1dbf7d1b44ae04867e0f",
+      "placeholder_signature": ""
+    },
+    "frontend.past_bookings": {
+      "group": "frontend",
+      "default_sha1": "8112e45d9f3f1ef9ce98384da506f8a9de601640",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_book": {
+      "group": "frontend",
+      "default_sha1": "e88e4ff386cbe106c28c4ab0c687381fc15f1963",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_deposit": {
+      "group": "frontend",
+      "default_sha1": "ad5a00ec894edadf041e87005989e8febcb5fe09",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_in_full": {
+      "group": "frontend",
+      "default_sha1": "0b93655d7affb5900edd2e83a7a995477e7de533",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_later": {
+      "group": "frontend",
+      "default_sha1": "3c7c45b4b884fc8e10ba533c8668ab9b7fb1e34e",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_now": {
+      "group": "frontend",
+      "default_sha1": "748c323563fa6fbdd11c83ad179d271f720fa73a",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_on_arrival": {
+      "group": "frontend",
+      "default_sha1": "0b3f1941bcce98208d5409f14ef2a72c826c9c8f",
+      "placeholder_signature": ""
+    },
+    "frontend.pay_value": {
+      "group": "frontend",
+      "default_sha1": "26e3e6b64ef5f469fe818885627b38139c0bfca7",
+      "placeholder_signature": "%s"
+    },
+    "frontend.pay_value_now": {
+      "group": "frontend",
+      "default_sha1": "38982e9867656654194aee5126c5e5c270796eed",
+      "placeholder_signature": "%s"
+    },
+    "frontend.pay_value_now_remaining_value_on_arrival": {
+      "group": "frontend",
+      "default_sha1": "f63f19913323cdbef16731d1db8543f98d7b0a36",
+      "placeholder_signature": "%1$s|%2$s"
+    },
+    "frontend.pay_value_on_arrival": {
+      "group": "frontend",
+      "default_sha1": "be08df0faaaa08bd312f12376d6d2facab277d32",
+      "placeholder_signature": "%s"
+    },
+    "frontend.paying": {
+      "group": "frontend",
+      "default_sha1": "42bddfffc7719b6fed402ae028a5b9c833928797",
+      "placeholder_signature": ""
+    },
+    "frontend.payment": {
+      "group": "frontend",
+      "default_sha1": "b41a92bed03261664717a6afdad4edf3d5d6ef6e",
+      "placeholder_signature": ""
+    },
+    "frontend.payment_gateway_is_missing": {
+      "group": "frontend",
+      "default_sha1": "5329414f77f6c9bf4fbf7126513bc2419012ec99",
+      "placeholder_signature": ""
+    },
+    "frontend.payment_method": {
+      "group": "frontend",
+      "default_sha1": "0e55fb3b04e225d83af1a64ec1cedc121fb61c32",
+      "placeholder_signature": ""
+    },
+    "frontend.payment_unavailable": {
+      "group": "frontend",
+      "default_sha1": "29962828c8ca39cd1a97b22ce3f206819a93ebd6",
+      "placeholder_signature": ""
+    },
+    "frontend.pdf_invoice": {
+      "group": "frontend",
+      "default_sha1": "c961bdbd6b720b114416e8e52c2236cd4a926a67",
+      "placeholder_signature": ""
+    },
+    "frontend.pdf_invoices_are_disabled": {
+      "group": "frontend",
+      "default_sha1": "55e3df2368c5209ffb00c97863e21a97e2a6edf4",
+      "placeholder_signature": ""
+    },
+    "frontend.per_day": {
+      "group": "frontend",
+      "default_sha1": "f5170787e872c133853b01f5ca645a8a80061887",
+      "placeholder_signature": ""
+    },
+    "frontend.per_hour": {
+      "group": "frontend",
+      "default_sha1": "ead9eb78bb9b75102ded48b79266f27936802881",
+      "placeholder_signature": ""
+    },
+    "frontend.per_night": {
+      "group": "frontend",
+      "default_sha1": "52cebe59d831ebac85e0aca7c2f57373dfc43921",
+      "placeholder_signature": ""
+    },
+    "frontend.phone": {
+      "group": "frontend",
+      "default_sha1": "77064d5265236e0ac252f3fc4a5ba7b274b6a583",
+      "placeholder_signature": ""
+    },
+    "frontend.phone_number": {
+      "group": "frontend",
+      "default_sha1": "8961d3bf56ef1c18ef5c831ba0838e8b1f85e5de",
+      "placeholder_signature": ""
+    },
+    "frontend.places_left": {
+      "group": "frontend",
+      "default_sha1": "8c028d7f3d040ba0892f27f37c0a6857b6ef6f80",
+      "placeholder_signature": ""
+    },
+    "frontend.please_choose_a_payment_method": {
+      "group": "frontend",
+      "default_sha1": "b90c532e05cbd59dd31f96f98d7e08902e5198f5",
+      "placeholder_signature": ""
+    },
+    "frontend.please_choose_a_valid_date": {
+      "group": "frontend",
+      "default_sha1": "ce1326e3b245a7ca216334bc28ff1b074ded7ce0",
+      "placeholder_signature": ""
+    },
+    "frontend.please_complete_all_booking_steps_and_required_fields": {
+      "group": "frontend",
+      "default_sha1": "b39005b35a82a6c6053d5b5587865cb1ac055f54",
+      "placeholder_signature": ""
+    },
+    "frontend.please_confirm_that_you_want_to_cancel_this_booking_this_action_will_n": {
+      "group": "frontend",
+      "default_sha1": "f257d85ecff7866ba5bf1fd004d478fdc83e4b2a",
+      "placeholder_signature": ""
+    },
+    "frontend.please_enter_a_valid_email_address": {
+      "group": "frontend",
+      "default_sha1": "d2306dd8970ff616631a3501791297f31475e416",
+      "placeholder_signature": ""
+    },
+    "frontend.please_sign_in_to_manage_this_booking": {
+      "group": "frontend",
+      "default_sha1": "632987c79f5bcb0394f550becb79518f20667b86",
+      "placeholder_signature": ""
+    },
+    "frontend.please_wait": {
+      "group": "frontend",
+      "default_sha1": "89e944f8eb377852ecb003a3915c7e6b11d4bde6",
+      "placeholder_signature": ""
+    },
+    "frontend.popular": {
+      "group": "frontend",
+      "default_sha1": "9bc2c5b3f52ee542bf32ec052e7c7aefc5d8f16d",
+      "placeholder_signature": ""
+    },
+    "frontend.prepay_book": {
+      "group": "frontend",
+      "default_sha1": "e268a60acece017b3754bbc7e7c415a24f82cf55",
+      "placeholder_signature": ""
+    },
+    "frontend.prepay_deposit": {
+      "group": "frontend",
+      "default_sha1": "b826e940591c954a4ab0b7f3fff4fa9540cfafd9",
+      "placeholder_signature": ""
+    },
+    "frontend.prepay_method": {
+      "group": "frontend",
+      "default_sha1": "d6b60f1f1ac78f7700e31d5f4ff4262a7903557a",
+      "placeholder_signature": ""
+    },
+    "frontend.prepaying": {
+      "group": "frontend",
+      "default_sha1": "fa6fe1d08c13a356ffab0c4e629288c89da90868",
+      "placeholder_signature": ""
+    },
+    "frontend.previous_month": {
+      "group": "frontend",
+      "default_sha1": "46a299215300b3a0de6931f926bc6b0f2283eb99",
+      "placeholder_signature": ""
+    },
+    "frontend.price_on_request": {
+      "group": "frontend",
+      "default_sha1": "385ce7fbc63bef5d71c81617f8a122f6e079f0f1",
+      "placeholder_signature": ""
+    },
+    "frontend.provide_either_date_or_valid_year_month": {
+      "group": "frontend",
+      "default_sha1": "e646f37a122136c990e8cd4aac0da810b696c6dd",
+      "placeholder_signature": ""
+    },
+    "frontend.public_rest_booking_is_disabled_use_the_site_booking_form_or_enable_pu": {
+      "group": "frontend",
+      "default_sha1": "85cd877186b259a173fa66963a2ca7021bad4c8d",
+      "placeholder_signature": ""
+    },
+    "frontend.reschedule": {
+      "group": "frontend",
+      "default_sha1": "34b2dc9be9dd9d4f6be0e4fd792b17515fa72ddf",
+      "placeholder_signature": ""
+    },
+    "frontend.reschedule_booking": {
+      "group": "frontend",
+      "default_sha1": "0e1759ca5598e93e8404e43cbfccefc6fa7b4893",
+      "placeholder_signature": ""
+    },
+    "frontend.resend_login_link": {
+      "group": "frontend",
+      "default_sha1": "a1e338b971a64b3b899e7649ac22e37007ee3fbe",
+      "placeholder_signature": ""
+    },
+    "frontend.scheduled_dates": {
+      "group": "frontend",
+      "default_sha1": "649cafef92532ca059c39cd54b95b865bc808505",
+      "placeholder_signature": ""
+    },
+    "frontend.scheduled_event": {
+      "group": "frontend",
+      "default_sha1": "6e53b413163f278249418af7ebbab435a8799c56",
+      "placeholder_signature": ""
+    },
+    "frontend.select_date": {
+      "group": "frontend",
+      "default_sha1": "b84a6ecbc04c1f54b6fa504c6441ca78e07db586",
+      "placeholder_signature": ""
+    },
+    "frontend.select_option": {
+      "group": "frontend",
+      "default_sha1": "cf01ef7bb325f6a246e2c3825f59f050f2f4cec8",
+      "placeholder_signature": ""
+    },
+    "frontend.select_service": {
+      "group": "frontend",
+      "default_sha1": "f216b2305e94515c9342aeaf0da8af015a0de846",
+      "placeholder_signature": ""
+    },
+    "frontend.select_time": {
+      "group": "frontend",
+      "default_sha1": "3d7f91e8e71b2c78edc4695b186006a5b73d00be",
+      "placeholder_signature": ""
+    },
+    "frontend.selected_option": {
+      "group": "frontend",
+      "default_sha1": "f4c3eee07324e6be37e1350a6f6215442093b1c8",
+      "placeholder_signature": ""
+    },
+    "frontend.selected_package_is_not_available": {
+      "group": "frontend",
+      "default_sha1": "17e67c17b424e3de1dac36bace26b5204ceb5b41",
+      "placeholder_signature": ""
+    },
+    "frontend.send_login_link": {
+      "group": "frontend",
+      "default_sha1": "4e0872b345b76010ee72d8a93e6c1ff0ea584f25",
+      "placeholder_signature": ""
+    },
+    "frontend.service": {
+      "group": "frontend",
+      "default_sha1": "329cb8b6ba8c427be7c09b298295c655415c7ac9",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_facebook": {
+      "group": "frontend",
+      "default_sha1": "853f1c24e87a3f9812cebb55b6ffd080e3fe5b01",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_kakaotalk": {
+      "group": "frontend",
+      "default_sha1": "6715bc54a9be19beb3b09c88c6b8a018ca7e694e",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_line": {
+      "group": "frontend",
+      "default_sha1": "27aa43b217c8b3ac3223dafc72c655830ea5426b",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_linkedin": {
+      "group": "frontend",
+      "default_sha1": "b75b4f37f40d37b71fea0ff9cc26096ee801be1c",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_telegram": {
+      "group": "frontend",
+      "default_sha1": "26ea633cf7dc22fd883b20c9c0df981f158d5f42",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_viber": {
+      "group": "frontend",
+      "default_sha1": "4d7069d9e0836ee9bcfb645404f3be491508c38d",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_whatsapp": {
+      "group": "frontend",
+      "default_sha1": "7e03939f86e604a0558aaf363ae5b640a594645b",
+      "placeholder_signature": ""
+    },
+    "frontend.share_on_x": {
+      "group": "frontend",
+      "default_sha1": "6d4d437a8571d7c230e27cf18447d20dde2d392f",
+      "placeholder_signature": ""
+    },
+    "frontend.share_package": {
+      "group": "frontend",
+      "default_sha1": "e03018cb44908e5a3b2cdde0622e28b693b3bc5b",
+      "placeholder_signature": ""
+    },
+    "frontend.show_available_rooms": {
+      "group": "frontend",
+      "default_sha1": "dd1f4ac7b3cf049be7c7022b28fe5c16a30c6dfd",
+      "placeholder_signature": ""
+    },
+    "frontend.show_package_description": {
+      "group": "frontend",
+      "default_sha1": "13a8ad62f9154b2ae758b47221a758f6a8601155",
+      "placeholder_signature": ""
+    },
+    "frontend.show_slide_value": {
+      "group": "frontend",
+      "default_sha1": "2176f2c8f428b1b8485df4be9620e86bee27a08c",
+      "placeholder_signature": "%d"
+    },
+    "frontend.sign_in": {
+      "group": "frontend",
+      "default_sha1": "ada2e9e96fa9ce85430225b412068b5b62b79800",
+      "placeholder_signature": ""
+    },
+    "frontend.sign_in_with_a_secure_email_link_to_view_your_booking_history_and_mana": {
+      "group": "frontend",
+      "default_sha1": "67299e2d7416bf9be72a654ee1bb691fc2aea1db",
+      "placeholder_signature": ""
+    },
+    "frontend.signed_in_as_value": {
+      "group": "frontend",
+      "default_sha1": "e01abc7bbc5d7bb1473e9ded5f5df9a600fe248b",
+      "placeholder_signature": "%s"
+    },
+    "frontend.slider_navigation": {
+      "group": "frontend",
+      "default_sha1": "60a8bdacff3f2a99b0a074b5c0fa2ba81b6f3219",
+      "placeholder_signature": ""
+    },
+    "frontend.social_login_failed_please_try_again_or_use_email_login": {
+      "group": "frontend",
+      "default_sha1": "c2570b71b6eabbc6d80eb23df80ce8880db557a2",
+      "placeholder_signature": ""
+    },
+    "frontend.social_login_was_cancelled": {
+      "group": "frontend",
+      "default_sha1": "3726969d8c259106936ff63b32ac7d02a541ee14",
+      "placeholder_signature": ""
+    },
+    "frontend.sold_out": {
+      "group": "frontend",
+      "default_sha1": "02ff65909856c0d4c47e5496f4e5df4964c3982f",
+      "placeholder_signature": ""
+    },
+    "frontend.spot_left": {
+      "group": "frontend",
+      "default_sha1": "4314da5a05abbe957234230058145d5d58b79952",
+      "placeholder_signature": ""
+    },
+    "frontend.spots_left": {
+      "group": "frontend",
+      "default_sha1": "d65a24f8df747372895bd33c234155f40134c8e6",
+      "placeholder_signature": ""
+    },
+    "frontend.standard_discount": {
+      "group": "frontend",
+      "default_sha1": "2ed4de5c72ca7b8a89962505ba540d3464f6d685",
+      "placeholder_signature": ""
+    },
+    "frontend.start": {
+      "group": "frontend",
+      "default_sha1": "952f375412e89ff213a8aca383d18e5691354347",
+      "placeholder_signature": ""
+    },
+    "frontend.state_county": {
+      "group": "frontend",
+      "default_sha1": "53cc4d18b8672cf627b4d93b8c5bd4cedad3a68b",
+      "placeholder_signature": ""
+    },
+    "frontend.state_county_region": {
+      "group": "frontend",
+      "default_sha1": "ffe9886e6b3eb1700a672856f09f48084bed8cef",
+      "placeholder_signature": ""
+    },
+    "frontend.status": {
+      "group": "frontend",
+      "default_sha1": "bae7d5be70820ed56467bd9a63744e23b47bd711",
+      "placeholder_signature": ""
+    },
+    "frontend.street_address": {
+      "group": "frontend",
+      "default_sha1": "497a500af2eec4aaa0a712523fcf62eb5c987d0b",
+      "placeholder_signature": ""
+    },
+    "frontend.tax": {
+      "group": "frontend",
+      "default_sha1": "9be70f66f8dd4da98c04e092dd7dc12331ce3e09",
+      "placeholder_signature": ""
+    },
+    "frontend.tell_us_about_wishes_special_requests": {
+      "group": "frontend",
+      "default_sha1": "70e31900d1a97aa53d39912eada8c63826a23723",
+      "placeholder_signature": ""
+    },
+    "frontend.test_mode": {
+      "group": "frontend",
+      "default_sha1": "5a862566df8181eaae0952867a3710a92099e25f",
+      "placeholder_signature": ""
+    },
+    "frontend.thank_you_for_your_booking": {
+      "group": "frontend",
+      "default_sha1": "ddf760d8b998eb5c72a653d117e4f4536e8d1317",
+      "placeholder_signature": ""
+    },
+    "frontend.the_login_link_expires_in_30_minutes_your_account_session_stays_active": {
+      "group": "frontend",
+      "default_sha1": "c850ee8dce947a7ba64ebdc4557ba0ea869f09f3",
+      "placeholder_signature": ""
+    },
+    "frontend.this_cancellation_link_is_invalid_or_has_expired": {
+      "group": "frontend",
+      "default_sha1": "2b8217a41a02da8e930a224f2b85eadffcd6c238",
+      "placeholder_signature": ""
+    },
+    "frontend.this_login_link_is_invalid_or_expired_please_request_a_new_one": {
+      "group": "frontend",
+      "default_sha1": "a7374af818016082bb2536d008dee62c102d9e7c",
+      "placeholder_signature": ""
+    },
+    "frontend.this_package_does_not_use_scheduled_events": {
+      "group": "frontend",
+      "default_sha1": "11bfd4946c956eba100def5e5c88f385e8971eac",
+      "placeholder_signature": ""
+    },
+    "frontend.this_reschedule_link_is_invalid_or_has_expired": {
+      "group": "frontend",
+      "default_sha1": "9447340411141350e1b234ee1f3b83b4dbffa3c9",
+      "placeholder_signature": ""
+    },
+    "frontend.this_social_login_provider_is_not_available_yet": {
+      "group": "frontend",
+      "default_sha1": "1b6ca9b6c34a7bfdc7207a7908857920831475d0",
+      "placeholder_signature": ""
+    },
+    "frontend.time": {
+      "group": "frontend",
+      "default_sha1": "6c82e6dd86807ee3db07e3c82bec1ae1ce00b08b",
+      "placeholder_signature": ""
+    },
+    "frontend.to": {
+      "group": "frontend",
+      "default_sha1": "ae79ea1e9c6391a9ed83a2e18a031b835feec0c9",
+      "placeholder_signature": ""
+    },
+    "frontend.to_be_confirmed": {
+      "group": "frontend",
+      "default_sha1": "4efd6f827c672cae3354a9681fdab7287be7d83f",
+      "placeholder_signature": ""
+    },
+    "frontend.too_many_availability_requests_please_try_again_later": {
+      "group": "frontend",
+      "default_sha1": "75bba96d7c045c987365bc6e1bfca1b3a57e77a6",
+      "placeholder_signature": ""
+    },
+    "frontend.too_many_login_link_requests_please_try_again_later": {
+      "group": "frontend",
+      "default_sha1": "81d2358b46bd1040a14dba84ddab0c3a1363dbc3",
+      "placeholder_signature": ""
+    },
+    "frontend.too_many_public_rest_booking_attempts_please_try_again_later": {
+      "group": "frontend",
+      "default_sha1": "b4b30c0dd917099c9fb365d1e84f1ab512dbc530",
+      "placeholder_signature": ""
+    },
+    "frontend.too_many_webhook_requests_please_try_again_later": {
+      "group": "frontend",
+      "default_sha1": "ce4748c16652e9bd4a499512d0c1bc6845d2b635",
+      "placeholder_signature": ""
+    },
+    "frontend.total": {
+      "group": "frontend",
+      "default_sha1": "b25928c69902557b0ef0a628490a3a1768d7b82f",
+      "placeholder_signature": ""
+    },
+    "frontend.unavailable": {
+      "group": "frontend",
+      "default_sha1": "1d5ee313d50a7f8aedf787b5a6c029ef09906c69",
+      "placeholder_signature": ""
+    },
+    "frontend.unsupported_payment_gateway": {
+      "group": "frontend",
+      "default_sha1": "3fb2a095aac6040e76c9bca8fd80c0c95a6ac84b",
+      "placeholder_signature": ""
+    },
+    "frontend.value_h": {
+      "group": "frontend",
+      "default_sha1": "889f0f6deb15ea62183bc18e1ade79562495e768",
+      "placeholder_signature": "%d"
+    },
+    "frontend.value_h_value_min": {
+      "group": "frontend",
+      "default_sha1": "46fce6aa0fd65dac2a203d6d9ab77f57325a0338",
+      "placeholder_signature": "%d|%d"
+    },
+    "frontend.value_included_in_total": {
+      "group": "frontend",
+      "default_sha1": "91934a19f758b16f61962813210943d601b1d526",
+      "placeholder_signature": "%s"
+    },
+    "frontend.value_min": {
+      "group": "frontend",
+      "default_sha1": "6cd7ee109262e00266057f49ba2f87be3672476c",
+      "placeholder_signature": "%d"
+    },
+    "frontend.value_places_left": {
+      "group": "frontend",
+      "default_sha1": "c8b886b1fde61cd3bdc993e981ef08815d2e56fc",
+      "placeholder_signature": "%d"
+    },
+    "frontend.vat": {
+      "group": "frontend",
+      "default_sha1": "5f54ad7bf78bfc644706e5476b2bd927ca5322a9",
+      "placeholder_signature": ""
+    },
+    "frontend.view_details": {
+      "group": "frontend",
+      "default_sha1": "badd385121c5861ac693b59ad8c160fdf7994344",
+      "placeholder_signature": ""
+    },
+    "frontend.we_could_not_send_the_login_email_please_contact_the_site_administrato": {
+      "group": "frontend",
+      "default_sha1": "c314b8b8ff096f2c9eea958e3a429418be7ef44b",
+      "placeholder_signature": ""
+    },
+    "frontend.we_could_not_verify_access_to_this_booking_summary_please_use_the_conf": {
+      "group": "frontend",
+      "default_sha1": "e038afba2537e48cccff5c78ac6b2620c40d1e9b",
+      "placeholder_signature": ""
+    },
+    "frontend.webhook_payload_is_empty": {
+      "group": "frontend",
+      "default_sha1": "349aaab1aedcf197d4a115bdfd744713783f5a16",
+      "placeholder_signature": ""
+    },
+    "frontend.webhook_signature_or_verification_data_is_missing": {
+      "group": "frontend",
+      "default_sha1": "19a05ca84ad97354d54ede6bf96e25dc5aed59e8",
+      "placeholder_signature": ""
+    },
+    "frontend.weekend_offer": {
+      "group": "frontend",
+      "default_sha1": "46b70c2fabc9ccb04a20c65b49a58fe88861af94",
+      "placeholder_signature": ""
+    },
+    "frontend.yes_cancel_booking": {
+      "group": "frontend",
+      "default_sha1": "4837a37be4f3cc74af4943ae7c5bff82b1dd9b93",
+      "placeholder_signature": ""
+    },
+    "frontend.you_are_already_signed_in_to_your_client_account": {
+      "group": "frontend",
+      "default_sha1": "926737005894cfb5ec27be7ec5fe844ef45e1a07",
+      "placeholder_signature": ""
+    },
+    "frontend.you_are_signed_in": {
+      "group": "frontend",
+      "default_sha1": "c20ee3e29c74cec6af354fcb23cc3636d476881d",
+      "placeholder_signature": ""
+    },
+    "frontend.you_do_not_have_access_to_manage_this_booking": {
+      "group": "frontend",
+      "default_sha1": "d5dacebea8699dd4a0c8e3c8dce33ba4647e1358",
+      "placeholder_signature": ""
+    },
+    "frontend.you_do_not_have_access_to_this_invoice": {
+      "group": "frontend",
+      "default_sha1": "96d4e5807a9d80eb1c55435b374aca2268f711f0",
+      "placeholder_signature": ""
+    },
+    "frontend.you_example_com": {
+      "group": "frontend",
+      "default_sha1": "50e2b46ef8778549445c9610f4fea207d995c937",
+      "placeholder_signature": ""
+    },
+    "frontend.you_have_been_logged_out": {
+      "group": "frontend",
+      "default_sha1": "9b57251536fd16a95d3c83b525b495e490cec7bc",
+      "placeholder_signature": ""
+    },
+    "frontend.your_booking_has_been_received_successfully_a_confirmation_email_will_": {
+      "group": "frontend",
+      "default_sha1": "3efcf228249ea1b18baae44b58af8d3b5d140c20",
+      "placeholder_signature": ""
+    },
+    "frontend.your_booking_request_has_been_received": {
+      "group": "frontend",
+      "default_sha1": "88fb440615d0a9b4493b3773a32d8ec73e03c85a",
+      "placeholder_signature": ""
+    },
+    "frontend.your_booking_was_saved_but_the_payment_attempt_failed_or_could_not_be_": {
+      "group": "frontend",
+      "default_sha1": "0329be9fb0642eb6037edf719db684cfec0b5058",
+      "placeholder_signature": ""
+    },
+    "frontend.your_details": {
+      "group": "frontend",
+      "default_sha1": "a6252b66904c2b87ca11b95e1f01fab3be570ff4",
+      "placeholder_signature": ""
+    },
+    "frontend.your_name": {
+      "group": "frontend",
+      "default_sha1": "ab42293e29e1ffb306c1403dd95144d664853a60",
+      "placeholder_signature": ""
+    }
+  }
+}
