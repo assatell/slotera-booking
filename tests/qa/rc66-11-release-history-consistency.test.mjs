@@ -18,23 +18,23 @@ function compareRc(a, b) {
   return 0;
 }
 
-test('RC66 changelog is continuous with manifest release history through current candidate', () => {
+test('changelog is continuous with manifest release history through current candidate', () => {
   const manifest = JSON.parse(readText('release-manifest.json'));
   const declared = manifest.release_changes
-    .map((line) => line.match(/\b(RC66(?:\.\d+){1,2})\b/)?.[1])
+    .map((line) => line.match(/\b(RC\d+(?:\.\d+){1,2})\b/)?.[1]).filter((id) => id && Number(id.match(/^RC(\d+)/)?.[1]) >= 66)
     .filter(Boolean);
   const uniqueDeclared = [...new Set(declared)].sort(compareRc);
   const current = manifest.candidate;
-  assert.match(current, /^RC66(?:\.\d+){1,2}$/);
+  assert.match(current, /^RC\d+(?:\.\d+){1,2}$/);
   assert.ok(uniqueDeclared.includes('RC66.4'), 'manifest must retain RC66.4 in release history');
-  assert.equal(uniqueDeclared.at(-1), current, 'current RC66 candidate must be last declared RC66 release');
+  assert.equal(uniqueDeclared.at(-1), current, 'current candidate must be last declared release');
 
-  const changelogIds = [...readText('CHANGELOG.md').matchAll(/^##\s+1\.0\.1038\s+(RC66(?:\.\d+){1,2})\b/gm)].map((m) => m[1]);
+  const changelogIds = [...readText('CHANGELOG.md').matchAll(/^##\s+1\.0\.1038\s+(RC\d+(?:\.\d+){1,2})\b/gm)].map((m) => m[1]).filter((id) => Number(id.match(/^RC(\d+)/)?.[1]) >= 66);
   const counts = new Map(changelogIds.map((id) => [id, changelogIds.filter((x) => x === id).length]));
   for (const id of uniqueDeclared) {
     assert.equal(counts.get(id), 1, `${id} must appear exactly once in CHANGELOG.md`);
   }
 
   const expectedDescending = [...uniqueDeclared].sort((a, b) => compareRc(b, a));
-  assert.deepEqual(changelogIds.slice(0, expectedDescending.length), expectedDescending, 'RC66 changelog entries must be newest-first without omissions');
+  assert.deepEqual(changelogIds.slice(0, expectedDescending.length), expectedDescending, 'changelog entries must be newest-first without omissions');
 });
