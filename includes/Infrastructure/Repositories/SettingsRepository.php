@@ -1140,7 +1140,7 @@ final class SettingsRepository
                 continue;
             }
 
-            if (in_array($key, ['email_notifications_enabled', 'smtp_enabled', 'smtp_auth', 'smtp_allow_insecure_ssl'], true)) {
+            if (in_array($key, ['email_notifications_enabled', 'email_attach_ics_invites', 'smtp_enabled', 'smtp_auth', 'smtp_allow_insecure_ssl'], true)) {
                 $clean[$key] = !empty($value) ? 1 : 0;
                 continue;
             }
