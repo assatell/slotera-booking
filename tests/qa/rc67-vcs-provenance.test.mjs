@@ -80,3 +80,31 @@ test('legacy sandbox builds remain source-archive compatible for reproducibility
     /VCS-bound build cannot use source-archive state/,
   );
 });
+test('RC67 Git source is direct provenance source while RC18 remains historical lineage', () => {
+  const metadata = read('tools/release-metadata.mjs');
+
+  assert.match(metadata, /type:\s*'git'/);
+  assert.match(metadata, /repository:\s*manifest\.vcs\?\.repository/);
+  assert.match(metadata, /lineage:\s*\{/);
+  assert.match(metadata, /previous_source:\s*previousSource/);
+
+  assert.match(
+    metadata,
+    /input_artifact:\s*previousSource\.artifact/,
+  );
+
+  assert.match(
+    metadata,
+    /input_tree_sha256:\s*previousSource\.tree_sha256/,
+  );
+
+  assert.match(
+    metadata,
+    /Git source commit does not match VCS provenance/,
+  );
+
+  assert.match(
+    metadata,
+    /Git source tag does not match VCS provenance/,
+  );
+});
