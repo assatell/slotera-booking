@@ -20,9 +20,20 @@ test('release metadata binds current candidate identity and changelog top entry'
   const provenance = JSON.parse(readText('build-provenance.json'));
   const top = readText('CHANGELOG.md').match(/^##\s+\d+\.\d+\.\d+\s+(RC\d+(?:\.\d+)*)\b/m);
   assert.match(manifest.candidate, /^RC\d+(?:\.\d+)*$/);
-  assert.equal(provenance.candidate, manifest.candidate);
   assert.equal(top?.[1], manifest.candidate);
   assert.match(manifest.release_notes, new RegExp(manifest.candidate.replace('.', '\\.')));
+
+  assert.equal(provenance.version, manifest.version);
+  assert.match(provenance.candidate, /^RC\d+(?:\.\d+)*$/);
+  assert.equal(provenance.schema, 'slotera-build-provenance/v3');
+
+  if (provenance.vcs?.state === 'git-clean') {
+    assert.equal(provenance.candidate, manifest.candidate);
+    assert.equal(provenance.builder.version, manifest.builder.version);
+  } else {
+    assert.equal(provenance.source?.sha256, manifest.source?.sha256);
+    assert.equal(provenance.source?.tree_sha256, manifest.source?.tree_sha256);
+  }
 });
 
 test('release attestation verifier is fail-closed and compares extracted tree to signed ZIP', () => {
