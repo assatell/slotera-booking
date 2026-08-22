@@ -9,6 +9,52 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 ARCHIVE_ROOT = 'slotera-booking/'
 
 
+def git(args: list[str]) -> str:
+    try:
+        run = subprocess.run(
+            ['git', *args],
+            cwd=ROOT,
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+        return run.stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return ''
+
+
+def capture_vcs(env: dict[str, str]) -> None:
+    required = env.get('SLTR_VCS_REQUIRED', '').strip() == '1'
+    expected_tag = env.get('SLTR_VCS_TAG', '').strip()
+    commit = git(['rev-parse', 'HEAD'])
+
+    if not commit:
+        if required:
+            raise SystemExit('VCS-bound build requires Git metadata and an exact HEAD commit')
+        env['SLTR_VCS_COMMIT'] = ''
+        env['SLTR_VCS_TAG'] = ''
+        env['SLTR_VCS_DIRTY'] = ''
+        env['SLTR_VCS_STATE'] = 'source-archive'
+        return
+
+    dirty = git(['status', '--porcelain']) != ''
+    tag = git(['describe', '--tags', '--exact-match', 'HEAD'])
+
+    if required:
+        if dirty:
+            raise SystemExit('VCS-bound build requires a clean working tree')
+        if not expected_tag:
+            raise SystemExit('VCS-bound build requires SLTR_VCS_TAG')
+        if tag != expected_tag:
+            raise SystemExit(f'VCS-bound build tag mismatch: expected {expected_tag}, HEAD tag is {tag or "<none>"}')
+
+    env['SLTR_VCS_COMMIT'] = commit
+    env['SLTR_VCS_TAG'] = tag
+    env['SLTR_VCS_DIRTY'] = '1' if dirty else '0'
+    env['SLTR_VCS_STATE'] = 'git-dirty' if dirty else 'git-clean'
+
+
 def canonical_files() -> list[tuple[bytes, str, pathlib.Path]]:
     files: list[tuple[bytes, str, pathlib.Path]] = []
     for path in ROOT.rglob('*'):
@@ -37,6 +83,7 @@ def main() -> int:
     env['SLTR_BUILD_OUTPUT'] = output.name
     env.setdefault('SLTR_BUILD_COMMAND', f"node tools/build-rc.mjs --output ../{output.name} --source-date-epoch {args.source_date_epoch}")
     env['SLTR_SIGNING_STATUS'] = env.get('SLTR_SIGNING_STATUS', 'not-performed-release-candidate')
+    capture_vcs(env)
     subprocess.run(['node', 'tools/release-metadata.mjs', 'prepare'], cwd=ROOT, env=env, check=True)
 
     dt = time.gmtime(args.source_date_epoch)[:6]

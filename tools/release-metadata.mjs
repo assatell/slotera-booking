@@ -59,6 +59,33 @@ function git(args) {
 }
 
 function detectVcs() {
+  const capturedState = String(process.env.SLTR_VCS_STATE || '').trim();
+  if (capturedState !== '') {
+    if (!['source-archive', 'git-clean', 'git-dirty'].includes(capturedState)) throw new Error(`Invalid captured VCS state: ${capturedState}`);
+    if (capturedState === 'source-archive') {
+      if (process.env.SLTR_VCS_REQUIRED === '1') throw new Error('VCS-bound build cannot use source-archive state');
+      return { commit: null, tag: null, dirty: null, state: 'source-archive', note: 'No Git metadata is present in the release source tree.' };
+    }
+
+    const commit = String(process.env.SLTR_VCS_COMMIT || '').trim();
+    const tag = String(process.env.SLTR_VCS_TAG || '').trim() || null;
+    const dirtyRaw = String(process.env.SLTR_VCS_DIRTY || '').trim();
+
+    if (!/^[0-9a-f]{40}$/.test(commit)) throw new Error('Captured VCS commit must be a full 40-character lowercase Git SHA-1');
+    if (!['0', '1'].includes(dirtyRaw)) throw new Error('Captured VCS dirty state must be 0 or 1');
+
+    const dirty = dirtyRaw === '1';
+    if ((capturedState === 'git-dirty') !== dirty) throw new Error('Captured VCS state/dirty mismatch');
+
+    if (process.env.SLTR_VCS_REQUIRED === '1') {
+      const expectedTag = String(process.env.SLTR_VCS_TAG || '').trim();
+      if (dirty) throw new Error('VCS-bound build requires a clean captured tree');
+      if (!expectedTag || tag !== expectedTag) throw new Error('VCS-bound build requires the exact captured tag');
+    }
+
+    return { commit, tag, dirty, state: capturedState, capture: 'pre-metadata' };
+  }
+
   const commit = git(['rev-parse', 'HEAD']);
   if (!commit) {
     return { commit: null, tag: null, dirty: null, state: 'source-archive', note: 'No Git metadata is present in the release source tree.' };
@@ -260,6 +287,18 @@ function verify() {
   if (provenance.version !== version || provenance.candidate !== manifest.candidate || provenance.release_manifest_sha256 !== sha256(fs.readFileSync(manifestPath))) throw new Error('provenance does not match release manifest');
   if (provenance.builder?.version !== builderVersion) throw new Error('provenance builder version mismatch');
   if (!Object.hasOwn(provenance.vcs || {}, 'commit') || !Object.hasOwn(provenance.vcs || {}, 'tag')) throw new Error('provenance must contain commit/tag fields');
+
+  if (provenance.vcs?.state === 'git-clean') {
+    if (!/^[0-9a-f]{40}$/.test(String(provenance.vcs.commit || ''))) throw new Error('git-clean provenance must contain a full commit hash');
+    if (provenance.vcs.dirty !== false) throw new Error('git-clean provenance must record dirty=false');
+  }
+
+  if (process.env.SLTR_VCS_REQUIRED === '1') {
+    const expectedTag = String(process.env.SLTR_VCS_TAG || '').trim();
+    if (provenance.vcs?.state !== 'git-clean') throw new Error('VCS-bound provenance must be git-clean');
+    if (!expectedTag || provenance.vcs?.tag !== expectedTag) throw new Error('VCS-bound provenance tag mismatch');
+  }
+
   if (provenance.source?.sha256 !== manifest.source?.sha256) throw new Error('provenance source hash mismatch');
   if (!Array.isArray(provenance.transformation_chain) || provenance.transformation_chain.length < 6) throw new Error('provenance transformation chain is incomplete');
   if (!provenance.build?.command) throw new Error('provenance exact build command is missing');
