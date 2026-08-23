@@ -25,13 +25,23 @@ test('public visitor analytics is rate limited and restricted to same-site URLs'
 test('plaintext secret migration never writes when encryption is unavailable', () => {
   const source = read('includes/Infrastructure/Repositories/SettingsRepository.php');
   const guard = source.indexOf('SecretStore::encryption_available()');
-  const encrypted = source.indexOf('$encrypted = SecretStore::encrypt_settings($settings)', guard);
+  const decrypted = source.indexOf('$decrypted = SecretStore::decrypt_settings($settings)', guard);
+  const encrypted = source.indexOf('$encrypted = SecretStore::encrypt_settings($decrypted)', decrypted);
   const write = source.indexOf('update_option(self::OPTION_NAME, $encrypted, false)', encrypted);
-  assert.ok(guard >= 0 && encrypted > guard && write > encrypted);
+  assert.ok(guard >= 0 && decrypted > guard && encrypted > decrypted && write > encrypted);
   assert.match(source, /!SecretStore::is_encrypted\(\$encrypted\[\$key\]\)/);
   assert.match(source, /finally\s*\{\s*\$migrating = false;/s);
 });
 
+test('license secrets rotate legacy ciphertext to current encryption', () => {
+  const source = read('includes/Application/Services/LicenseService.php');
+  assert.match(source, /SecretStore::is_current_encrypted\(\$stored_key\)/);
+  assert.match(source, /\$plain_key = SecretStore::decrypt_string\(\$stored_key\)/);
+  assert.match(source, /\$rotated_key = SecretStore::encrypt_string\(\$plain_key\)/);
+  assert.match(source, /SecretStore::is_current_encrypted\(\$rotated_key\)/);
+  assert.match(source, /update_option\(self::OPTION_NAME, \$stored, false\)/);
+  assert.match(source, /\$data\['license_key'\] = SecretStore::decrypt_string\(\$stored_key\)/);
+});
 test('visitor analytics emits one final event per page view', () => {
   const client = read('assets/js/frontend-analytics.js');
   assert.match(client, /if \(sent\) \{ return; \}/);

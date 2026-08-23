@@ -55,6 +55,32 @@ require_once ABSPATH . 'includes/Domain/Availability/AvailabilityService.php';
 require_once ABSPATH . 'includes/Application/Services/DateRangeInventoryService.php';
 require_once ABSPATH . 'includes/Application/Services/BookingAccessTokenService.php';
 require_once ABSPATH . 'includes/Application/Services/MarketingConsentService.php';
+require_once ABSPATH . 'includes/Application/Security/SecretStore.php';
+
+if (\Slotera\Application\Security\SecretStore::encryption_available()) {
+    $secretPlain = 'runtime-secret';
+    $secretEncrypted = \Slotera\Application\Security\SecretStore::encrypt_string($secretPlain);
+
+    assert_runtime(
+        str_starts_with($secretEncrypted, 'sltr_secret:v3:'),
+        'SecretStore must use v3 for new ciphertext.'
+    );
+
+    assert_runtime(
+        \Slotera\Application\Security\SecretStore::decrypt_string($secretEncrypted) === $secretPlain,
+        'SecretStore v3 ciphertext must round-trip.'
+    );
+
+    $legacyKey = hash('sha256', 'slotera-secret-store-fallback', true);
+    $legacyNonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+    $legacyCiphertext = sodium_crypto_secretbox('legacy-runtime-secret', $legacyNonce, $legacyKey);
+    $legacyStored = 'sltr_secret:v2:' . base64_encode($legacyNonce . $legacyCiphertext);
+
+    assert_runtime(
+        \Slotera\Application\Security\SecretStore::decrypt_string($legacyStored) === 'legacy-runtime-secret',
+        'SecretStore must retain v2 fixed-fallback decryption compatibility.'
+    );
+}
 
 $socialClass = new ReflectionClass(\Slotera\Application\Services\SocialLoginService::class);
 $social = $socialClass->newInstanceWithoutConstructor();

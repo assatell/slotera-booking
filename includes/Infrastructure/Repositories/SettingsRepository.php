@@ -120,7 +120,7 @@ final class SettingsRepository
             if (!array_key_exists($key, $settings) || !is_string($settings[$key]) || $settings[$key] === '') {
                 continue;
             }
-            if (!SecretStore::is_encrypted($settings[$key])) {
+            if (!SecretStore::is_current_encrypted($settings[$key])) {
                 $needs_migration = true;
                 break;
             }
@@ -131,7 +131,8 @@ final class SettingsRepository
         // empty string in that environment, so a read-time migration without
         // this guard would destroy the existing credentials.
         if ($needs_migration && !$migrating && SecretStore::encryption_available()) {
-            $encrypted = SecretStore::encrypt_settings($settings);
+            $decrypted = SecretStore::decrypt_settings($settings);
+            $encrypted = SecretStore::encrypt_settings($decrypted);
             $migration_is_complete = true;
             foreach (SecretStore::sensitive_keys() as $key) {
                 if (!array_key_exists($key, $settings) || !is_string($settings[$key]) || $settings[$key] === '') {

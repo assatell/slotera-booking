@@ -30,8 +30,8 @@ final class ActivityLogRepository
             'message' => sanitize_text_field(DataRedactor::text((string) ($d['message'] ?? ''))),
             'error_message' => $error,
             'payload_json' => wp_json_encode($payload),
-            'ip_address' => sanitize_text_field((string) ($d['ip_address'] ?? ($_SERVER['REMOTE_ADDR'] ?? ''))),
-            'user_agent' => sanitize_text_field((string) ($d['user_agent'] ?? ($_SERVER['HTTP_USER_AGENT'] ?? ''))),
+            'ip_address' => null,
+            'user_agent' => null,
             'created_at' => current_time('mysql'),
         ]);
 

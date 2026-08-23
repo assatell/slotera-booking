@@ -125,11 +125,13 @@ final class PublicBookingActionSecurityService
 
     public function audit_context(): array
     {
+        $ip = ClientIpResolver::get_client_ip();
         $ua = $this->user_agent();
+        $salt = wp_salt('auth');
+
         return [
-            'ip' => ClientIpResolver::get_client_ip(),
-            'user_agent' => $ua,
-            'user_agent_hash' => $ua !== '' ? hash('sha256', $ua) : '',
+            'ip_hash' => $ip !== '' ? hash_hmac('sha256', $ip, $salt) : '',
+            'user_agent_hash' => $ua !== '' ? hash_hmac('sha256', $ua, $salt) : '',
         ];
     }
 

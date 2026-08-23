@@ -65,12 +65,24 @@ final class LicenseService
         $data = get_option(self::OPTION_NAME, []);
         if (!is_array($data)) { return []; }
         if (!empty($data['license_key']) && is_string($data['license_key'])) {
-            if (!SecretStore::is_encrypted($data['license_key']) && SecretStore::encryption_available()) {
-                $stored = $data;
-                $stored['license_key'] = SecretStore::encrypt_string($data['license_key']);
-                update_option(self::OPTION_NAME, $stored, false);
+            $stored_key = $data['license_key'];
+
+            if (SecretStore::encryption_available()) {
+                if (!SecretStore::is_current_encrypted($stored_key)) {
+                    $plain_key = SecretStore::decrypt_string($stored_key);
+                    if ($plain_key !== '') {
+                        $rotated_key = SecretStore::encrypt_string($plain_key);
+                        if (SecretStore::is_current_encrypted($rotated_key)) {
+                            $stored = $data;
+                            $stored['license_key'] = $rotated_key;
+                            update_option(self::OPTION_NAME, $stored, false);
+                            $stored_key = $rotated_key;
+                        }
+                    }
+                }
             }
-            $data['license_key'] = SecretStore::decrypt_string($data['license_key']);
+
+            $data['license_key'] = SecretStore::decrypt_string($stored_key);
         }
         return $data;
     }
