@@ -16,18 +16,18 @@
     }
   },
   "vcs": {
-    "commit": "fca53877defe816278c1083ae99c7a6e55ba4914",
-    "tag": "v1.0.1038-rc67.0",
-    "dirty": true,
-    "state": "git-dirty"
+    "commit": "434439cb5680df6e75e0311210c003a1fa13b755",
+    "tag": "v1.0.1041-rc67.1",
+    "dirty": false,
+    "state": "git-clean",
+    "capture": "pre-metadata"
   },
   "source": {
-    "type": "archive",
-    "artifact": "slotera-booking-1.0.1038-rc18.zip",
-    "sha256": "fdce7d034c1c1b85d3bd20b64699af455e45c8b0c955ca06b633cbbbf28e17da",
-    "attestation_schema": null,
-    "attestation_key_id": null,
-    "tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763"
+    "type": "git",
+    "repository": "https://github.com/assatell/slotera-booking",
+    "commit": "434439cb5680df6e75e0311210c003a1fa13b755",
+    "tag": "v1.0.1041-rc67.1",
+    "dirty": false
   },
   "lineage": {
     "previous_source": {
@@ -39,14 +39,14 @@
     }
   },
   "build": {
-    "command": "node tools/release-metadata.mjs prepare",
+    "command": "node tools/build-rc.mjs --output ../slotera-booking-1.0.1041-rc67.1.zip --source-date-epoch 1787496341",
     "metadata_command": "node tools/release-metadata.mjs prepare",
     "archive_root": "slotera-booking/",
-    "output": "slotera-booking-1.0.1041.zip",
+    "output": "slotera-booking-1.0.1041-rc67.1.zip",
     "source_date_epoch_utc": "2026-08-23T14:45:41Z"
   },
   "hashes": {
-    "source_artifact_sha256": "fdce7d034c1c1b85d3bd20b64699af455e45c8b0c955ca06b633cbbbf28e17da",
+    "source_artifact_sha256": null,
     "release_manifest_sha256": "ef3e936d9f3de145c21011e2b6caf48c964a5a6ccb6a3449e2817405286724bd",
     "pre_version_sync_tree_sha256": "61709422fe8ac4da5c0b245c716233a4c90aa9144ac06c5fc8248613450cf7c6",
     "release_tree_sha256": "61709422fe8ac4da5c0b245c716233a4c90aa9144ac06c5fc8248613450cf7c6"
@@ -107,12 +107,12 @@
     {
       "order": 6,
       "name": "archive-packaging",
-      "command": "node tools/release-metadata.mjs prepare",
-      "output": "slotera-booking-1.0.1041.zip",
+      "command": "node tools/build-rc.mjs --output ../slotera-booking-1.0.1041-rc67.1.zip --source-date-epoch 1787496341",
+      "output": "slotera-booking-1.0.1041-rc67.1.zip",
       "signing_policy": {
         "algorithm": "RSA-PSS-SHA256",
         "key_id": "sha256:c3272d14be785233f096bd11ef478a85b12b889bb3e7b7930993c440b1275603",
-        "status": "not-performed-in-this-build"
+        "status": "not-performed-release-candidate"
       },
       "note": "Official releases are signed after packaging. The final archive SHA-256 is recorded outside the ZIP in the detached attestation to avoid self-reference."
     }
