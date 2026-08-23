@@ -75,7 +75,7 @@ final class CalendarInviteService
                 if ($end_dt < $start_dt) { $end_dt = $start_dt; }
 
                 $all_day_start = $start_dt->format('Ymd');
-                $all_day_end = $end_dt->modify('+1 day')->format('Ymd');
+                $all_day_end = $end_dt->format('Ymd');
             } catch (\Exception $e) {
                 return '';
             }

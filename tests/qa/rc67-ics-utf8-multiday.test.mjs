@@ -100,7 +100,7 @@ namespace {
   const unfolded = ics.replace(/\r\n /g, '');
 
   assert.match(ics, /DTSTART;VALUE=DATE:20260824\r\n/);
-  assert.match(ics, /DTEND;VALUE=DATE:20260827\r\n/);
+  assert.match(ics, /DTEND;VALUE=DATE:20260826\r\n/);
 
   assert.ok(
     unfolded.includes(`SUMMARY:${packageTitle} ${dash} ${customerName}`),

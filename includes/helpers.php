@@ -549,7 +549,26 @@ if (!function_exists('sltr_booking_display_data')) {
         $start_time = $valid_time((string) ($booking['start_time'] ?? ''));
         $end_time = $valid_time((string) ($booking['end_time'] ?? ''));
 
-        $is_multi_day = $start_date !== '' && $end_date !== '' && $end_date !== $start_date;
+        $full_day_duration_days = 0;
+        if ($date_only_multi_day && $start_date !== '' && $end_date !== '') {
+            try {
+                $start_boundary = new \DateTimeImmutable($start_date);
+                $end_boundary = new \DateTimeImmutable($end_date);
+                if ($end_boundary > $start_boundary) {
+                    $full_day_duration_days = (int) $start_boundary->diff($end_boundary)->days;
+                    $display_end_date = sltr_format_localized_date(
+                        $end_boundary->modify('-1 day')->format('Y-m-d'),
+                        $frontend_locale
+                    );
+                }
+            } catch (\Exception $e) {
+                $full_day_duration_days = 0;
+            }
+        }
+
+        $is_multi_day = $date_only_multi_day
+            ? $full_day_duration_days > 1
+            : ($start_date !== '' && $end_date !== '' && $end_date !== $start_date);
         $is_scheduled_event = $event_use_time !== null;
         $date = $display_start_date;
         $time = '';
