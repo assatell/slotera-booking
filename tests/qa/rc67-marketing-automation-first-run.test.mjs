@@ -14,8 +14,12 @@ assert.match(editor, /Run now/);
 
 assert.match(controller, /if \(\$id > 0\)/);
 assert.match(controller, /\$_POST\['type'\]/);
+assert.match(controller, /\$posted_type === 'after-booking'/);
+assert.match(controller, /\$posted_type === 'come-back'/);
+assert.match(controller, /'after_booking'/);
+assert.match(controller, /'come_back'/);
 assert.match(controller, /in_array\(\$type, \['after_booking', 'come_back'\], true\)/);
-assert.match(controller, /sltr_run_marketing_automation_' \. \$type/);
+assert.match(controller, /sltr_run_marketing_automation_' \. \$posted_type/);
 assert.match(controller, /process_after_booking\(true\)/);
 assert.match(controller, /->process\(true\)/);
 

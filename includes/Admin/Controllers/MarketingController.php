@@ -448,12 +448,16 @@ final class MarketingController
             }
             $type = sanitize_key((string) ($campaign['automation_type'] ?? ''));
         } else {
-            $type = sanitize_key(wp_unslash((string) ($_POST['type'] ?? '')));
+            $posted_type = sanitize_key(wp_unslash((string) ($_POST['type'] ?? '')));
+            $type = $posted_type === 'after-booking'
+                ? 'after_booking'
+                : ($posted_type === 'come-back' ? 'come_back' : $posted_type);
+
             if (!in_array($type, ['after_booking', 'come_back'], true)) {
                 wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation'));
                 exit;
             }
-            $this->request->verify_admin_nonce('sltr_run_marketing_automation_' . $type);
+            $this->request->verify_admin_nonce('sltr_run_marketing_automation_' . $posted_type);
         }
 
         $settings = new SettingsRepository();
