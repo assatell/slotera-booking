@@ -22,7 +22,7 @@ assert.match(editor, /offer_package_ids/);
 assert.match(editor, /One time per recipient/);
 assert.match(editor, /Marketing queue settings/);
 assert.match(editor, /Preview and test/);
-assert.doesNotMatch(editor, /Run now/);
+assert.match(editor, /Run now/);
 assert.doesNotMatch(editor, /Enabled/);
 assert.match(editor, /'form' => 'sltr-automation-settings-form'/);
 assert.doesNotMatch(editor, /automation_coupon_id/);

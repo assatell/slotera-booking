@@ -101,5 +101,12 @@ $preview_url = wp_nonce_url(
         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="sltr-marketing-test-form"><input type="hidden" name="action" value="sltr_send_marketing_automation_test"><input type="hidden" name="type" value="<?php echo esc_attr($sltr_automation_type); ?>"><?php wp_nonce_field('sltr_send_marketing_automation_test_' . $sltr_automation_type); ?><input type="email" name="test_email" class="regular-text" value="<?php echo esc_attr((string) get_option('admin_email')); ?>"> <?php submit_button(__('Send test email with preview data', 'slotera-booking'), 'secondary', 'submit', false); ?></form>
         <div class="sltr-marketing-preview-modal" aria-hidden="true"><div class="sltr-marketing-preview-backdrop"></div><div class="sltr-marketing-preview-dialog" role="dialog" aria-modal="true"><div class="sltr-marketing-preview-header"><strong><?php esc_html_e('Automation preview', 'slotera-booking'); ?></strong><button type="button" class="button-link sltr-marketing-preview-close">×</button></div><iframe title="<?php esc_attr_e('Automation preview', 'slotera-booking'); ?>" src="about:blank"></iframe></div></div>
         <?php submit_button($sltr_save_label, 'primary', 'submit', false, $marketing_allowed && $automation_allowed ? ['form' => 'sltr-automation-settings-form'] : ['disabled' => 'disabled', 'form' => 'sltr-automation-settings-form']); ?>
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="display:inline-block;margin-left:8px;">
+            <input type="hidden" name="action" value="sltr_run_marketing_automation">
+            <input type="hidden" name="id" value="0">
+            <input type="hidden" name="type" value="<?php echo esc_attr($sltr_automation_type); ?>">
+            <?php wp_nonce_field('sltr_run_marketing_automation_' . $sltr_automation_type); ?>
+            <?php submit_button(__('Run now', 'slotera-booking'), 'secondary', 'submit', false, $marketing_allowed && $automation_allowed ? [] : ['disabled' => 'disabled']); ?>
+        </form>
     </div>
 </section>

@@ -5,7 +5,7 @@ const editor = read('includes/Admin/Views/marketing-automation-editor.php');
 const controller = read('includes/Admin/Controllers/MarketingController.php');
 
 assert.doesNotMatch(editor, /name="<\?php echo esc_attr\(\$sltr_prefix\); \?>enabled"/);
-assert.doesNotMatch(editor, /Run now/);
+assert.match(editor, /Run now/);
 assert.match(editor, /Preview and test/);
 assert.match(editor, /submit_button\(\$sltr_save_label/);
 assert.match(editor, /form' => 'sltr-automation-settings-form'/);

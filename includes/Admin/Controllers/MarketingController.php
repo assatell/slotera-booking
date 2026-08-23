@@ -438,14 +438,24 @@ final class MarketingController
     {
         $this->request->require_admin(\Slotera\Core\Capabilities::MANAGE_MARKETING);
         $id = isset($_POST['id']) ? absint(wp_unslash((string) $_POST['id'])) : 0;
-        $this->request->verify_admin_nonce('sltr_marketing_automation_toggle_' . $id);
-        $campaign = $id > 0 ? $this->repo->get_by_id($id) : null;
-        if (!$campaign || sanitize_key((string) ($campaign['source'] ?? '')) !== 'automation') {
-            wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=campaigns'));
-            exit;
+
+        if ($id > 0) {
+            $this->request->verify_admin_nonce('sltr_marketing_automation_toggle_' . $id);
+            $campaign = $this->repo->get_by_id($id);
+            if (!$campaign || sanitize_key((string) ($campaign['source'] ?? '')) !== 'automation') {
+                wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=campaigns'));
+                exit;
+            }
+            $type = sanitize_key((string) ($campaign['automation_type'] ?? ''));
+        } else {
+            $type = sanitize_key(wp_unslash((string) ($_POST['type'] ?? '')));
+            if (!in_array($type, ['after_booking', 'come_back'], true)) {
+                wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation'));
+                exit;
+            }
+            $this->request->verify_admin_nonce('sltr_run_marketing_automation_' . $type);
         }
 
-        $type = sanitize_key((string) ($campaign['automation_type'] ?? ''));
         $settings = new SettingsRepository();
         if ($type === 'after_booking') {
             $settings->update(['after_booking_automation_enabled' => 1]);
@@ -454,9 +464,11 @@ final class MarketingController
             $settings->update(['comeback_automation_enabled' => 1]);
             $result = (new MarketingAutomationService())->process(true);
         }
+
         if ((int) ($result['queued'] ?? 0) > 0) {
             (new MarketingEmailService())->process_campaign_queue((int) ($result['campaign_id'] ?? 0));
         }
+
         wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=campaigns&automation_started=1'));
         exit;
     }
