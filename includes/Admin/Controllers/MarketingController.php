@@ -380,13 +380,7 @@ final class MarketingController
         ], $this->automation_offer_settings_from_post('comeback_automation_'), $this->automation_queue_settings_from_post()));
         $automation = new MarketingAutomationService();
         $automation->ensure_scheduled(true);
-        $result = $automation->process(true);
-        $processed = ['sent' => 0, 'failed' => 0];
-        if ((int) ($result['queued'] ?? 0) > 0) { $processed = (new MarketingEmailService())->process_campaign_queue((int) ($result['campaign_id'] ?? 0)); }
-        $limited = (($result['reason'] ?? '') === 'license_limited') ? '&license_limited=1' : '';
-        $email_settings = (($result['reason'] ?? '') === 'email_settings_required') ? '&email_settings_required=1&email_settings_issue=' . rawurlencode((string) ($result['email_settings_issue'] ?? '')) : '';
-        $target_tab = ((int) ($result['campaign_id'] ?? 0) > 0 && $limited === '' && $email_settings === '') ? 'campaigns' : 'come-back';
-        wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=' . $target_tab . '&automation_saved=1&automation_queued=' . (int) ($result['queued'] ?? 0) . '&automation_skipped=' . (int) ($result['skipped'] ?? 0) . '&automation_campaign_id=' . (int) ($result['campaign_id'] ?? 0) . '&processed_sent=' . (int) ($processed['sent'] ?? 0) . '&processed_failed=' . (int) ($processed['failed'] ?? 0) . $limited . $email_settings));
+        wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=come-back&automation_saved=1'));
         exit;
     }
 
@@ -411,13 +405,7 @@ final class MarketingController
         ], $this->automation_offer_settings_from_post('after_booking_automation_'), $this->automation_queue_settings_from_post()));
         $automation = new MarketingAutomationService();
         $automation->ensure_scheduled(true);
-        $result = $automation->process_after_booking(true);
-        $processed = ['sent' => 0, 'failed' => 0];
-        if ((int) ($result['queued'] ?? 0) > 0) { $processed = (new MarketingEmailService())->process_campaign_queue((int) ($result['campaign_id'] ?? 0)); }
-        $limited = (($result['reason'] ?? '') === 'license_limited') ? '&license_limited=1' : '';
-        $email_settings = (($result['reason'] ?? '') === 'email_settings_required') ? '&email_settings_required=1&email_settings_issue=' . rawurlencode((string) ($result['email_settings_issue'] ?? '')) : '';
-        $target_tab = ((int) ($result['campaign_id'] ?? 0) > 0 && $limited === '' && $email_settings === '') ? 'campaigns' : 'after-booking';
-        wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=' . $target_tab . '&after_booking_automation_saved=1&after_booking_automation_queued=' . (int) ($result['queued'] ?? 0) . '&after_booking_automation_skipped=' . (int) ($result['skipped'] ?? 0) . '&after_booking_automation_campaign_id=' . (int) ($result['campaign_id'] ?? 0) . '&processed_sent=' . (int) ($processed['sent'] ?? 0) . '&processed_failed=' . (int) ($processed['failed'] ?? 0) . $limited . $email_settings));
+        wp_safe_redirect(admin_url('admin.php?page=slotera-marketing&sltr_marketing_section=automation&sltr_marketing_tab=after-booking&after_booking_automation_saved=1'));
         exit;
     }
 

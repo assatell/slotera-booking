@@ -37,7 +37,8 @@ assert.match(controller, /automation_offer_settings_from_post/);
 assert.match(controller, /automation_queue_settings_from_post/);
 assert.match(controller, /sltr_stop_marketing_automation/);
 assert.match(controller, /sltr_run_marketing_automation/);
-assert.match(controller, /sltr_marketing_tab=' \. \$target_tab/);
+assert.match(controller, /sltr_marketing_tab=come-back&automation_saved=1/);
+assert.match(controller, /sltr_marketing_tab=after-booking&after_booking_automation_saved=1/);
 assert.doesNotMatch(controller, /run_comeback_automation_now|run_after_booking_automation_now/);
 
 assert.match(page, /latest_by_type/);
