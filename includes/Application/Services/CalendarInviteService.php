@@ -51,10 +51,40 @@ final class CalendarInviteService
     public function generate(array $booking, array $package = [], string $method = 'REQUEST'): string
     {
         $method = strtoupper($method) === 'CANCEL' ? 'CANCEL' : 'REQUEST';
-        $start = $this->timestamp($booking, 'start_time');
-        $end = $this->timestamp($booking, 'end_time');
-        if ($start <= 0) { return ''; }
-        if ($end <= $start) { $end = $start + HOUR_IN_SECONDS; }
+
+        $display = function_exists('sltr_booking_display_data')
+            ? sltr_booking_display_data($booking, $package)
+            : [];
+        $date_only = !empty($display['date_only']);
+
+        $start = 0;
+        $end = 0;
+        $all_day_start = '';
+        $all_day_end = '';
+
+        if ($date_only) {
+            $start_date = sanitize_text_field((string) ($booking['booking_date'] ?? ''));
+            $end_date = sanitize_text_field((string) ($booking['end_date'] ?? ''));
+
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $start_date)) { return ''; }
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $end_date)) { $end_date = $start_date; }
+
+            try {
+                $start_dt = new \DateTimeImmutable($start_date, wp_timezone());
+                $end_dt = new \DateTimeImmutable($end_date, wp_timezone());
+                if ($end_dt < $start_dt) { $end_dt = $start_dt; }
+
+                $all_day_start = $start_dt->format('Ymd');
+                $all_day_end = $end_dt->modify('+1 day')->format('Ymd');
+            } catch (\Exception $e) {
+                return '';
+            }
+        } else {
+            $start = $this->timestamp($booking, 'start_time');
+            $end = $this->timestamp($booking, 'end_time');
+            if ($start <= 0) { return ''; }
+            if ($end <= $start) { $end = $start + HOUR_IN_SECONDS; }
+        }
 
         $booking_id = absint($booking['id'] ?? 0);
         $uid = 'slotera-booking-' . ($booking_id > 0 ? (string) $booking_id : md5(wp_json_encode($booking))) . '@' . wp_parse_url(home_url(), PHP_URL_HOST);
@@ -99,8 +129,12 @@ final class CalendarInviteService
             'BEGIN:VEVENT',
             'UID:' . $this->escape($uid),
             'DTSTAMP:' . gmdate('Ymd\THis\Z'),
-            'DTSTART:' . gmdate('Ymd\THis\Z', $start),
-            'DTEND:' . gmdate('Ymd\THis\Z', $end),
+            $date_only
+                ? 'DTSTART;VALUE=DATE:' . $all_day_start
+                : 'DTSTART:' . gmdate('Ymd\THis\Z', $start),
+            $date_only
+                ? 'DTEND;VALUE=DATE:' . $all_day_end
+                : 'DTEND:' . gmdate('Ymd\THis\Z', $end),
             'SUMMARY:' . $this->escape($summary),
             'DESCRIPTION:' . $this->escape(implode("\n", $description_lines)),
             'STATUS:' . $status,
@@ -154,8 +188,20 @@ final class CalendarInviteService
         $output = [];
         foreach (preg_split('/\r\n/', $content) as $line) {
             while (strlen($line) > 73) {
-                $output[] = substr($line, 0, 73);
-                $line = ' ' . substr($line, 73);
+                $cut = 73;
+
+                // RFC 5545 folding is measured in octets, but a fold must never
+                // split a UTF-8 code point between continuation lines.
+                while ($cut > 0 && isset($line[$cut]) && (ord($line[$cut]) & 0xC0) === 0x80) {
+                    $cut--;
+                }
+
+                if ($cut <= 0) {
+                    $cut = 73;
+                }
+
+                $output[] = substr($line, 0, $cut);
+                $line = ' ' . substr($line, $cut);
             }
             $output[] = $line;
         }
