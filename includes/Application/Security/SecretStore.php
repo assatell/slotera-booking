@@ -8,7 +8,8 @@ if (!defined('ABSPATH')) { exit; }
 
 final class SecretStore
 {
-    private const PREFIX = 'sltr_secret:v2:';
+    private const PREFIX = 'sltr_secret:v3:';
+    private const V2_PREFIX = 'sltr_secret:v2:';
     private const LEGACY_PREFIX = 'sltr_secret:v1:';
 
     public static function sensitive_keys(): array
@@ -51,14 +52,24 @@ final class SecretStore
     public static function is_encrypted($value): bool
     {
         return is_string($value)
-            && (strpos($value, self::PREFIX) === 0 || strpos($value, self::LEGACY_PREFIX) === 0);
+            && (
+                strpos($value, self::PREFIX) === 0
+                || strpos($value, self::V2_PREFIX) === 0
+                || strpos($value, self::LEGACY_PREFIX) === 0
+            );
+    }
+    public static function is_current_encrypted($value): bool
+    {
+        return is_string($value) && strpos($value, self::PREFIX) === 0;
     }
 
     public static function encryption_available(): bool
     {
         return function_exists('sodium_crypto_secretbox')
             && function_exists('sodium_crypto_secretbox_open')
-            && function_exists('random_bytes');
+            && function_exists('random_bytes')
+            && function_exists('wp_salt')
+            && (string) wp_salt('auth') !== '';
     }
 
     public static function encrypt_string(string $plain): string
@@ -66,6 +77,7 @@ final class SecretStore
         if ($plain === '' || self::is_encrypted($plain)) {
             return $plain;
         }
+
         if (!self::encryption_available()) {
             return '';
         }
@@ -76,7 +88,12 @@ final class SecretStore
             return '';
         }
 
-        $ciphertext = sodium_crypto_secretbox($plain, $nonce, self::key());
+        $key = self::key();
+        if ($key === '') {
+            return '';
+        }
+
+        $ciphertext = sodium_crypto_secretbox($plain, $nonce, $key);
         if (!is_string($ciphertext) || $ciphertext === '') {
             return '';
         }
@@ -94,20 +111,15 @@ final class SecretStore
             return self::decrypt_legacy_string($stored);
         }
 
-        if (!function_exists('sodium_crypto_secretbox_open')) {
+        if (strpos($stored, self::V2_PREFIX) === 0) {
+            return self::decrypt_v2_string($stored);
+        }
+
+        if (!self::encryption_available()) {
             return '';
         }
 
-        $payload = base64_decode(substr($stored, strlen(self::PREFIX)), true);
-        if (!is_string($payload) || strlen($payload) <= SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
-            return '';
-        }
-
-        $nonce = substr($payload, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-        $ciphertext = substr($payload, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-        $plain = sodium_crypto_secretbox_open($ciphertext, $nonce, self::key());
-
-        return is_string($plain) ? $plain : '';
+        return self::decrypt_secretbox_string($stored, self::PREFIX, self::key());
     }
 
     public static function decrypt_settings(array $settings): array
@@ -137,6 +149,33 @@ final class SecretStore
         return '••••••••';
     }
 
+    private static function decrypt_v2_string(string $stored): string
+    {
+        if (!function_exists('sodium_crypto_secretbox_open')) {
+            return '';
+        }
+
+        return self::decrypt_secretbox_string($stored, self::V2_PREFIX, self::legacy_key());
+    }
+
+    private static function decrypt_secretbox_string(string $stored, string $prefix, string $key): string
+    {
+        if ($key === '') {
+            return '';
+        }
+
+        $payload = base64_decode(substr($stored, strlen($prefix)), true);
+        if (!is_string($payload) || strlen($payload) <= SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
+            return '';
+        }
+
+        $nonce = substr($payload, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $ciphertext = substr($payload, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $plain = sodium_crypto_secretbox_open($ciphertext, $nonce, $key);
+
+        return is_string($plain) ? $plain : '';
+    }
+
     private static function decrypt_legacy_string(string $stored): string
     {
         if (!function_exists('openssl_decrypt')) {
@@ -151,26 +190,63 @@ final class SecretStore
         $iv = substr($payload, 0, 16);
         $mac = substr($payload, 16, 32);
         $ciphertext = substr($payload, 48);
-        $expected = hash_hmac('sha256', $iv . $ciphertext, self::key(), true);
+        $key = self::legacy_key();
+
+        $expected = hash_hmac('sha256', $iv . $ciphertext, $key, true);
         if (!hash_equals($expected, $mac)) {
             return '';
         }
 
-        $plain = openssl_decrypt($ciphertext, 'AES-256-CBC', self::key(), OPENSSL_RAW_DATA, $iv);
+        $plain = openssl_decrypt($ciphertext, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
         return is_string($plain) ? $plain : '';
     }
 
     private static function key(): string
     {
+        if (!function_exists('wp_salt')) {
+            return '';
+        }
+
+        $material = (string) wp_salt('auth');
+        if ($material === '') {
+            return '';
+        }
+
+        return hash('sha256', 'slotera-secret-store-v3|' . $material, true);
+    }
+
+    /**
+     * Historical v1/v2 key derivation.
+     *
+     * The fixed fallback is retained only so installations that previously
+     * encrypted data with it can still decrypt and rotate those values.
+     * New encryption never uses this key.
+     */
+    private static function legacy_key(): string
+    {
         $material = '';
-        foreach (['AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT'] as $constant) {
+
+        foreach ([
+            'AUTH_KEY',
+            'SECURE_AUTH_KEY',
+            'LOGGED_IN_KEY',
+            'NONCE_KEY',
+            'AUTH_SALT',
+            'SECURE_AUTH_SALT',
+            'LOGGED_IN_SALT',
+            'NONCE_SALT',
+        ] as $constant) {
             if (defined($constant)) {
                 $material .= (string) constant($constant);
             }
         }
+
         if ($material === '') {
-            $material = defined('DB_PASSWORD') ? (string) DB_PASSWORD : 'slotera-secret-store-fallback';
+            $material = defined('DB_PASSWORD')
+                ? (string) DB_PASSWORD
+                : 'slotera-secret-store-fallback';
         }
+
         return hash('sha256', $material, true);
     }
 }

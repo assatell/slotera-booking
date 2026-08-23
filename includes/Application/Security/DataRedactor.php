@@ -30,6 +30,7 @@ final class DataRedactor
         'paypal-transmission-sig', 'http_paypal_transmission_sig',
         'x-square-hmacsha256-signature', 'http_x_square_hmacsha256_signature',
         'set-cookie', 'cookie', 'cookies',
+        'ip', 'ip_address', 'user_agent', 'remote_addr',
     ];
 
     public static function payload($value)

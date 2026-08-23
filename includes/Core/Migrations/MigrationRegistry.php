@@ -239,6 +239,9 @@ final class MigrationRegistry
             '1.0.1019' => Version_1_0_1019::class,
             '1.0.1021' => Version_1_0_1021::class,
             '1.0.1038' => Version_1_0_1038::class,
+            '1.0.1039' => Version_1_0_1039::class,
+            '1.0.1040' => null,
+            '1.0.1041' => null,
             '1.0.714' => null,
         ];
     }

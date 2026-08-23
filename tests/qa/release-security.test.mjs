@@ -25,13 +25,23 @@ test('public visitor analytics is rate limited and restricted to same-site URLs'
 test('plaintext secret migration never writes when encryption is unavailable', () => {
   const source = read('includes/Infrastructure/Repositories/SettingsRepository.php');
   const guard = source.indexOf('SecretStore::encryption_available()');
-  const encrypted = source.indexOf('$encrypted = SecretStore::encrypt_settings($settings)', guard);
+  const decrypted = source.indexOf('$decrypted = SecretStore::decrypt_settings($settings)', guard);
+  const encrypted = source.indexOf('$encrypted = SecretStore::encrypt_settings($decrypted)', decrypted);
   const write = source.indexOf('update_option(self::OPTION_NAME, $encrypted, false)', encrypted);
-  assert.ok(guard >= 0 && encrypted > guard && write > encrypted);
+  assert.ok(guard >= 0 && decrypted > guard && encrypted > decrypted && write > encrypted);
   assert.match(source, /!SecretStore::is_encrypted\(\$encrypted\[\$key\]\)/);
   assert.match(source, /finally\s*\{\s*\$migrating = false;/s);
 });
 
+test('license secrets rotate legacy ciphertext to current encryption', () => {
+  const source = read('includes/Application/Services/LicenseService.php');
+  assert.match(source, /SecretStore::is_current_encrypted\(\$stored_key\)/);
+  assert.match(source, /\$plain_key = SecretStore::decrypt_string\(\$stored_key\)/);
+  assert.match(source, /\$rotated_key = SecretStore::encrypt_string\(\$plain_key\)/);
+  assert.match(source, /SecretStore::is_current_encrypted\(\$rotated_key\)/);
+  assert.match(source, /update_option\(self::OPTION_NAME, \$stored, false\)/);
+  assert.match(source, /\$data\['license_key'\] = SecretStore::decrypt_string\(\$stored_key\)/);
+});
 test('visitor analytics emits one final event per page view', () => {
   const client = read('assets/js/frontend-analytics.js');
   assert.match(client, /if \(sent\) \{ return; \}/);
@@ -121,17 +131,25 @@ test('release metadata has one version source and reproducible provenance', () =
   assert.equal(pkg.version, manifest.version);
   assert.equal(provenance.version, manifest.version);
   assert.equal(provenance.schema, 'slotera-build-provenance/v3');
-  assert.equal(provenance.source.sha256, manifest.source.sha256);
   assert.ok(Array.isArray(provenance.transformation_chain));
   assert.ok(provenance.transformation_chain.length >= 6);
-  assert.equal(provenance.builder.version, manifest.builder.version);
-  assert.equal(provenance.source.sha256, manifest.source.sha256);
   assert.ok(provenance.build.command);
   assert.ok(Object.hasOwn(provenance.vcs, 'commit'));
   assert.ok(Object.hasOwn(provenance.vcs, 'tag'));
   assert.ok(provenance.hashes.release_tree_sha256);
-  assert.equal(provenance.source.tree_sha256, manifest.source.tree_sha256);
   assert.equal(manifest.schema, 'slotera-release-manifest/v2');
+
+  if (provenance.vcs?.state === 'git-clean') {
+    assert.equal(provenance.candidate, manifest.candidate);
+    assert.equal(provenance.builder.version, manifest.builder.version);
+    assert.equal(provenance.source?.type, 'git');
+    assert.equal(provenance.source?.commit, provenance.vcs.commit);
+    assert.equal(provenance.source?.tag, provenance.vcs.tag);
+    assert.equal(provenance.vcs?.dirty, false);
+  } else {
+    assert.equal(provenance.source?.sha256, manifest.source.sha256);
+    assert.equal(provenance.source?.tree_sha256, manifest.source.tree_sha256);
+  }
 });
 
 test('release provenance is covered by an external signing workflow', () => {

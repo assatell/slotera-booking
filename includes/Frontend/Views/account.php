@@ -126,7 +126,17 @@ $render_booking_card = static function (array $booking, array $packages_by_id, s
                     <?php endif; ?>
                     <div><dt><?php echo esc_html(sltr_t('Status')); ?></dt><dd><?php echo esc_html(sltr_booking_status_label((string) ($selected_booking['status'] ?? ''), 'frontend')); ?></dd></div>
                     <div><dt><?php echo esc_html(sltr_t('Payment')); ?></dt><dd><?php echo esc_html(sltr_payment_status_label((string) ($selected_booking['payment_status'] ?? ''), 'frontend')); ?></dd></div>
-                    <?php if (sanitize_key((string) ($selected_booking['payment_status'] ?? '')) === 'partial') : ?><div class="sltr-partial-payment-note"><dt></dt><dd><?php echo esc_html(sltr__('frontend.remaining_balance_paid_on_site', (string) ($selected_booking['booking_locale'] ?? ''))); ?></dd></div><?php endif; ?>
+                    <?php if (sanitize_key((string) ($selected_booking['payment_status'] ?? '')) === 'partial') :
+                        $selected_paid_amount = max(0.0, (float) ($selected_booking['paid_amount'] ?? 0));
+                        $selected_remaining_amount = array_key_exists('remaining_amount', $selected_booking)
+                            ? max(0.0, (float) $selected_booking['remaining_amount'])
+                            : max(0.0, (float) ($selected_booking['total_amount'] ?? 0) - $selected_paid_amount);
+                        $selected_booking_locale = (string) ($selected_booking['booking_locale'] ?? '');
+                        ?>
+                        <div><dt><?php echo esc_html(sltr__('frontend.payment.status.paid', $selected_booking_locale)); ?></dt><dd><?php echo esc_html(number_format_i18n($selected_paid_amount, 2)); ?></dd></div>
+                        <div><dt><?php echo esc_html(sltr__('frontend.remaining_balance', $selected_booking_locale)); ?></dt><dd><?php echo esc_html(number_format_i18n($selected_remaining_amount, 2)); ?></dd></div>
+                        <div class="sltr-partial-payment-note"><dt></dt><dd><?php echo esc_html(sltr__('frontend.remaining_balance_paid_on_site', $selected_booking_locale)); ?></dd></div>
+                    <?php endif; ?>
                     <?php $selected_extras = json_decode((string) ($selected_booking['selected_extras_json'] ?? '[]'), true); if (is_array($selected_extras)) : foreach ($selected_extras as $extra) : if (!is_array($extra)) continue; ?>
                     <div><dt><?php echo esc_html((string) ($extra['name'] ?? sltr_t('Extra service'))); ?></dt><dd>+<?php echo esc_html(number_format_i18n((float) ($extra['line_amount'] ?? $extra['price'] ?? 0), 2)); ?></dd></div>
                     <?php endforeach; endif; ?>

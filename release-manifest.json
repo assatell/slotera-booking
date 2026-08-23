@@ -1,11 +1,11 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1038",
+  "version": "1.0.1041",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
-    "version": "2.4.1",
+    "version": "2.5.0",
     "runtime": "Node.js 20+, CPython 3.9+ (PYTHON override, py -3, python3, or python), in-tree deterministic fixed-Huffman DEFLATE writer, and Windows PowerShell 5.1+ or PowerShell 7+ for signed release packaging"
   },
   "source": {
@@ -115,8 +115,14 @@
     "1.0.1038 RC66.12.6: make marketing consent styling theme-aware and use the configured Form background for Custom theme",
     "1.0.1038 RC66.12.7: remove customer email from outbound Mollie payment metadata while preserving booking ID linkage",
     "1.0.1038 RC66.12.8: prepare future first-party Update URI binding with fail-closed HTTPS build-time injection while leaving RC builds intentionally unbound",
-    "1.0.1038 RC66.12.9: adopt GPL-2.0-or-later project licensing and add third-party notices plus a CycloneDX release SBOM without changing runtime behavior"
+    "1.0.1038 RC66.12.9: adopt GPL-2.0-or-later project licensing and add third-party notices plus a CycloneDX release SBOM without changing runtime behavior",
+    "1.0.1038 RC67.0: establish the first VCS-bound release provenance chain from a clean Git commit and exact release tag while preserving the historical RC18 source lineage",
+    "1.0.1041 RC67.1: stop retaining raw activity-log IP addresses and user agents, redact historical network identifiers, and migrate stored activity data",
+    "1.0.1041 RC67.1: replace predictable secret-store fallback encryption with site-bound v3 encryption while preserving legacy decryption and rotating persistent v1/v2 settings"
   ],
-  "release_notes": "RC66.12.9 adopts GPL-2.0-or-later for Slotera Booking, documents bundled Noto Sans licensing, and adds a CycloneDX SBOM without changing runtime behavior.",
-  "candidate": "RC66.12.9"
+  "release_notes": "RC67.1 closes the final production privacy and secret-storage risks: activity logs no longer retain raw IP/User-Agent identifiers, historical stored identifiers are cleaned, and persistent secrets rotate from legacy v1/v2 encryption to site-bound v3 encryption while retaining backward-compatible decryption.",
+  "candidate": "RC67.1",
+  "vcs": {
+    "repository": "https://github.com/assatell/slotera-booking"
+  }
 }

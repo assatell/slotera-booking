@@ -1,3 +1,17 @@
+## 1.0.1041 RC67.1 — Privacy and secret-storage hardening
+
+- Stop retaining raw activity-log IP addresses and user agents; store only keyed hashes for new audit context.
+- Add migration 1.0.1039 to clear historical raw activity identifiers and redact sensitive payload keys.
+- Replace predictable SecretStore fallback encryption with site-bound v3 encryption based on the WordPress auth salt.
+- Preserve backward-compatible v1/v2 decryption and rotate persistent encrypted settings to v3 on repository access.
+- Keep the RC67 VCS-bound provenance chain and deterministic release tooling intact.
+## 1.0.1038 RC67.0 — VCS-bound release provenance
+
+- Establish the first trusted Git-bound release baseline for Slotera Booking releases.
+- Bind release provenance to the exact clean Git commit and exact RC tag captured before generated release metadata changes the working tree.
+- Preserve the historical RC18 source archive separately as prior lineage rather than presenting it as the direct source of RC67.0.
+- Keep deterministic packaging, detached RSA-PSS signing, release checksums, and runtime booking behavior unchanged.
+
 ## 1.0.1038 RC66.12.9 — GPL licensing, notices & SBOM
 
 - License Slotera Booking under **GPL-2.0-or-later** and publish the complete GPLv2 license text with the “or later” grant.
