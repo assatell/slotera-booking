@@ -7,7 +7,7 @@
     "component": {
       "type": "application",
       "name": "Slotera Booking",
-      "version": "1.0.1038",
+      "version": "1.0.1043",
       "licenses": [
         {
           "license": {
@@ -18,7 +18,7 @@
       "properties": [
         {
           "name": "slotera:release-candidate",
-          "value": "RC66.12.9"
+          "value": "RC67.3"
         }
       ]
     }

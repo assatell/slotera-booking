@@ -239,14 +239,20 @@ final class MigrationRegistry
             '1.0.1019' => Version_1_0_1019::class,
             '1.0.1021' => Version_1_0_1021::class,
             '1.0.1038' => Version_1_0_1038::class,
-            '1.0.1039' => Version_1_0_1039::class,
+            // Superseded by the bounded/resumable RC67.3 privacy repair.
+            '1.0.1039' => null,
             '1.0.1040' => null,
             '1.0.1041' => null,
+            '1.0.1042' => null,
+            '1.0.1043' => Version_1_0_1043::class,
             '1.0.714' => null,
         ];
     }
 
-    public static function run(string $current_version): void
+    /**
+     * @return bool True only when every required migration is complete.
+     */
+    public static function run(string $current_version): bool
     {
         foreach (self::all() as $target_version => $migration) {
             if (version_compare($current_version, $target_version, '>=')) {
@@ -259,6 +265,9 @@ final class MigrationRegistry
 
             if (is_string($migration) && is_subclass_of($migration, MigrationInterface::class)) {
                 $migration::apply();
+                if (method_exists($migration, 'is_complete') && !$migration::is_complete()) {
+                    return false;
+                }
                 continue;
             }
 
@@ -266,5 +275,7 @@ final class MigrationRegistry
                 call_user_func($migration);
             }
         }
+
+        return true;
     }
 }

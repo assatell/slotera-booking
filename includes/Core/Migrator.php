@@ -21,7 +21,9 @@ final class Migrator {
         if ($fresh_install) {
             FreshInstallSetup::run();
         } else {
-            MigrationRegistry::run($old);
+            if (!MigrationRegistry::run($old)) {
+                return;
+            }
         }
 
         update_option(self::DB_VERSION_OPTION, SLTR_VERSION);
