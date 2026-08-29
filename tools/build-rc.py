@@ -61,6 +61,8 @@ def canonical_files() -> list[tuple[bytes, str, pathlib.Path]]:
         if not path.is_file() or '.git' in path.parts or 'node_modules' in path.parts or '__pycache__' in path.parts or path.suffix == '.pyc':
             continue
         rel = path.relative_to(ROOT).as_posix()
+        if path.suffix.lower() == '.zip':
+            raise SystemExit(f'nested ZIP is not allowed in release source tree: {rel}')
         files.append((rel.encode('utf-8'), rel, path))
     files.sort(key=lambda item: item[0])
     return files

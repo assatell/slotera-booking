@@ -29,7 +29,7 @@ test('changelog is continuous with manifest release history through current cand
   assert.ok(uniqueDeclared.includes('RC66.4'), 'manifest must retain RC66.4 in release history');
   assert.equal(uniqueDeclared.at(-1), current, 'current candidate must be last declared release');
 
-  const changelogIds = [...readText('CHANGELOG.md').matchAll(/^##\s+1\.0\.1038\s+(RC\d+(?:\.\d+){1,2})\b/gm)].map((m) => m[1]).filter((id) => Number(id.match(/^RC(\d+)/)?.[1]) >= 66);
+  const changelogIds = [...readText('CHANGELOG.md').matchAll(/^##\s+1\.0\.\d+\s+(RC\d+(?:\.\d+){1,2})\b/gm)].map((m) => m[1]).filter((id) => Number(id.match(/^RC(\d+)/)?.[1]) >= 66);
   const counts = new Map(changelogIds.map((id) => [id, changelogIds.filter((x) => x === id).length]));
   for (const id of uniqueDeclared) {
     assert.equal(counts.get(id), 1, `${id} must appear exactly once in CHANGELOG.md`);

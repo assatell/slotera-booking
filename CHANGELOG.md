@@ -1,3 +1,15 @@
+## 1.0.1043 RC67.3 — Resumable historical privacy repair
+
+- Make historical activity-log privacy repair bounded to at most 100 rows per invocation and persist a cursor across requests.
+- Keep `sltr_db_version` below 1.0.1043 until the resumable repair fully completes.
+- Replace malformed legacy activity payloads with a privacy-safe `malformed_legacy_payload` marker instead of silently skipping them.
+- Supersede the synchronous RC67.1/RC67.2 activity-log repair path while preserving the RC67 VCS-bound release provenance chain.
+
+## 1.0.1042 RC67.2 — Fail-closed activity-log privacy repair
+
+- Make historical activity-log privacy cleanup fail closed so database version advancement cannot hide an incomplete repair.
+- Re-run the privacy repair through migration 1.0.1042 before advancing the stored database version.
+- Preserve the RC67.1 privacy and secret-storage hardening behavior while tightening migration completion guarantees.
 ## 1.0.1041 RC67.1 — Privacy and secret-storage hardening
 
 - Stop retaining raw activity-log IP addresses and user agents; store only keyed hashes for new audit context.
