@@ -19,6 +19,9 @@ const utf8 = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const write = (file, value) => fs.writeFileSync(path.join(root, file), value.replace(/\r\n/g, '\n'), 'utf8');
 const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
 const generated = new Set(['build-provenance.json', 'checksums.sha256']);
+const vcsPolicy = manifest.source?.type === 'git' ? manifest.source : null;
+const vcsRequired = vcsPolicy?.required === true || process.env.SLTR_VCS_REQUIRED === '1';
+const expectedVcsTag = String(vcsPolicy?.tag || process.env.SLTR_VCS_TAG || '').trim();
 const normalizedRelativePath = (absolute) => path.relative(root, absolute).replaceAll('\\', '/');
 const utf8PathCompare = (a, b) => Buffer.compare(Buffer.from(a, 'utf8'), Buffer.from(b, 'utf8'));
 
@@ -63,7 +66,7 @@ function detectVcs() {
   if (capturedState !== '') {
     if (!['source-archive', 'git-clean', 'git-dirty'].includes(capturedState)) throw new Error(`Invalid captured VCS state: ${capturedState}`);
     if (capturedState === 'source-archive') {
-      if (process.env.SLTR_VCS_REQUIRED === '1') throw new Error('VCS-bound build cannot use source-archive state');
+      if (vcsRequired) throw new Error('VCS-bound build cannot use source-archive state');
       return { commit: null, tag: null, dirty: null, state: 'source-archive', note: 'No Git metadata is present in the release source tree.' };
     }
 
@@ -77,10 +80,9 @@ function detectVcs() {
     const dirty = dirtyRaw === '1';
     if ((capturedState === 'git-dirty') !== dirty) throw new Error('Captured VCS state/dirty mismatch');
 
-    if (process.env.SLTR_VCS_REQUIRED === '1') {
-      const expectedTag = String(process.env.SLTR_VCS_TAG || '').trim();
+    if (vcsRequired) {
       if (dirty) throw new Error('VCS-bound build requires a clean captured tree');
-      if (!expectedTag || tag !== expectedTag) throw new Error('VCS-bound build requires the exact captured tag');
+      if (!expectedVcsTag || tag !== expectedVcsTag) throw new Error(`VCS-bound build requires exact tag ${expectedVcsTag || '(missing)'}`);
     }
 
     return { commit, tag, dirty, state: capturedState, capture: 'pre-metadata' };
@@ -88,10 +90,15 @@ function detectVcs() {
 
   const commit = git(['rev-parse', 'HEAD']);
   if (!commit) {
+    if (vcsRequired) throw new Error('VCS-bound build requires Git metadata and a real commit/tag');
     return { commit: null, tag: null, dirty: null, state: 'source-archive', note: 'No Git metadata is present in the release source tree.' };
   }
   const tag = git(['describe', '--tags', '--exact-match', 'HEAD']) || null;
   const dirty = git(['status', '--porcelain']) !== '';
+  if (vcsRequired) {
+    if (dirty) throw new Error('VCS-bound build requires a clean Git working tree');
+    if (!expectedVcsTag || tag !== expectedVcsTag) throw new Error(`VCS-bound build requires exact tag ${expectedVcsTag || '(missing)'}`);
+  }
   return { commit, tag, dirty, state: dirty ? 'git-dirty' : 'git-clean' };
 }
 
@@ -146,6 +153,18 @@ function syncVersions() {
   write('package.json', `${JSON.stringify(pkg, null, 2)}\n`);
   targets.push('package.json:version');
 
+  const sbom = JSON.parse(utf8('sbom.cdx.json'));
+  if (!sbom?.metadata?.component) throw new Error('sbom.cdx.json is missing metadata.component');
+  sbom.metadata.component.version = version;
+  const candidateProperty = Array.isArray(sbom.metadata.component.properties)
+    ? sbom.metadata.component.properties.find((property) => property?.name === 'slotera:release-candidate')
+    : null;
+  if (!candidateProperty) throw new Error('sbom.cdx.json is missing slotera:release-candidate');
+  candidateProperty.value = String(manifest.candidate || '');
+  write('sbom.cdx.json', `${JSON.stringify(sbom, null, 2)}\n`);
+  targets.push('sbom.cdx.json:component-version');
+  targets.push('sbom.cdx.json:release-candidate');
+
   syncText('README.md', [
     [/(?:Production|Release candidate) package for Slotera Booking v\d+\.\d+\.\d+\./, `${packageLabel} for Slotera Booking v${version}.`, 'README.md:package-version'],
   ]);
@@ -159,18 +178,19 @@ function generateMetadata(syncState = null) {
   const releaseTreeSha256 = treeHash();
   const manifestSha256 = sha256(fs.readFileSync(manifestPath));
   const vcs = detectVcs();
+  const lineageSource = manifest.lineage?.previous_source || {};
   const previousSource = {
-    artifact: manifest.source?.artifact || null,
-    sha256: manifest.source?.sha256 || null,
-    attestation_schema: manifest.source?.attestation_schema || null,
-    attestation_key_id: manifest.source?.attestation_key_id || null,
-    tree_sha256: manifest.source?.tree_sha256 || null,
+    artifact: lineageSource.artifact || null,
+    sha256: lineageSource.sha256 || null,
+    attestation_schema: lineageSource.attestation_schema || null,
+    attestation_key_id: lineageSource.attestation_key_id || null,
+    tree_sha256: lineageSource.tree_sha256 || null,
   };
 
   const source = vcs.state === 'git-clean'
     ? {
         type: 'git',
-        repository: manifest.vcs?.repository || null,
+        repository: vcsPolicy?.repository || null,
         commit: vcs.commit,
         tag: vcs.tag,
         dirty: vcs.dirty,
@@ -309,14 +329,16 @@ function verify() {
     if (provenance.vcs.dirty !== false) throw new Error('git-clean provenance must record dirty=false');
   }
 
-  if (process.env.SLTR_VCS_REQUIRED === '1') {
-    const expectedTag = String(process.env.SLTR_VCS_TAG || '').trim();
+  if (vcsRequired) {
     if (provenance.vcs?.state !== 'git-clean') throw new Error('VCS-bound provenance must be git-clean');
-    if (!expectedTag || provenance.vcs?.tag !== expectedTag) throw new Error('VCS-bound provenance tag mismatch');
+    if (!expectedVcsTag || provenance.vcs?.tag !== expectedVcsTag) throw new Error('VCS-bound provenance tag mismatch');
+    if (provenance.source?.type !== 'git') throw new Error('VCS-bound provenance must use Git as the direct source');
+    if (provenance.source?.repository !== vcsPolicy?.repository) throw new Error('VCS-bound provenance repository mismatch');
   }
 
   if (provenance.source?.type === 'archive') {
-    if (provenance.source?.sha256 !== manifest.source?.sha256) throw new Error('provenance source hash mismatch');
+    if (vcsRequired) throw new Error('Required VCS provenance cannot fall back to an archive source');
+    if (provenance.source?.sha256 !== manifest.lineage?.previous_source?.sha256) throw new Error('provenance lineage source hash mismatch');
   } else if (provenance.source?.type === 'git') {
     if (provenance.source?.commit !== provenance.vcs?.commit) throw new Error('Git source commit does not match VCS provenance');
     if (provenance.source?.tag !== provenance.vcs?.tag) throw new Error('Git source tag does not match VCS provenance');

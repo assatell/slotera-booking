@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1041",
+  "version": "1.0.1043",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -9,9 +9,10 @@
     "runtime": "Node.js 20+, CPython 3.9+ (PYTHON override, py -3, python3, or python), in-tree deterministic fixed-Huffman DEFLATE writer, and Windows PowerShell 5.1+ or PowerShell 7+ for signed release packaging"
   },
   "source": {
-    "artifact": "slotera-booking-1.0.1038-rc18.zip",
-    "sha256": "fdce7d034c1c1b85d3bd20b64699af455e45c8b0c955ca06b633cbbbf28e17da",
-    "tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763"
+    "type": "git",
+    "repository": "https://github.com/assatell/slotera-booking",
+    "required": true,
+    "tag": "v1.0.1043-rc67.3"
   },
   "archive": {
     "root": "slotera-booking/",
@@ -118,11 +119,20 @@
     "1.0.1038 RC66.12.9: adopt GPL-2.0-or-later project licensing and add third-party notices plus a CycloneDX release SBOM without changing runtime behavior",
     "1.0.1038 RC67.0: establish the first VCS-bound release provenance chain from a clean Git commit and exact release tag while preserving the historical RC18 source lineage",
     "1.0.1041 RC67.1: stop retaining raw activity-log IP addresses and user agents, redact historical network identifiers, and migrate stored activity data",
-    "1.0.1041 RC67.1: replace predictable secret-store fallback encryption with site-bound v3 encryption while preserving legacy decryption and rotating persistent v1/v2 settings"
+    "1.0.1041 RC67.1: replace predictable secret-store fallback encryption with site-bound v3 encryption while preserving legacy decryption and rotating persistent v1/v2 settings",
+    "1.0.1042 RC67.2: make activity-log privacy cleanup fail closed and re-run it through repair migration 1.0.1042 before advancing the database version",
+    "1.0.1043 RC67.3: make historical activity-log privacy repair bounded and resumable, and replace malformed legacy payloads with privacy-safe markers"
   ],
-  "release_notes": "RC67.1 closes the final production privacy and secret-storage risks: activity logs no longer retain raw IP/User-Agent identifiers, historical stored identifiers are cleaned, and persistent secrets rotate from legacy v1/v2 encryption to site-bound v3 encryption while retaining backward-compatible decryption.",
-  "candidate": "RC67.1",
+  "release_notes": "RC67.3 replaces the historical activity-log privacy cleanup with a bounded resumable repair: batches persist progress across requests, malformed legacy payloads are replaced with privacy-safe markers, and the database version advances only after the full cleanup and invariant check complete.",
+  "candidate": "RC67.3",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
+  },
+  "lineage": {
+    "previous_source": {
+      "artifact": "slotera-booking-1.0.1038-rc18.zip",
+      "sha256": "fdce7d034c1c1b85d3bd20b64699af455e45c8b0c955ca06b633cbbbf28e17da",
+      "tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763"
+    }
   }
 }

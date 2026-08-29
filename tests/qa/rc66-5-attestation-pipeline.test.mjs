@@ -31,8 +31,8 @@ test('release metadata binds current candidate identity and changelog top entry'
     assert.equal(provenance.candidate, manifest.candidate);
     assert.equal(provenance.builder.version, manifest.builder.version);
   } else {
-    assert.equal(provenance.source?.sha256, manifest.source?.sha256);
-    assert.equal(provenance.source?.tree_sha256, manifest.source?.tree_sha256);
+    assert.equal(provenance.source?.sha256, manifest.lineage?.previous_source?.sha256);
+    assert.equal(provenance.source?.tree_sha256, manifest.lineage?.previous_source?.tree_sha256);
   }
 });
 
@@ -42,7 +42,11 @@ test('release attestation verifier is fail-closed and compares extracted tree to
     const tree = path.join(temp, 'tree');
     copyTree(root, tree);
     const manifest = JSON.parse(readText('release-manifest.json'));
-    const archive = path.join(temp, `slotera-booking-1.0.1038-${manifest.candidate.toLowerCase()}.zip`);
+    for (const args of [['init'], ['config','user.email','qa@example.invalid'], ['config','user.name','Slotera QA'], ['add','.'], ['commit','-m','qa fixture'], ['tag', manifest.source.tag]]) {
+      const git = spawnSync('git', args, { cwd: tree, encoding: 'utf8' });
+      assert.equal(git.status, 0, git.stderr || git.stdout);
+    }
+    const archive = path.join(temp, `slotera-booking-${manifest.version}-${manifest.candidate.toLowerCase()}.zip`);
     const build = spawnSync(process.execPath, ['tools/build-rc.mjs', '--output', archive, '--source-date-epoch', '1786884060'], { cwd: tree, encoding: 'utf8' });
     assert.equal(build.status, 0, build.stderr || build.stdout);
 
@@ -66,13 +70,13 @@ test('release attestation verifier is fail-closed and compares extracted tree to
     fs.writeFileSync(sigPath, signature);
     fs.writeFileSync(pubPath, publicKey.export({ type: 'spki', format: 'pem' }));
 
-    const ok = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, tree], { cwd: tree, encoding: 'utf8' });
+    const extracted = path.join(temp, 'extracted');
+    copyTree(tree, extracted);
+    const ok = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, extracted], { cwd: tree, encoding: 'utf8' });
     assert.equal(ok.status, 0, ok.stderr || ok.stdout);
 
-    fs.appendFileSync(path.join(tree, 'README.md'), '\nCONTROLLED TAMPER\n');
-    const prepare = spawnSync(process.execPath, ['tools/release-metadata.mjs', 'prepare'], { cwd: tree, encoding: 'utf8', env: { ...process.env, SOURCE_DATE_EPOCH: '1786884060', SLTR_BUILD_OUTPUT: path.basename(archive) } });
-    assert.equal(prepare.status, 0, prepare.stderr || prepare.stdout);
-    const tampered = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, tree], { cwd: tree, encoding: 'utf8' });
+    fs.appendFileSync(path.join(extracted, 'README.md'), '\nCONTROLLED TAMPER\n');
+    const tampered = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, extracted], { cwd: tree, encoding: 'utf8' });
     assert.notEqual(tampered.status, 0, 'tampered extracted tree must fail verification even after local metadata regeneration');
     assert.match(tampered.stderr, /differs from signed ZIP|file count differs|unsigned extra file/);
 
