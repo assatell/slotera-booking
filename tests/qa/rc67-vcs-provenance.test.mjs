@@ -84,7 +84,7 @@ test('RC67 Git source is direct provenance source while RC18 remains historical 
   const metadata = read('tools/release-metadata.mjs');
 
   assert.match(metadata, /type:\s*'git'/);
-  assert.match(metadata, /repository:\s*manifest\.vcs\?\.repository/);
+  assert.match(metadata, /repository:\s*vcsPolicy\?\.repository/);
   assert.match(metadata, /lineage:\s*\{/);
   assert.match(metadata, /previous_source:\s*previousSource/);
 

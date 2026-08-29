@@ -26,8 +26,8 @@ if ($SourceArtifactPath) {
     $sourceArtifact = [System.IO.Path]::GetFullPath($SourceArtifactPath)
     if (-not (Test-Path -LiteralPath $sourceArtifact -PathType Leaf)) { throw "Source artifact not found: $sourceArtifact" }
     $sourceHash = (Get-FileHash -LiteralPath $sourceArtifact -Algorithm SHA256).Hash.ToLowerInvariant()
-    if ($sourceHash -ne ([string]$manifest.source.sha256).ToLowerInvariant()) {
-        throw "Source artifact SHA-256 does not match release manifest. Expected $($manifest.source.sha256), got $sourceHash"
+    if ($sourceHash -ne ([string]$manifest.lineage.previous_source.sha256).ToLowerInvariant()) {
+        throw "Source artifact SHA-256 does not match release manifest. Expected $($manifest.lineage.previous_source.sha256), got $sourceHash"
     }
 }
 
@@ -38,6 +38,7 @@ $env:SLTR_BUILD_COMMAND = $canonicalCommand
 $env:SLTR_BUILD_OUTPUT = [System.IO.Path]::GetFileName($output)
 $env:SLTR_POWERSHELL_VERSION = $psVersion
 $env:SLTR_SIGNING_STATUS = 'performed-by-build-release.ps1'
+$env:SLTR_VCS_REQUIRED = '1'
 if (-not $env:SOURCE_DATE_EPOCH) {
     throw 'SOURCE_DATE_EPOCH is required for a reproducible release build.'
 }

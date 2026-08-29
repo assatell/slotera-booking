@@ -147,8 +147,8 @@ test('release metadata has one version source and reproducible provenance', () =
     assert.equal(provenance.source?.tag, provenance.vcs.tag);
     assert.equal(provenance.vcs?.dirty, false);
   } else {
-    assert.equal(provenance.source?.sha256, manifest.source.sha256);
-    assert.equal(provenance.source?.tree_sha256, manifest.source.tree_sha256);
+    assert.equal(provenance.source?.sha256, manifest.lineage?.previous_source?.sha256);
+    assert.equal(provenance.source?.tree_sha256, manifest.lineage?.previous_source?.tree_sha256);
   }
 });
 
@@ -225,6 +225,8 @@ test('release build delegates deterministic archive creation to the canonical cr
   assert.match(signedBuilder, /build-rc\.mjs/);
   assert.doesNotMatch(signedBuilder, /CreateEntry\(/);
   assert.match(archiveBuilder, /files\.sort\(key=lambda item: item\[0\]\)/);
+  assert.match(archiveBuilder, /nested ZIP is not allowed in release source tree/);
+  assert.match(archiveBuilder, /path\.suffix\.lower\(\) == '\.zip'/);
   assert.match(archiveBuilder, /write_zip\(output, entries, dt\)/);
   assert.match(read('tools/deterministic_zip.py'), /method=8/);
   assert.match(metadata, /SOURCE_DATE_EPOCH/);

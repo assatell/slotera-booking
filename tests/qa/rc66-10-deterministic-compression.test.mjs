@@ -15,6 +15,15 @@ function copyTree(src, dst) {
   fs.cpSync(src, dst, { recursive: true, filter: (p) => !p.includes(`${path.sep}node_modules${path.sep}`) && !p.includes(`${path.sep}.git${path.sep}`) });
 }
 
+function initTaggedGit(tree) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(tree, 'release-manifest.json'), 'utf8'));
+  const env = { ...process.env, GIT_AUTHOR_DATE: '2026-08-29T15:25:23Z', GIT_COMMITTER_DATE: '2026-08-29T15:25:23Z' };
+  for (const args of [['init'], ['config','user.email','qa@example.invalid'], ['config','user.name','Slotera QA'], ['add','.'], ['commit','-m','deterministic QA fixture'], ['tag', manifest.source.tag]]) {
+    const run = spawnSync('git', args, { cwd: tree, encoding: 'utf8', env });
+    assert.equal(run.status, 0, run.stderr || run.stdout);
+  }
+}
+
 test('RC66.10 canonical builder uses in-tree deterministic DEFLATE rather than host zlib compression', () => {
   const builder = read('tools/build-rc.py');
   const writer = read('tools/deterministic_zip.py');
@@ -33,6 +42,7 @@ test('RC66.10 compressed builds are byte-for-byte repeatable and materially belo
   try {
     const a = path.join(temp, 'a'); const b = path.join(temp, 'b');
     copyTree(root, a); copyTree(root, b);
+    initTaggedGit(a); initTaggedGit(b);
     const outA = path.join(temp, 'one', 'slotera-booking-1.0.1038-rc66.10.zip');
     const outB = path.join(temp, 'two', 'slotera-booking-1.0.1038-rc66.10.zip');
     fs.mkdirSync(path.dirname(outA)); fs.mkdirSync(path.dirname(outB));

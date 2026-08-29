@@ -11,6 +11,15 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (p) => fs.readFileSync(path.join(root, p), 'utf8');
 
+function initTaggedGit(tree) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(tree, 'release-manifest.json'), 'utf8'));
+  const env = { ...process.env, GIT_AUTHOR_DATE: '2026-08-29T15:25:23Z', GIT_COMMITTER_DATE: '2026-08-29T15:25:23Z' };
+  for (const args of [['init'], ['config','user.email','qa@example.invalid'], ['config','user.name','Slotera QA'], ['add','.'], ['commit','-m','deterministic QA fixture'], ['tag', manifest.source.tag]]) {
+    const run = spawnSync('git', args, { cwd: tree, encoding: 'utf8', env });
+    assert.equal(run.status, 0, run.stderr || run.stdout);
+  }
+}
+
 test('RC66.3 SEO redirect trace is path-only and hardened', () => {
   const source = read('includes/Application/Services/SEOService.php');
   assert.match(source, /wp_parse_url\([^\n]+REQUEST_URI[^\n]+PHP_URL_PATH/);
@@ -63,6 +72,8 @@ test('RC66.5 repeated builds use sandbox copies and leave the source tree unchan
     const bRoot = path.join(temp, 'tree-b');
     fs.cpSync(root, aRoot, { recursive: true, filter: (src) => !src.includes(`${path.sep}node_modules${path.sep}`) && !src.includes(`${path.sep}.git${path.sep}`) });
     fs.cpSync(root, bRoot, { recursive: true, filter: (src) => !src.includes(`${path.sep}node_modules${path.sep}`) && !src.includes(`${path.sep}.git${path.sep}`) });
+    initTaggedGit(aRoot);
+    initTaggedGit(bRoot);
     const name = 'slotera-booking-repro.zip';
     const epoch = '1786882380';
     const python = resolvePython();
