@@ -756,7 +756,7 @@ Rezervācijas numurs: #{booking_id}",
                 'recipient' => 'admin',
                 'description' => 'Sent to the admin when a visitor submits the Slotera contact form.',
                 'default_subject' => '[{site_name}] New contact message',
-                'default_body' => "New contact form message.\n\nName: {contact_name}\nEmail: {contact_email}\nPhone: {contact_phone}\nSubject: {contact_subject}\nMessage:\n{contact_message}\n\nPage: {contact_page_title}\nURL: {contact_page_url}\nSubmitted: {contact_submitted_at}\nLocale: {contact_locale}\nIP: {contact_user_ip}\nUser agent: {contact_user_agent}",
+                'default_body' => "New contact form message.\n\nName: {contact_name}\nEmail: {contact_email}\nPhone: {contact_phone}\nSubject: {contact_subject}\nMessage:\n{contact_message}\n\nPage: {contact_page_title}\nURL: {contact_page_url}\nSubmitted: {contact_submitted_at}\nLocale: {contact_locale}",
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promo',
@@ -894,7 +894,7 @@ Rezervācijas numurs: #{booking_id}",
             '{booking_date}', '{start_time}', '{end_time}', '{status}', '{payment_status}', '{status_raw}', '{payment_status_raw}', '{status_label}', '{payment_status_label}', '{site_name}', '{magic_link}', '{cancellation_url}', '{reschedule_url}',
             '{base_amount}', '{package_discount}', '{coupon_code}', '{coupon_discount}', '{coupon_expires}', '{discount_amount}', '{final_amount}', '{total_amount}', '{tax_amount}', '{price_summary}',
             '{theme_primary_color}', '{theme_primary_text_color}', '{theme_text_color}', '{theme_muted_text_color}', '{theme_card_background_color}',
-            '{contact_name}', '{contact_email}', '{contact_phone}', '{contact_subject}', '{contact_message}', '{contact_page_url}', '{contact_page_title}', '{contact_submitted_at}', '{contact_locale}', '{contact_user_ip}', '{contact_user_agent}',
+            '{contact_name}', '{contact_email}', '{contact_phone}', '{contact_subject}', '{contact_message}', '{contact_page_url}', '{contact_page_title}', '{contact_submitted_at}', '{contact_locale}',
             '{headline}', '{message}', '{submessage}', '{cta_button}', '{booking_url}', '{package_url}', '{cta_url}',
         ];
     }
