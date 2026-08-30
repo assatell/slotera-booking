@@ -591,6 +591,46 @@ final class BookingRepository
     public function cancel(int $id): bool { return $this->update_status($id, 'cancelled'); }
 
     /**
+     * Moves a booking and rotates its public reschedule token in one SQL
+     * statement. Only the request that still owns the current token may run
+     * reschedule side effects or expose the replacement token.
+     *
+     * @param array<string,mixed> $data
+     */
+    public function reschedule_by_token_atomically(int $id, string $token, array $data): bool
+    {
+        global $wpdb;
+        $table = Database::bookings_table();
+        $token = sanitize_text_field($token);
+        $current = $this->get_by_id($id);
+        if ($id <= 0 || $token === '' || !$current) { return false; }
+
+        $data = $this->normalize_update_data($data);
+        $next_token = sanitize_text_field((string) ($data['reschedule_token'] ?? ''));
+        if ($next_token === '' || hash_equals($token, $next_token)) { return false; }
+
+        $merged = array_merge($current, $data);
+        $data['active_slot_hash'] = $this->active_slot_hash_from_data($merged);
+        $data['updated_at'] = current_time('mysql');
+
+        $updated = $wpdb->update(
+            $table,
+            $data,
+            ['id' => $id, 'reschedule_token' => $token],
+            $this->formats_for_update_data($data),
+            ['%d', '%s']
+        );
+        if ($updated === 1) {
+            do_action('sltr_data_changed', 'booking_updated', [
+                'booking_id' => $id,
+                'package_id' => (int) ($merged['package_id'] ?? $current['package_id'] ?? 0),
+            ]);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Consumes a public cancellation token and cancels its booking in one SQL
      * statement. Only the request that changes one row may run side effects.
      */

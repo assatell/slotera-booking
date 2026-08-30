@@ -83,7 +83,6 @@ final class BookingLifecycleService {
         if ($security->is_token_expired($booking)) { return new \WP_Error('sltr_expired_token', __('Invalid or expired reschedule link.', 'slotera-booking')); }
         if (($booking['status'] ?? '') === self::STATUS_CANCELLED) { return new \WP_Error('sltr_cancelled_booking', __('Cancelled bookings cannot be rescheduled.', 'slotera-booking')); }
         if (($booking['status'] ?? '') === self::STATUS_COMPLETED) { return new \WP_Error('sltr_completed_booking', __('Completed bookings cannot be rescheduled.', 'slotera-booking')); }
-        if ((new BookingHistoryRepository())->count_event((int) ($booking['id'] ?? 0), 'booking_rescheduled_by_customer') > 0) { return new \WP_Error('sltr_reschedule_already_used', __('This booking has already been rescheduled from the client account.', 'slotera-booking')); }
 
         $date = sanitize_text_field($date);
         $package_id = absint($booking['package_id'] ?? 0);
@@ -132,12 +131,13 @@ final class BookingLifecycleService {
                 );
                 if (!$available) { return new \WP_Error('sltr_slot_unavailable', __('Selected time slot is no longer available.', 'slotera-booking')); }
                 $before = $booking;
-                $ok = $repo->update((int) $booking['id'], [
+                $next_reschedule_token = $this->generate_unique_token('reschedule_token', $repo);
+                $ok = $repo->reschedule_by_token_atomically((int) $booking['id'], $token, [
                     'booking_date' => $date,
                     'end_date' => $new_end_date,
                     'start_time' => '00:00:00',
                     'end_time' => '00:00:00',
-                    'reschedule_token' => null,
+                    'reschedule_token' => $next_reschedule_token,
                 ]);
                 if (!$ok) { return new \WP_Error('sltr_reschedule_failed', __('Booking could not be rescheduled.', 'slotera-booking')); }
                 $after = $repo->get_by_id((int) $booking['id']);
@@ -171,7 +171,8 @@ final class BookingLifecycleService {
             }
             if (!$available) { return new \WP_Error('sltr_slot_unavailable', __('Selected time slot is no longer available.', 'slotera-booking')); }
             $before = $booking;
-            $ok = $repo->update((int)$booking['id'], ['booking_date'=>$date,'start_time'=>$start,'end_time'=>$end,'reschedule_token'=>null]);
+            $next_reschedule_token = $this->generate_unique_token('reschedule_token', $repo);
+            $ok = $repo->reschedule_by_token_atomically((int)$booking['id'], $token, ['booking_date'=>$date,'start_time'=>$start,'end_time'=>$end,'reschedule_token'=>$next_reschedule_token]);
             if (!$ok) { return new \WP_Error('sltr_reschedule_failed', __('Booking could not be rescheduled.', 'slotera-booking')); }
             $after = $repo->get_by_id((int)$booking['id']);
             $payload=array_merge(['date'=>$date,'start'=>$start,'end'=>$end,'source'=>'customer_token'], $security->audit_context());

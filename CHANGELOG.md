@@ -1,3 +1,10 @@
+## 1.0.1046 RC67.6 — Repeatable secure customer rescheduling
+
+- Allow customers to reschedule the same active booking more than once.
+- Atomically invalidate the used reschedule token and issue a unique replacement token after every successful change.
+- Include the replacement reschedule link in each customer confirmation email and reject concurrent reuse of an older token.
+- Add regression coverage for timed and multi-day booking reschedules.
+
 ## 1.0.1045 RC67.5 — Signed release builder VCS binding
 
 - Carry forward the complete RC67.4 release-blocker remediation.

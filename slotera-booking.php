@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Slotera Booking
  * Description: Complete WordPress booking platform with payments, packages, coupons, marketing automation, analytics and customer management.
- * Version: 1.0.1045
+ * Version: 1.0.1046
  * Requires at least: 6.0
  * Requires PHP: 8.0
  * License: GPL v2 or later
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SLTR_VERSION', '1.0.1045');
+define('SLTR_VERSION', '1.0.1046');
 define('SLTR_UPDATE_URI', '');
 define('SLTR_MINIMUM_WP_VERSION', '6.0');
 define('SLTR_MINIMUM_PHP_VERSION', '8.0');
