@@ -1,3 +1,10 @@
+## 1.0.1044 RC67.4 — Release blocker remediation
+
+- Remove raw IP addresses and User-Agent values from contact-form processing and localized email templates.
+- Repair mandatory PHP QA guards and refresh the intentional email-template translation freeze baselines.
+- Enforce canonical cross-platform line endings so Windows checkouts do not alter release source bytes.
+- Publish and pin the release signing-key fingerprint through the independent https://getslotera.com/.well-known/slotera-release-signing-key.txt HTTPS trust anchor.
+
 ## 1.0.1043 RC67.3 — Resumable historical privacy repair
 
 - Make historical activity-log privacy repair bounded to at most 100 rows per invocation and persist a cursor across requests.

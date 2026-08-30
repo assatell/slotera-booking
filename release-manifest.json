@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1043",
+  "version": "1.0.1044",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1043-rc67.3"
+    "tag": "v1.0.1044-rc67.4"
   },
   "archive": {
     "root": "slotera-booking/",
@@ -121,10 +121,14 @@
     "1.0.1041 RC67.1: stop retaining raw activity-log IP addresses and user agents, redact historical network identifiers, and migrate stored activity data",
     "1.0.1041 RC67.1: replace predictable secret-store fallback encryption with site-bound v3 encryption while preserving legacy decryption and rotating persistent v1/v2 settings",
     "1.0.1042 RC67.2: make activity-log privacy cleanup fail closed and re-run it through repair migration 1.0.1042 before advancing the database version",
-    "1.0.1043 RC67.3: make historical activity-log privacy repair bounded and resumable, and replace malformed legacy payloads with privacy-safe markers"
+    "1.0.1043 RC67.3: make historical activity-log privacy repair bounded and resumable, and replace malformed legacy payloads with privacy-safe markers",
+"1.0.1044 RC67.4: remove raw IP addresses and user agents from contact-form processing and email templates",
+"1.0.1044 RC67.4: repair mandatory PHP QA guards and refresh intentional email-template freeze baselines",
+"1.0.1044 RC67.4: enforce canonical cross-platform line endings for reproducible Windows checkouts",
+"1.0.1044 RC67.4: pin the official release signing key and fingerprint through the independent getslotera.com HTTPS trust anchor"
   ],
-  "release_notes": "RC67.3 replaces the historical activity-log privacy cleanup with a bounded resumable repair: batches persist progress across requests, malformed legacy payloads are replaced with privacy-safe markers, and the database version advances only after the full cleanup and invariant check complete.",
-  "candidate": "RC67.3",
+  "release_notes": "RC67.4 remediates the RC67.3 release blockers: contact emails no longer expose raw network identifiers, mandatory PHP QA passes with current guards and freeze baselines, Windows checkouts use canonical release line endings, and the signing-key fingerprint is pinned through getslotera.com.",
+  "candidate": "RC67.4",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },
