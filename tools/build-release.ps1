@@ -39,6 +39,11 @@ $env:SLTR_BUILD_OUTPUT = [System.IO.Path]::GetFileName($output)
 $env:SLTR_POWERSHELL_VERSION = $psVersion
 $env:SLTR_SIGNING_STATUS = 'performed-by-build-release.ps1'
 $env:SLTR_VCS_REQUIRED = '1'
+$expectedVcsTag = [string]$manifest.source.tag
+if (-not $expectedVcsTag) {
+    throw 'Release manifest source tag is required for a VCS-bound build.'
+}
+$env:SLTR_VCS_TAG = $expectedVcsTag
 if (-not $env:SOURCE_DATE_EPOCH) {
     throw 'SOURCE_DATE_EPOCH is required for a reproducible release build.'
 }

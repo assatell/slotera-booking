@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1044",
+  "version": "1.0.1045",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1044-rc67.4"
+    "tag": "v1.0.1045-rc67.5"
   },
   "archive": {
     "root": "slotera-booking/",
@@ -125,10 +125,11 @@
 "1.0.1044 RC67.4: remove raw IP addresses and user agents from contact-form processing and email templates",
 "1.0.1044 RC67.4: repair mandatory PHP QA guards and refresh intentional email-template freeze baselines",
 "1.0.1044 RC67.4: enforce canonical cross-platform line endings for reproducible Windows checkouts",
-"1.0.1044 RC67.4: pin the official release signing key and fingerprint through the independent getslotera.com HTTPS trust anchor"
+"1.0.1044 RC67.4: pin the official release signing key and fingerprint through the independent getslotera.com HTTPS trust anchor",
+"1.0.1045 RC67.5: make the official signed release builder supply the manifest VCS tag automatically and guard the behavior with executable QA"
   ],
-  "release_notes": "RC67.4 remediates the RC67.3 release blockers: contact emails no longer expose raw network identifiers, mandatory PHP QA passes with current guards and freeze baselines, Windows checkouts use canonical release line endings, and the signing-key fingerprint is pinned through getslotera.com.",
-  "candidate": "RC67.4",
+  "release_notes": "RC67.5 carries forward the RC67.4 blocker remediation and repairs the official signed release pipeline so it automatically supplies the manifest VCS tag required by fail-closed provenance capture.",
+  "candidate": "RC67.5",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

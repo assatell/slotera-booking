@@ -1,3 +1,9 @@
+## 1.0.1045 RC67.5 — Signed release builder VCS binding
+
+- Carry forward the complete RC67.4 release-blocker remediation.
+- Make the official signed release builder pass the manifest tag into fail-closed VCS provenance capture.
+- Add executable QA that prevents the required VCS tag assignment from being removed or moved after archive packaging.
+
 ## 1.0.1044 RC67.4 — Release blocker remediation
 
 - Remove raw IP addresses and User-Agent values from contact-form processing and localized email templates.
