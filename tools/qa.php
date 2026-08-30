@@ -59,9 +59,10 @@ function tests(string $root): void {
     }
     $settingsRepository=file_get_contents($root.'/includes/Infrastructure/Repositories/SettingsRepository.php');
     $secretMigrationGuard=strpos($settingsRepository, 'SecretStore::encryption_available()');
-    $secretMigrationEncrypt=strpos($settingsRepository, '$encrypted = SecretStore::encrypt_settings($settings)', $secretMigrationGuard === false ? 0 : $secretMigrationGuard);
+    $secretMigrationDecrypt=strpos($settingsRepository, '$decrypted = SecretStore::decrypt_settings($settings)', $secretMigrationGuard === false ? 0 : $secretMigrationGuard);
+    $secretMigrationEncrypt=strpos($settingsRepository, '$encrypted = SecretStore::encrypt_settings($decrypted)', $secretMigrationDecrypt === false ? 0 : $secretMigrationDecrypt);
     $secretMigrationWrite=strpos($settingsRepository, 'update_option(self::OPTION_NAME, $encrypted, false)', $secretMigrationEncrypt === false ? 0 : $secretMigrationEncrypt);
-    if($secretMigrationGuard === false || $secretMigrationEncrypt === false || $secretMigrationWrite === false || !($secretMigrationGuard < $secretMigrationEncrypt && $secretMigrationEncrypt < $secretMigrationWrite)) fail('plaintext secret migration encryption-availability regression');
+    if($secretMigrationGuard === false || $secretMigrationDecrypt === false || $secretMigrationEncrypt === false || $secretMigrationWrite === false || !($secretMigrationGuard < $secretMigrationDecrypt && $secretMigrationDecrypt < $secretMigrationEncrypt && $secretMigrationEncrypt < $secretMigrationWrite)) fail('plaintext secret migration encryption-availability regression');
     if(!str_contains($settingsRepository, '!SecretStore::is_encrypted($encrypted[$key])')) fail('plaintext secret migration completeness regression');
     $visitorAnalyticsClient=file_get_contents($root.'/assets/js/frontend-analytics.js');
     $visitorAnalyticsService=file_get_contents($root.'/includes/Application/Services/VisitorAnalyticsService.php');
@@ -192,7 +193,7 @@ function verifyRelease(string $root): void {
     $provenanceMetadata=json_decode((string) file_get_contents($root.'/build-provenance.json'), true);
     if((string) ($packageMetadata['version'] ?? '') !== $releaseVersion || (string) ($provenanceMetadata['version'] ?? '') !== $releaseVersion) fail('release metadata version mismatch');
     foreach(['builder','vcs','source','build','hashes','transformation_chain','release_manifest_sha256'] as $field) if(!array_key_exists($field, $provenanceMetadata)) fail('provenance field missing: '.$field);
-    if(!preg_match('/^[a-f0-9]{64}  build-provenance\.json$/m', (string) file_get_contents($root.'/checksums.sha256'))) fail('provenance is not included in checksum manifest');
+    if(!preg_match('/^[a-f0-9]{64}  build-provenance\.json\r?$/m', (string) file_get_contents($root.'/checksums.sha256'))) fail('provenance is not included in checksum manifest');
     if((string) ($releaseManifest['schema'] ?? '') !== 'slotera-release-manifest/v2') fail('release manifest schema mismatch');
     if((string) ($provenanceMetadata['schema'] ?? '') !== 'slotera-build-provenance/v3') fail('provenance schema mismatch');
     if((string) ($releaseManifest['signing']['algorithm'] ?? '') !== 'RSA-PSS-SHA256' || !preg_match('/^sha256:[a-f0-9]{64}$/', (string) ($releaseManifest['signing']['key_id'] ?? ''))) fail('release signing policy missing');

@@ -344,117 +344,117 @@ return array (
       'et_EE' => 
       array (
         'items' => 109,
-        'sha256' => '8463e5ab40f787ac7aa4ab311f9cb3a169f239dc9b3b5e95abcbdecd4a3d96e0',
+        'sha256' => '27851fd4cecc9f8d8e5234653adc9cef48260b4064b0692178c7fb99e80dc218',
       ),
       'de_DE' => 
       array (
         'items' => 109,
-        'sha256' => '8fef56f9dbab3d2e63fa8c398e477e5eb5479a5405f020676d9d4cd5789557d1',
+        'sha256' => 'e64fec80639a2b0e8f61e8fecc5a767636454b768f3fc230b0621a876b32a59b',
       ),
       'fr_FR' => 
       array (
         'items' => 109,
-        'sha256' => '1895319cb5dec03c95fdfb927ffd6657f715dc02ff40a27d83c5d44e4986c47e',
+        'sha256' => '0ad88e32e50364c73409696a6833754d0f817ce3a0995210ac7934a4a56dd9ce',
       ),
       'da_DK' => 
       array (
         'items' => 109,
-        'sha256' => '45f48a1ae90202d9253232eba37f5006ef43b96be68a610cfc6670571af0b773',
+        'sha256' => '88feb71dc8bc4ea3b492f088705b1bd1d0992e783b90ca8e92ab1e29bc484ffd',
       ),
       'nl_NL' => 
       array (
         'items' => 109,
-        'sha256' => 'd0efae81026f4147166f74a0f65c7c516881ac031e124c6dfacab06705752ba9',
+        'sha256' => 'a657b95b42eaf2a05c0d107f928d09729c211e9bb936a93584389c1bec418615',
       ),
       'sv_SE' => 
       array (
         'items' => 109,
-        'sha256' => '5231a86d4e24c068b06f348bd9aa775e84bdb634b2658a02c5f7678beca8f13a',
+        'sha256' => 'e34c2b2d204578dc8fe18a97270102b1fd977364f3ac6a4a7f1d8d1db624efd6',
       ),
       'fi_FI' => 
       array (
         'items' => 109,
-        'sha256' => '969dabbecd820abc2e7fba6eb7e681fdff93f4cebbc9442efb7d018979ad6293',
+        'sha256' => '5cfecec5104b37eb97553afcf9015fc6d8157c65ea3c042f5a6d4046e0367e20',
       ),
       'ru_RU' => 
       array (
         'items' => 109,
-        'sha256' => '7fc771af59ed76cef13a2868d5642b53fe5057f6ec573b07178246af6060aac1',
+        'sha256' => '4629d25159888af0ae8d6e2632125d28e19ba1a9915127e44d04d1ef37aa0eb9',
       ),
       'es_ES' => 
       array (
         'items' => 109,
-        'sha256' => 'e1f82c68a98dd630ae3c6687d522ec0307c62109fdd0a6502923a189971dab20',
+        'sha256' => 'faf35c009717aa8ce280cfcbecec33ea063c9e37809fdf57a8ba715cc391accd',
       ),
       'it_IT' => 
       array (
         'items' => 109,
-        'sha256' => '6538e6048ce447fc72f704b8fca51f29d9edccc569bb534f7650dbc6aa3cb26c',
+        'sha256' => '4e71b748f0adf9cba9918333077eea7c16ea619f644324954341a35d2b7d148f',
       ),
       'pt_PT' => 
       array (
         'items' => 109,
-        'sha256' => '03c11a129d83652a854d7ee1889402ebd9f7786a59614d948b317a77e61a7e61',
+        'sha256' => '09bb7fe9f35005944fb931e8b6a932f0f64f8e2dfbed203a0e76f752c0f41f79',
       ),
       'pt_BR' => 
       array (
         'items' => 109,
-        'sha256' => '7e18cc0943163328862a56c1a57b7eceaaea6d231c7d19ffcd4487e174bf76e4',
+        'sha256' => 'ddd83b7d1568be7b0063a5bd7a876e6a7647b5221bccb29852449733adf50d73',
       ),
       'pl_PL' => 
       array (
         'items' => 109,
-        'sha256' => '3a750cc7303ffc6afba7f31dae40d4b7a84e0b258f1853dae4bc4a2997a648c3',
+        'sha256' => '2fe4bbc672b16837e022c7ffa5d3f79f76bbba1b42572913eda7c7459adc7018',
       ),
       'cs_CZ' => 
       array (
         'items' => 109,
-        'sha256' => '55d455ed3efe45fa8cb39c87fb231cd5f428e3ef6960130a33f0af292e43eddd',
+        'sha256' => '5f3da71756ee6af73e76f65e21c9c855345e54c3a791631ef4b09b7ea7dfb098',
       ),
       'sk_SK' => 
       array (
         'items' => 109,
-        'sha256' => '960a732421ee7972f7a6e748e7431c8d89816af8761c45d99a64e8fbd01bf1de',
+        'sha256' => 'b68b64cd0d43da8c8bc4cbc18fff22c0f9b34be81e4b8d831a6c1de3ac858738',
       ),
       'sl_SI' => 
       array (
         'items' => 109,
-        'sha256' => '5d1d07afed82e19357d30a453268e3cd1a8d25cd626f35352f813ac2f033a44f',
+        'sha256' => '95cfca5025d4e54f84f10d38f6919fadbe73c5b0acd50aea338c55219daa7559',
       ),
       'hr_HR' => 
       array (
         'items' => 109,
-        'sha256' => 'c56bf3fe87b605c7fb9dcb40b96127a28212f867cf75af4bd2bccc12ed0f28ac',
+        'sha256' => '9d0ee71be7c73f5c99fcececd23a9713d7ef246f2eacd53815870cc035e53fef',
       ),
       'ro_RO' => 
       array (
         'items' => 109,
-        'sha256' => '10326c6094c2c9b08a7a4c04c5af2932eadd8796d4586ca4c0727ff276c6bae3',
+        'sha256' => '42df00cf9b3011f6e3d957933126f371460521a7274879a4884c8234d7b1c96d',
       ),
       'hu_HU' => 
       array (
         'items' => 109,
-        'sha256' => '829dbf569dd643beb2836b3b901ed2511bba5e9a526a7c4484ce51e24aa5f4de',
+        'sha256' => 'b7a25715955dbd7f48972d40494636eddeecf9315231cc3ef04e04f3a151836b',
       ),
       'bg_BG' => 
       array (
         'items' => 109,
-        'sha256' => '0be41e4af65a6c8f5be4ebefecb3098952c194c2ca0d9d587dd30298598a262f',
+        'sha256' => 'bd22177d361b10058785452c0a8b9e321e37f325ab330028281425a573b77cac',
       ),
       'lt_LT' => 
       array (
         'items' => 109,
-        'sha256' => '19b6330bfc8e06011c5a47ccff9e1098bbf1c77092a556c7e6fee96e207b22dc',
+        'sha256' => 'bd0b44fd78da4f323874c481d354c8ebc6ceb80fb038301339b54f4040c5f3f1',
       ),
       'lv_LV' => 
       array (
         'items' => 109,
-        'sha256' => 'aed3cf2ac791c86075999409b8c46b211f9156069fdf06e027e0465b20538736',
+        'sha256' => '00ad32cd491140261210a5b2f9a663da8c2514d0bac024ec747f5f3ffbf199e2',
       ),
       'no_NO' => 
       array (
         'items' => 109,
-        'sha256' => '7f16e4a4208647e449de361d486812bb377c2fba20cb90528bd7bcd44c732c3f',
+        'sha256' => '1425271445041c35e9a4851eda172925f9cc884c3cbfea25f4a9384da2e745ce',
       ),
       'is_IS' => 
       array (
@@ -464,7 +464,7 @@ return array (
       'el_GR' => 
       array (
         'items' => 109,
-        'sha256' => 'b4b45a7a53c889962ba1087e96e9e95fe9124f9d0ebfa15020c07a0e0043623a',
+        'sha256' => '14aad646da10622b375f08a7038c10bd2dac5807adcd1f903f178cd893765285',
       ),
       'ga_IE' => 
       array (
