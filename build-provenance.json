@@ -1,11 +1,11 @@
 {
   "schema": "slotera-build-provenance/v3",
-  "version": "1.0.1043",
-  "candidate": "RC67.3",
+  "version": "1.0.1044",
+  "candidate": "RC67.4",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-08-29T18:57:09Z",
+  "generated_at_utc": "2026-08-30T12:17:17Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "f81424160755b5964717ed0435b91b4ca39226c9afa548710573dd672b123319",
+  "release_manifest_sha256": "62375a88023a202055a46db24cc42f07117404b646bf547517404ac822a36265",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.5.0",
@@ -16,17 +16,16 @@
     }
   },
   "vcs": {
-    "commit": "dc757a9874567a284e4986ddf8dd62fc1c9bbb5d",
-    "tag": "v1.0.1043-rc67.3",
+    "commit": "536ecc306b8868e9876535d5a107761019a7f02f",
+    "tag": "v1.0.1044-rc67.4",
     "dirty": false,
-    "state": "git-clean",
-    "capture": "pre-metadata"
+    "state": "git-clean"
   },
   "source": {
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
-    "commit": "dc757a9874567a284e4986ddf8dd62fc1c9bbb5d",
-    "tag": "v1.0.1043-rc67.3",
+    "commit": "536ecc306b8868e9876535d5a107761019a7f02f",
+    "tag": "v1.0.1044-rc67.4",
     "dirty": false
   },
   "lineage": {
@@ -39,17 +38,17 @@
     }
   },
   "build": {
-    "command": "node tools/build-rc.mjs --output ../slotera-booking-1.0.1043-rc67.3.zip --source-date-epoch 1788029829",
+    "command": "node tools/release-metadata.mjs prepare",
     "metadata_command": "node tools/release-metadata.mjs prepare",
     "archive_root": "slotera-booking/",
-    "output": "slotera-booking-1.0.1043-rc67.3.zip",
-    "source_date_epoch_utc": "2026-08-29T18:57:09Z"
+    "output": "slotera-booking-1.0.1044.zip",
+    "source_date_epoch_utc": "2026-08-30T12:17:17Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "f81424160755b5964717ed0435b91b4ca39226c9afa548710573dd672b123319",
-    "pre_version_sync_tree_sha256": "8aaea7354db6978a44f6b20de9e0eaf4fe5fb5517b8426ef190e39dd624a49e9",
-    "release_tree_sha256": "8aaea7354db6978a44f6b20de9e0eaf4fe5fb5517b8426ef190e39dd624a49e9"
+    "release_manifest_sha256": "62375a88023a202055a46db24cc42f07117404b646bf547517404ac822a36265",
+    "pre_version_sync_tree_sha256": "b6c996d54e2784a40863e5b7dc1597cc109253b7516522e591057edf77dafac0",
+    "release_tree_sha256": "b6c996d54e2784a40863e5b7dc1597cc109253b7516522e591057edf77dafac0"
   },
   "transformation_chain": [
     {
@@ -64,17 +63,17 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "8aaea7354db6978a44f6b20de9e0eaf4fe5fb5517b8426ef190e39dd624a49e9",
-      "changes_manifest_sha256": "f81424160755b5964717ed0435b91b4ca39226c9afa548710573dd672b123319",
-      "latest_change": "1.0.1043 RC67.3: make historical activity-log privacy repair bounded and resumable, and replace malformed legacy payloads with privacy-safe markers",
+      "output_tree_sha256": "b6c996d54e2784a40863e5b7dc1597cc109253b7516522e591057edf77dafac0",
+      "changes_manifest_sha256": "62375a88023a202055a46db24cc42f07117404b646bf547517404ac822a36265",
+      "latest_change": "1.0.1044 RC67.4: pin the official release signing key and fingerprint through the independent getslotera.com HTTPS trust anchor",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
     {
       "order": 3,
       "name": "manifest-version-sync",
-      "version": "1.0.1043",
-      "input_tree_sha256": "8aaea7354db6978a44f6b20de9e0eaf4fe5fb5517b8426ef190e39dd624a49e9",
-      "output_tree_sha256": "8aaea7354db6978a44f6b20de9e0eaf4fe5fb5517b8426ef190e39dd624a49e9",
+      "version": "1.0.1044",
+      "input_tree_sha256": "b6c996d54e2784a40863e5b7dc1597cc109253b7516522e591057edf77dafac0",
+      "output_tree_sha256": "b6c996d54e2784a40863e5b7dc1597cc109253b7516522e591057edf77dafac0",
       "generated_targets": [
         "slotera-booking.php:update-uri-ready-unbound",
         "slotera-booking.php:plugin-header",
@@ -90,8 +89,8 @@
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "8aaea7354db6978a44f6b20de9e0eaf4fe5fb5517b8426ef190e39dd624a49e9",
-      "file_count": 581
+      "output_tree_sha256": "b6c996d54e2784a40863e5b7dc1597cc109253b7516522e591057edf77dafac0",
+      "file_count": 583
     },
     {
       "order": 5,
@@ -109,17 +108,17 @@
     {
       "order": 6,
       "name": "archive-packaging",
-      "command": "node tools/build-rc.mjs --output ../slotera-booking-1.0.1043-rc67.3.zip --source-date-epoch 1788029829",
-      "output": "slotera-booking-1.0.1043-rc67.3.zip",
+      "command": "node tools/release-metadata.mjs prepare",
+      "output": "slotera-booking-1.0.1044.zip",
       "signing_policy": {
         "algorithm": "RSA-PSS-SHA256",
         "key_id": "sha256:c3272d14be785233f096bd11ef478a85b12b889bb3e7b7930993c440b1275603",
-        "status": "not-performed-release-candidate"
+        "status": "not-performed-in-this-build"
       },
       "note": "Official releases are signed after packaging. The final archive SHA-256 is recorded outside the ZIP in the detached attestation to avoid self-reference."
     }
   ],
-  "file_count": 581,
+  "file_count": 583,
   "tree_manifest": {
     "path": "checksums.sha256",
     "semantics": "canonical UTF-8 path ordered SHA-256 manifest; its digest is bound by the detached release attestation"
