@@ -163,8 +163,6 @@ final class BookingShortcode
             'contact_page_title' => $page_title,
             'contact_submitted_at' => current_time('mysql'),
             'contact_locale' => $contact_locale,
-            'contact_user_ip' => $this->contact_user_ip(),
-            'contact_user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? sanitize_text_field((string) wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '',
             'site_name' => wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES),
         ];
 
@@ -270,20 +268,6 @@ final class BookingShortcode
         $post_id = url_to_postid($url);
         if ($post_id > 0) {
             return get_the_title($post_id) ?: '';
-        }
-        return '';
-    }
-
-    private function contact_user_ip(): string
-    {
-        foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $key) {
-            if (!empty($_SERVER[$key])) {
-                $raw = sanitize_text_field((string) wp_unslash($_SERVER[$key]));
-                $ip = trim((string) explode(',', $raw)[0]);
-                if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                    return $ip;
-                }
-            }
         }
         return '';
     }

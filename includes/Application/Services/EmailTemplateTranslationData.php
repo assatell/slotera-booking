@@ -442,9 +442,7 @@ Email: {contact_email}
 Σελίδα: {contact_page_title}
 URL: {contact_page_url}
 Υποβλήθηκε: {contact_submitted_at}
-Γλώσσα: {contact_locale}
-IP: {contact_user_ip}
-Πράκτορας χρήστη: {contact_user_agent}',
+Γλώσσα: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -901,9 +899,7 @@ Teachtaireacht:
 Leathanach: {contact_page_title}
 URL: {contact_page_url}
 Curtha isteach: {contact_submitted_at}
-Logchaighdeán: {contact_locale}
-IP: {contact_user_ip}
-Gníomhaire úsáideora: {contact_user_agent}',
+Logchaighdeán: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -1360,9 +1356,7 @@ Gníomhaire úsáideora: {contact_user_agent}',
         Lapa: {contact_page_title}
         URL: {contact_page_url}
         Iesniegts: {contact_submitted_at}
-        Lokalizācija: {contact_locale}
-        IP: {contact_user_ip}
-        Lietotāja aģents: {contact_user_agent}',
+        Lokalizācija: {contact_locale}',
           ),
           'marketing_promo' => 
           array (
@@ -1819,9 +1813,7 @@ Melding:
 Side: {contact_page_title}
 URL: {contact_page_url}
 Sendt inn: {contact_submitted_at}
-Språkinnstilling: {contact_locale}
-IP: {contact_user_ip}
-Brukeragent: {contact_user_agent}',
+Språkinnstilling: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -2278,9 +2270,7 @@ Skilaboð:
 Síða: {contact_page_title}
 Vefslóð: {contact_page_url}
 Sent: {contact_submitted_at}
-Tungumál: {contact_locale}
-IP-tala: {contact_user_ip}
-Vafraauðkenni: {contact_user_agent}',
+Tungumál: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -2711,9 +2701,7 @@ Tárgy: {contact_subject}
 Oldal: {contact_page_title}
 URL: {contact_page_url}
 Elküldve: {contact_submitted_at}
-Nyelvi beállítás: {contact_locale}
-IP-cím: {contact_user_ip}
-Felhasználói ügynök: {contact_user_agent}',
+Nyelvi beállítás: {contact_locale}',
   ),
   'marketing_promo' => array (
 'title' => 'Marketing — promóció',
@@ -3143,9 +3131,7 @@ Sporočilo:
 Stran: {contact_page_title}
 URL: {contact_page_url}
 Oddano: {contact_submitted_at}
-Jezik: {contact_locale}
-IP: {contact_user_ip}
-Uporabniški agent: {contact_user_agent}',
+Jezik: {contact_locale}',
   ),
   'marketing_promo' => array (
 'title' => 'Trženje — promocija',
@@ -3601,9 +3587,7 @@ Správa:
 Stránka: {contact_page_title}
 URL: {contact_page_url}
 Odoslané: {contact_submitted_at}
-Jazyk: {contact_locale}
-IP: {contact_user_ip}
-Používateľský agent: {contact_user_agent}',
+Jazyk: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -4034,9 +4018,7 @@ Mesaj:
 Pagină: {contact_page_title}
 URL: {contact_page_url}
 Trimis la: {contact_submitted_at}
-Limbă: {contact_locale}
-IP: {contact_user_ip}
-Agent utilizator: {contact_user_agent}',
+Limbă: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promoție',
@@ -4466,9 +4448,7 @@ Mensagem:
 Página: {contact_page_title}
 URL: {contact_page_url}
 Enviado em: {contact_submitted_at}
-Idioma: {contact_locale}
-IP: {contact_user_ip}
-Agente do utilizador: {contact_user_agent}',
+Idioma: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promoção',
@@ -4924,9 +4904,7 @@ Zpráva:
 Stránka: {contact_page_title}
 URL: {contact_page_url}
 Odesláno: {contact_submitted_at}
-Jazyk: {contact_locale}
-IP: {contact_user_ip}
-User agent: {contact_user_agent}',
+Jazyk: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -5383,9 +5361,7 @@ Wiadomość:
 Strona: {contact_page_title}
 URL: {contact_page_url}
 Wysłano: {contact_submitted_at}
-Język: {contact_locale}
-IP: {contact_user_ip}
-Agent użytkownika: {contact_user_agent}',
+Język: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -5816,9 +5792,7 @@ Mensagem:
 Página: {contact_page_title}
 URL: {contact_page_url}
 Enviado em: {contact_submitted_at}
-Idioma: {contact_locale}
-IP: {contact_user_ip}
-Agente do usuário: {contact_user_agent}',
+Idioma: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promoção',
@@ -6248,9 +6222,7 @@ Messaggio:
 Pagina: {contact_page_title}
 URL: {contact_page_url}
 Inviato il: {contact_submitted_at}
-Lingua: {contact_locale}
-IP: {contact_user_ip}
-Agente utente: {contact_user_agent}',
+Lingua: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promozione',
@@ -6680,9 +6652,7 @@ Mensaje:
 Página: {contact_page_title}
 URL: {contact_page_url}
 Enviado: {contact_submitted_at}
-Idioma: {contact_locale}
-IP: {contact_user_ip}
-Agente de usuario: {contact_user_agent}',
+Idioma: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promoción',
@@ -7112,9 +7082,7 @@ Viesti:
 Sivu: {contact_page_title}
 URL: {contact_page_url}
 Lähetetty: {contact_submitted_at}
-Kielialue: {contact_locale}
-IP: {contact_user_ip}
-Selainagentti: {contact_user_agent}',
+Kielialue: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Markkinointi — kampanja',
@@ -7544,9 +7512,7 @@ Meddelande:
 Sida: {contact_page_title}
 URL: {contact_page_url}
 Skickat: {contact_submitted_at}
-Språkversion: {contact_locale}
-IP: {contact_user_ip}
-Webbläsaragent: {contact_user_agent}',
+Språkversion: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marknadsföring — kampanj',
@@ -7732,7 +7698,7 @@ Webbläsaragent: {contact_user_agent}',
                 'title' => 'Formulaire de contact — administrateur',
                 'description' => 'Envoyé à l’administrateur lorsqu’un visiteur soumet le formulaire de contact Slotera.',
                 'default_subject' => 'Nouveau message du formulaire de contact — {site_name}',
-                'default_body' => "Nouveau message du formulaire de contact.\n\nNom : {contact_name}\nE-mail : {contact_email}\nTéléphone : {contact_phone}\nObjet : {contact_subject}\nMessage :\n{contact_message}\n\nPage : {contact_page_title}\nURL : {contact_page_url}\nEnvoyé le : {contact_submitted_at}\nLangue : {contact_locale}\nIP : {contact_user_ip}\nNavigateur / appareil : {contact_user_agent}",
+                'default_body' => "Nouveau message du formulaire de contact.\n\nNom : {contact_name}\nE-mail : {contact_email}\nTéléphone : {contact_phone}\nObjet : {contact_subject}\nMessage :\n{contact_message}\n\nPage : {contact_page_title}\nURL : {contact_page_url}\nEnvoyé le : {contact_submitted_at}\nLangue : {contact_locale}",
             ],
             'marketing_promo' => [
                 'title' => 'Campagne promotionnelle',
@@ -7908,7 +7874,7 @@ Webbläsaragent: {contact_user_agent}',
                 'title' => 'Форма за контакт — администратор',
                 'description' => 'Изпраща се до администратора, когато посетител изпрати формата за контакт на Slotera.',
                 'default_subject' => '[{site_name}] Ново съобщение от формата за контакт',
-                'default_body' => 'Ново съобщение от формата за контакт.\n\nИме: {contact_name}\nИмейл: {contact_email}\nТелефон: {contact_phone}\nТема: {contact_subject}\nСъобщение:\n{contact_message}\n\nСтраница: {contact_page_title}\nURL: {contact_page_url}\nИзпратено на: {contact_submitted_at}\nЕзикова настройка: {contact_locale}\nIP: {contact_user_ip}\nБраузър / устройство: {contact_user_agent}',
+                'default_body' => 'Ново съобщение от формата за контакт.\n\nИме: {contact_name}\nИмейл: {contact_email}\nТелефон: {contact_phone}\nТема: {contact_subject}\nСъобщение:\n{contact_message}\n\nСтраница: {contact_page_title}\nURL: {contact_page_url}\nИзпратено на: {contact_submitted_at}\nЕзикова настройка: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Маркетинг — промоция',
@@ -8343,9 +8309,7 @@ Tema: {contact_subject}
 Puslapis: {contact_page_title}
 URL: {contact_page_url}
 Pateikta: {contact_submitted_at}
-Lokalė: {contact_locale}
-IP: {contact_user_ip}
-Naršyklė / įrenginys: {contact_user_agent}',
+Lokalė: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -8777,9 +8741,7 @@ Sõnum:
 Leht: {contact_page_title}
 URL: {contact_page_url}
 Saadetud: {contact_submitted_at}
-Keel: {contact_locale}
-IP: {contact_user_ip}
-Brauser / seade: {contact_user_agent}',
+Keel: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Turundus — kampaania',
@@ -8965,7 +8927,7 @@ Brauser / seade: {contact_user_agent}',
                 'title' => 'Контактная форма — администратор',
                 'description' => 'Отправляется администратору, когда посетитель отправляет контактную форму Slotera.',
                 'default_subject' => '[{site_name}] Новое сообщение из контактной формы',
-                'default_body' => "Новое сообщение из контактной формы.\n\nИмя: {contact_name}\nЭл. почта: {contact_email}\nТелефон: {contact_phone}\nТема: {contact_subject}\nСообщение:\n{contact_message}\n\nСтраница: {contact_page_title}\nURL: {contact_page_url}\nОтправлено: {contact_submitted_at}\nЯзык: {contact_locale}\nIP: {contact_user_ip}\nБраузер / устройство: {contact_user_agent}",
+                'default_body' => "Новое сообщение из контактной формы.\n\nИмя: {contact_name}\nЭл. почта: {contact_email}\nТелефон: {contact_phone}\nТема: {contact_subject}\nСообщение:\n{contact_message}\n\nСтраница: {contact_page_title}\nURL: {contact_page_url}\nОтправлено: {contact_submitted_at}\nЯзык: {contact_locale}",
             ],
             'marketing_promo' => [
                 'title' => 'Маркетинг — промо',
@@ -9385,9 +9347,7 @@ Besked:
 Side: {contact_page_title}
 URL: {contact_page_url}
 Indsendt: {contact_submitted_at}
-Sprogkode: {contact_locale}
-IP: {contact_user_ip}
-Brugeragent: {contact_user_agent}',
+Sprogkode: {contact_locale}',
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — kampagne',
@@ -9573,7 +9533,7 @@ Brugeragent: {contact_user_agent}',
                 'title' => 'Contactformulier — beheerder',
                 'description' => 'Verzonden naar de beheerder wanneer een bezoeker het Slotera-contactformulier indient.',
                 'default_subject' => '[{site_name}] Nieuw contactbericht',
-                'default_body' => "Nieuw bericht via het contactformulier.\n\nNaam: {contact_name}\nE-mail: {contact_email}\nTelefoon: {contact_phone}\nOnderwerp: {contact_subject}\nBericht:\n{contact_message}\n\nPagina: {contact_page_title}\nURL: {contact_page_url}\nIngediend: {contact_submitted_at}\nTaalinstelling: {contact_locale}\nIP: {contact_user_ip}\nBrowser/apparaat: {contact_user_agent}",
+                'default_body' => "Nieuw bericht via het contactformulier.\n\nNaam: {contact_name}\nE-mail: {contact_email}\nTelefoon: {contact_phone}\nOnderwerp: {contact_subject}\nBericht:\n{contact_message}\n\nPagina: {contact_page_title}\nURL: {contact_page_url}\nIngediend: {contact_submitted_at}\nTaalinstelling: {contact_locale}",
             ],
             'marketing_promo' => [
                 'title' => 'Marketing — promotie',
@@ -9743,7 +9703,7 @@ Brugeragent: {contact_user_agent}',
                 'title' => 'Kontaktformular — Admin',
                 'description' => 'Wird an den Admin gesendet, wenn ein Besucher das Slotera-Kontaktformular absendet.',
                 'default_subject' => '[{site_name}] Neue Kontaktanfrage',
-                'default_body' => "Neue Nachricht über das Kontaktformular.\n\nName: {contact_name}\nE-Mail: {contact_email}\nTelefon: {contact_phone}\nBetreff: {contact_subject}\nNachricht:\n{contact_message}\n\nSeite: {contact_page_title}\nURL: {contact_page_url}\nGesendet: {contact_submitted_at}\nSprache: {contact_locale}\nIP: {contact_user_ip}\nBrowser / Gerät: {contact_user_agent}",
+                'default_body' => "Neue Nachricht über das Kontaktformular.\n\nName: {contact_name}\nE-Mail: {contact_email}\nTelefon: {contact_phone}\nBetreff: {contact_subject}\nNachricht:\n{contact_message}\n\nSeite: {contact_page_title}\nURL: {contact_page_url}\nGesendet: {contact_submitted_at}\nSprache: {contact_locale}",
             ],
             'magic_link_customer' => [
                 'title' => 'Magic Link',
@@ -10195,9 +10155,7 @@ Poruka:
 Stranica: {contact_page_title}
 URL: {contact_page_url}
 Poslano: {contact_submitted_at}
-Lokalizacija: {contact_locale}
-IP: {contact_user_ip}
-Korisnički agent: {contact_user_agent}',
+Lokalizacija: {contact_locale}',
   ),
   'marketing_promo' => 
   array (
@@ -10654,9 +10612,7 @@ Messaġġ:
 Paġna: {contact_page_title}
 URL: {contact_page_url}
 Mibgħut: {contact_submitted_at}
-Lingwa: {contact_locale}
-IP: {contact_user_ip}
-User agent: {contact_user_agent}',
+Lingwa: {contact_locale}',
   ),
   'marketing_promo' => 
   array (

@@ -18,6 +18,7 @@ This release package includes self-contained QA entry points that do not require
 - `node tools/release-metadata.mjs verify` — verify that all version fields, provenance and file hashes match `release-manifest.json`.
 - Use the exact `build.command` recorded in `build-provenance.json` to regenerate metadata and package the archive. The portable Node launcher resolves the declared Python runtime without assuming a `python3.exe` shim on Windows.
 - Verify the external trust bundle with `node tools/release-attestation.mjs verify <archive.zip> <attestation.json> <signature.sig> <public.pem> [extracted-plugin-root]` and compare the reported key ID through an independent trusted channel.
+- Official release signing key and SHA-256 fingerprint: `https://getslotera.com/.well-known/slotera-release-signing-key.txt`. Treat a public key bundled with a release as untrusted until it matches this HTTPS trust anchor.
 
 `release-manifest.json` is the single version source. `tools/release-metadata.mjs prepare` synchronizes the plugin header, runtime constants, package metadata and README before regenerating provenance and checksums. Official RC67.3+ provenance is VCS-bound: a clean Git working tree at the exact manifest tag is mandatory. Historical archive lineage is recorded separately and is never presented as the direct release source. Provenance records the builder version, exact Git commit/tag, exact build command and the known transformation chain.
 
