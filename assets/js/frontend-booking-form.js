@@ -465,7 +465,7 @@
         if (taxEl) taxEl.textContent = formatMoney(taxAmount);
         if (taxLabelEl) taxLabelEl.textContent = (selectedUnit && selectedUnit.taxLabel) ? selectedUnit.taxLabel : (selectedPackageMeta && selectedPackageMeta.taxLabel ? selectedPackageMeta.taxLabel : sltrT('Tax'));
         if (totalEl) totalEl.textContent = hasAmount ? formatMoney(decision.total) : sltrT('Price on request');
-        if (nowEl) nowEl.textContent = decision.dueNow > 0 ? formatMoney(decision.dueNow) : '0';
+        if (nowEl) nowEl.textContent = formatMoney(decision.dueNow);
         if (laterEl) laterEl.textContent = formatMoney(decision.remaining);
     }
 
@@ -964,7 +964,7 @@
                 if (recommended) card.classList.add('is-recommended');
                 card.innerHTML = '<span class="sltr-payment-radio"><input type="radio" aria-hidden="true" tabindex="-1"></span>' +
                     '<span class="sltr-payment-card-body"><strong>' + escapeHtml(paymentChoiceLabel(choice)) + (recommended ? ' <em>' + escapeHtml(sltrT('Recommended')) + '</em>' : '') + '</strong><small>' + escapeHtml(paymentChoiceDescription(choice, decision)) + '</small></span>' +
-                    '<b>' + escapeHtml(decision.dueNow > 0 ? formatMoney(decision.dueNow) : '0') + '</b>'; 
+                    '<b>' + escapeHtml(formatMoney(decision.dueNow)) + '</b>';
                 card.addEventListener('click', function(){ setPaymentChoice(choice); });
                 cards.appendChild(card);
             });

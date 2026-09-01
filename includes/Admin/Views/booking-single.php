@@ -16,6 +16,7 @@ $tax_amount = (float) ($booking['tax_amount'] ?? 0);
 $gross_amount = (float) ($booking['gross_amount'] ?? $total_amount);
 $due_now = (float) ($booking['amount_due_now'] ?? $total_amount);
 $remaining_amount = (float) ($booking['remaining_amount'] ?? 0);
+$sltr_hidden_detail_fields = ['cancellation_token', 'reschedule_token'];
 
 $sltr_status_label = static function ($status): string {
     $labels = ['confirmed'=>__('Confirmed', 'slotera-booking'),'cancelled'=>__('Cancelled', 'slotera-booking'),'completed'=>__('Completed', 'slotera-booking')];
@@ -83,16 +84,19 @@ $sltr_action_url = static function (string $action, array $booking): string {
             </section>
             <section class="sltr-panel">
                 <h2><?php esc_html_e('Details', 'slotera-booking'); ?></h2>
-                <div class="sltr-responsive-table-wrapper" tabindex="0" role="region" aria-label="<?php esc_attr_e('Booking details', 'slotera-booking'); ?>"><table class="widefat striped sltr-responsive-table"><tbody><?php foreach($booking as $k=>$v): ?><tr><th><?php echo esc_html($k); ?></th><td><?php echo esc_html((string)$v); ?></td></tr><?php endforeach; ?></tbody></table></div>
+                <div class="sltr-responsive-table-wrapper" tabindex="0" role="region" aria-label="<?php esc_attr_e('Booking details', 'slotera-booking'); ?>"><table class="widefat striped sltr-responsive-table"><tbody>
+                    <?php foreach ($booking as $k => $v) : ?>
+                        <?php if (in_array((string) $k, $sltr_hidden_detail_fields, true)) { continue; } ?>
+                        <tr><th><?php echo esc_html($k); ?></th><td><?php echo esc_html((string) $v); ?></td></tr>
+                    <?php endforeach; ?>
+                </tbody></table></div>
             </section>
             <section class="sltr-panel">
                 <h2><?php esc_html_e('Customer links', 'slotera-booking'); ?></h2>
-                <?php
-                $lifecycle = new \Slotera\Application\Services\BookingLifecycleService();
-                $cancel_url = $lifecycle->cancellation_url($booking);
-                $reschedule_url = $lifecycle->reschedule_url($booking);
-                ?>
-                <div class="sltr-panel__body sltr-link-list"><p><strong><?php esc_html_e('Cancellation link', 'slotera-booking'); ?></strong><code><?php echo esc_html($cancel_url); ?></code></p><p><strong><?php esc_html_e('Reschedule link', 'slotera-booking'); ?></strong><code><?php echo esc_html($reschedule_url); ?></code></p></div>
+                <div class="sltr-panel__body sltr-link-list">
+                    <p><strong><?php esc_html_e('Cancellation link', 'slotera-booking'); ?></strong><span class="sltr-status-badge sltr-status-badge--<?php echo !empty($booking['cancellation_token']) ? 'active' : 'inactive'; ?>"><?php echo !empty($booking['cancellation_token']) ? esc_html__('Available', 'slotera-booking') : esc_html__('Not available', 'slotera-booking'); ?></span></p>
+                    <p><strong><?php esc_html_e('Reschedule link', 'slotera-booking'); ?></strong><span class="sltr-status-badge sltr-status-badge--<?php echo !empty($booking['reschedule_token']) ? 'active' : 'inactive'; ?>"><?php echo !empty($booking['reschedule_token']) ? esc_html__('Available', 'slotera-booking') : esc_html__('Not available', 'slotera-booking'); ?></span></p>
+                </div>
             </section>
             <section class="sltr-panel">
                 <h2><?php esc_html_e('Booking history', 'slotera-booking'); ?></h2>

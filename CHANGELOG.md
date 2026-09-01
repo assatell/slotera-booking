@@ -1,3 +1,11 @@
+## 1.0.1047 RC67.7 — Acceptance cleanup
+
+- Format zero due-now amounts with the canonical currency formatter.
+- Store absent ordinary-booking end dates as `NULL` and migrate legacy zero dates safely.
+- Clear both public action tokens whenever a booking is cancelled.
+- Remove raw public action tokens and tokenized URLs from Booking Details in admin.
+- Add regression coverage for all four acceptance cleanup items.
+
 ## 1.0.1046 RC67.6 — Repeatable secure customer rescheduling
 
 - Allow customers to reschedule the same active booking more than once.

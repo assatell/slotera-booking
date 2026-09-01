@@ -10,6 +10,17 @@ if (!defined('ABSPATH')) { exit; }
 
 final class BookingRepository
 {
+    private function normalize_end_date($value): ?string
+    {
+        $date = sanitize_text_field((string) $value);
+        if ($date === '' || $date === '0000-00-00' || preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) !== 1) {
+            return null;
+        }
+
+        [$year, $month, $day] = array_map('intval', explode('-', $date));
+        return checkdate($month, $day, $year) ? $date : null;
+    }
+
     /** @return string[] */
     private function active_statuses(): array
     {
@@ -175,7 +186,7 @@ final class BookingRepository
         }
 
         $date = sanitize_text_field((string) ($data['booking_date'] ?? ''));
-        $end_date = sanitize_text_field((string) ($data['end_date'] ?? ''));
+        $end_date = $this->normalize_end_date($data['end_date'] ?? null) ?? '';
         $start = sanitize_text_field((string) ($data['start_time'] ?? ''));
         $end = sanitize_text_field((string) ($data['end_time'] ?? ''));
         if ($date === '' || $start === '' || $end === '') {
@@ -333,7 +344,7 @@ final class BookingRepository
             'address' => sanitize_text_field((string) ($data['address'] ?? '')),
             'company' => sanitize_text_field((string) ($data['company'] ?? '')),
             'booking_date' => sanitize_text_field((string) ($data['booking_date'] ?? '')),
-            'end_date' => sanitize_text_field((string) ($data['end_date'] ?? '')),
+            'end_date' => $this->normalize_end_date($data['end_date'] ?? null),
             'start_time' => sanitize_text_field((string) ($data['start_time'] ?? '')),
             'end_time' => sanitize_text_field((string) ($data['end_time'] ?? '')),
             'status' => sanitize_key((string) ($data['status'] ?? 'confirmed')),
@@ -490,6 +501,10 @@ final class BookingRepository
                     $allowed[$column] = sanitize_email((string) $value);
                     break;
 
+                case 'end_date':
+                    $allowed[$column] = $this->normalize_end_date($value);
+                    break;
+
                 case 'status':
                 case 'payment_status':
                 case 'payment_gateway':
@@ -537,7 +552,11 @@ final class BookingRepository
     public function update_status(int $id, string $status): bool
     {
         $data = ['status' => sanitize_key($status)];
-        if ($status === 'cancelled') { $data['cancelled_at'] = current_time('mysql'); }
+        if ($status === 'cancelled') {
+            $data['cancelled_at'] = current_time('mysql');
+            $data['cancellation_token'] = null;
+            $data['reschedule_token'] = null;
+        }
         if ($status === 'completed') { $data['completed_at'] = current_time('mysql'); }
         return $this->update($id, $data);
     }
@@ -646,7 +665,7 @@ final class BookingRepository
         $now = current_time('mysql');
         $params = array_merge([$now, $now, $id, $token], $statuses);
         $updated = $wpdb->query($wpdb->prepare(
-            "UPDATE {$table} SET status='cancelled',cancellation_token=NULL,active_slot_hash=NULL,cancelled_at=%s,updated_at=%s WHERE id=%d AND cancellation_token=%s AND status IN ({$placeholders})",
+            "UPDATE {$table} SET status='cancelled',cancellation_token=NULL,reschedule_token=NULL,active_slot_hash=NULL,cancelled_at=%s,updated_at=%s WHERE id=%d AND cancellation_token=%s AND status IN ({$placeholders})",
             $params
         ));
 
