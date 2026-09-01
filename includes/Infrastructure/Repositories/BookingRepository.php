@@ -10,6 +10,17 @@ if (!defined('ABSPATH')) { exit; }
 
 final class BookingRepository
 {
+    private function normalize_end_date($value): ?string
+    {
+        $date = sanitize_text_field((string) $value);
+        if ($date === '' || $date === '0000-00-00' || preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) !== 1) {
+            return null;
+        }
+
+        [$year, $month, $day] = array_map('intval', explode('-', $date));
+        return checkdate($month, $day, $year) ? $date : null;
+    }
+
     /** @return string[] */
     private function active_statuses(): array
     {
@@ -175,7 +186,7 @@ final class BookingRepository
         }
 
         $date = sanitize_text_field((string) ($data['booking_date'] ?? ''));
-        $end_date = sanitize_text_field((string) ($data['end_date'] ?? ''));
+        $end_date = $this->normalize_end_date($data['end_date'] ?? null) ?? '';
         $start = sanitize_text_field((string) ($data['start_time'] ?? ''));
         $end = sanitize_text_field((string) ($data['end_time'] ?? ''));
         if ($date === '' || $start === '' || $end === '') {
@@ -333,7 +344,7 @@ final class BookingRepository
             'address' => sanitize_text_field((string) ($data['address'] ?? '')),
             'company' => sanitize_text_field((string) ($data['company'] ?? '')),
             'booking_date' => sanitize_text_field((string) ($data['booking_date'] ?? '')),
-            'end_date' => sanitize_text_field((string) ($data['end_date'] ?? '')),
+            'end_date' => $this->normalize_end_date($data['end_date'] ?? null),
             'start_time' => sanitize_text_field((string) ($data['start_time'] ?? '')),
             'end_time' => sanitize_text_field((string) ($data['end_time'] ?? '')),
             'status' => sanitize_key((string) ($data['status'] ?? 'confirmed')),
@@ -488,6 +499,10 @@ final class BookingRepository
 
                 case 'customer_email':
                     $allowed[$column] = sanitize_email((string) $value);
+                    break;
+
+                case 'end_date':
+                    $allowed[$column] = $this->normalize_end_date($value);
                     break;
 
                 case 'status':
