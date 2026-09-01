@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1046",
+  "version": "1.0.1047",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1046-rc67.6"
+    "tag": "v1.0.1047-rc67.7"
   },
   "archive": {
     "root": "slotera-booking/",
@@ -127,10 +127,11 @@
 "1.0.1044 RC67.4: enforce canonical cross-platform line endings for reproducible Windows checkouts",
 "1.0.1044 RC67.4: pin the official release signing key and fingerprint through the independent getslotera.com HTTPS trust anchor",
 "1.0.1045 RC67.5: make the official signed release builder supply the manifest VCS tag automatically and guard the behavior with executable QA",
-"1.0.1046 RC67.6: allow repeated customer reschedules while atomically rotating the public reschedule token after every successful change"
+"1.0.1046 RC67.6: allow repeated customer reschedules while atomically rotating the public reschedule token after every successful change",
+"1.0.1047 RC67.7: normalize zero payment and absent end-date display/storage while clearing and redacting public action secrets"
   ],
-  "release_notes": "RC67.6 allows customers to reschedule a booking more than once while preserving single-use link security: every successful change atomically consumes the presented token, issues a unique replacement token, and includes the new link in the reschedule email.",
-  "candidate": "RC67.6",
+  "release_notes": "RC67.7 completes acceptance cleanup by formatting zero due-now amounts as currency, storing absent ordinary-booking end dates as NULL with legacy migration, clearing both public action tokens on cancellation, and removing raw tokens and tokenized URLs from Booking Details in admin.",
+  "candidate": "RC67.7",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },
