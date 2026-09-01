@@ -552,7 +552,11 @@ final class BookingRepository
     public function update_status(int $id, string $status): bool
     {
         $data = ['status' => sanitize_key($status)];
-        if ($status === 'cancelled') { $data['cancelled_at'] = current_time('mysql'); }
+        if ($status === 'cancelled') {
+            $data['cancelled_at'] = current_time('mysql');
+            $data['cancellation_token'] = null;
+            $data['reschedule_token'] = null;
+        }
         if ($status === 'completed') { $data['completed_at'] = current_time('mysql'); }
         return $this->update($id, $data);
     }
@@ -661,7 +665,7 @@ final class BookingRepository
         $now = current_time('mysql');
         $params = array_merge([$now, $now, $id, $token], $statuses);
         $updated = $wpdb->query($wpdb->prepare(
-            "UPDATE {$table} SET status='cancelled',cancellation_token=NULL,active_slot_hash=NULL,cancelled_at=%s,updated_at=%s WHERE id=%d AND cancellation_token=%s AND status IN ({$placeholders})",
+            "UPDATE {$table} SET status='cancelled',cancellation_token=NULL,reschedule_token=NULL,active_slot_hash=NULL,cancelled_at=%s,updated_at=%s WHERE id=%d AND cancellation_token=%s AND status IN ({$placeholders})",
             $params
         ));
 
