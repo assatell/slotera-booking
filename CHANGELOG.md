@@ -1,3 +1,10 @@
+## 1.0.1049 RC67.9 — Inner booking width and scanner cleanup
+
+- Restore the outer booking form to the width configured in Appearance.
+- Keep the 40px expansion limited to the calendar, customer-detail fields and time-slot grid.
+- Accept the correct French `Message` translation without a false same-as-English scanner warning.
+- Add regression coverage for the corrected width boundary and French scanner allowlist.
+
 ## 1.0.1048 RC67.8 — Frontend localization and booking width cleanup
 
 - Make the public contact form follow the configured frontend locale and canonical translation registry.
