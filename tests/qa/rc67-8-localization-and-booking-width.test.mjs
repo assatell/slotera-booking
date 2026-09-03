@@ -51,6 +51,11 @@ test('contact form follows the canonical frontend locale and translation registr
   assert.match(translations, /'frontend\.phone'[\s\S]*?'et' => 'Telefon'/);
 });
 
+test('French Message is accepted as a correct same-as-English translation', () => {
+  const scanner = read('includes/Application/Services/TranslationQualityScanner.php');
+  assert.match(scanner, /'fr_FR'\s*=>\s*\[[\s\S]*?'frontend_ui'\s*=>\s*\['frontend\.contact_message'\]/);
+});
+
 test('all customer-facing package views use one localized duration formatter', () => {
   const formatter = read('includes/Application/Services/FrontendDurationFormatter.php');
   assert.match(formatter, /sltr_t\('%dh %dmin', 'frontend', \$locale\)/);
@@ -74,15 +79,15 @@ test('all customer-facing package views use one localized duration formatter', (
   assert.match(translations, /'default' => '%dh %dmin'[\s\S]*?'de_DE' => '%d Std\. %d Min\.'/);
 });
 
-test('booking flow grows by 40px on tablet and desktop without changing mobile or catalogs', () => {
+test('booking inner flow grows by 40px without changing outer, mobile, or catalogs', () => {
   const view = read('includes/Frontend/Views/booking-form.php');
   const css = read('assets/css/frontend.css');
 
-  assert.match(view, /\+ 40\) \. 'px'/);
-  assert.match(view, /--sltr-booking-flow-max-width:%s/);
+  assert.doesNotMatch(view, /booking_flow_max_width|--sltr-booking-flow-max-width|\+ 40\) \. 'px'/);
   assert.match(view, /class="sltr-booking sltr-booking-flow /);
   assert.match(css, /\.sltr-booking-flow \{[^}]*--sltr-booking-calendar-max-width:\s*470px;[^}]*--sltr-booking-inner-max-width:\s*560px;[^}]*--sltr-booking-slots-grid-max-width:\s*660px;/);
-  assert.match(css, /max-width:\s*var\(--sltr-booking-flow-max-width,\s*var\(--sltr-booking-form-max-width,\s*1320px\)\)/);
+  assert.doesNotMatch(css, /\.sltr-booking-flow\s*\{[^}]*(?:^|;)\s*max-width\s*:/m);
+  assert.match(css, /\.sltr-booking\s*\{[^}]*max-width:\s*var\(--sltr-booking-form-max-width,\s*1280px\)/);
   assert.match(css, /@media \(max-width: 640px\) \{[\s\S]*?\.sltr-booking \{[\s\S]*?max-width: 100%/);
   assert.doesNotMatch(read('includes/Frontend/Views/packages-list.php'), /sltr-booking-flow-max-width/);
   assert.doesNotMatch(read('includes/Frontend/Views/categories-list.php'), /sltr-booking-flow-max-width/);

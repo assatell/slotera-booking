@@ -292,7 +292,7 @@
     font-family: inherit;
 }
 
-.sltr-booking-flow { --sltr-booking-calendar-max-width:470px; --sltr-booking-inner-max-width:560px; --sltr-booking-slots-grid-max-width:660px; max-width:var(--sltr-booking-flow-max-width,var(--sltr-booking-form-max-width,1320px)); }
+.sltr-booking-flow { --sltr-booking-calendar-max-width:470px; --sltr-booking-inner-max-width:560px; --sltr-booking-slots-grid-max-width:660px; }
 
 .sltr-platform-attribution { margin:0 0 10px; text-align:center; font-size:12px; line-height:1.4; opacity:.68; } .sltr-platform-attribution a { color:inherit; text-decoration:none; } .sltr-platform-attribution a:hover,.sltr-platform-attribution a:focus-visible { opacity:1; text-decoration:underline; } .sltr-step {
     text-align: center;

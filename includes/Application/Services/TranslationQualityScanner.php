@@ -456,6 +456,9 @@ final class TranslationQualityScanner
     private function is_allowed_same_as_english(string $locale, string $section, string $key): bool
     {
         $allowlist = [
+            'fr_FR' => [
+                'frontend_ui' => ['frontend.contact_message'],
+            ],
             'ro_RO' => [
                 'frontend_ui' => ['frontend.site', 'frontend.total', 'frontend.popular'],
                 'email_settings' => ['emails.total'],
