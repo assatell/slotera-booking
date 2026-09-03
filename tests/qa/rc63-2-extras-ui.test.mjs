@@ -19,11 +19,11 @@ test('Add extras is localized rather than hard-coded in rendered extras headings
 test('extra row renders name then price then checkbox and details extras use canonical field width', () => {
   assert.match(js, /<span>' \+ escapeHtml\(item\.name[^;]+<strong>[^;]+<input type="checkbox"/);
   assert.match(css, /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto\s+auto/);
-  assert.match(css, /#sltr-details-extra-services\s*\{[^}]*max-width:\s*520px/s);
+  assert.match(css, /#sltr-details-extra-services\s*\{[^}]*max-width:\s*var\(--sltr-booking-inner-max-width,\s*520px\)/s);
 });
 
 test('Discount=None cannot be inferred from a dynamic price difference as package discount', () => {
   assert.match(view, /if \(\$discount_type === 'fixed' && \$discount_value > 0\)/);
   assert.match(view, /return '';\s*\n\};/);
-  assert.match(css, /#sltr-summary-dynamic-wrap\s*\{[^}]*grid-column:\s*1 \/ -1[^}]*max-width:\s*520px[^}]*margin-left:\s*auto[^}]*margin-right:\s*auto/s);
+  assert.match(css, /#sltr-summary-dynamic-wrap\s*\{[^}]*grid-column:\s*1 \/ -1[^}]*max-width:\s*var\(--sltr-booking-inner-max-width,\s*520px\)[^}]*margin-left:\s*auto[^}]*margin-right:\s*auto/s);
 });

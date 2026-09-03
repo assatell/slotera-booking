@@ -11,9 +11,9 @@ for (const locale of [
   'pt_PT','pt_BR','pl_PL','cs_CZ','sk_SK','sl_SI','hr_HR','ro_RO','hu_HU','bg_BG',
   'lt_LT','lv_LV','no_NO','el_GR'
 ]) {
-  assert.match(frontend, new RegExp(`'${locale}' =>[\\s\\S]*?'items' => 376`));
+  assert.match(frontend, new RegExp(`'${locale}' =>[\\s\\S]*?'items' => 383`));
 }
-assert.match(frontend, /'ru_RU' =>[\s\S]*?'sha256' => '1c2782540307f3135bf5e5a5bce4863a010b7cbe4f2ac8e003e8b72490e78258'/);
-assert.match(frontend, /'et_EE' =>[\s\S]*?'sha256' => '5e9847bd3fef8f5babf0febfc84cd1367ab87f83c094955ee978e99fb6efbf95'/);
+assert.match(frontend, /'ru_RU' =>[\s\S]*?'sha256' => 'adad2888875579c8a7a8070b9cba2cc1786bcadebee5bf684a9dd462e7d971bc'/);
+assert.match(frontend, /'et_EE' =>[\s\S]*?'sha256' => '34810ff02bc89b87201753dabf5299900d2818396aab80fbe15a8f6212a59178'/);
 
 console.log('Frontend translation freeze baselines include the current localized frontend keys.');

@@ -56,6 +56,9 @@ if (!in_array($booking_form_width_mode, ['full', '1100', '1280', 'custom'], true
 }
 $booking_form_custom_width = max(800, min(2400, (int) ($settings['booking_form_custom_width'] ?? 1280)));
 $booking_form_max_width = $booking_form_width_mode === 'custom' ? $booking_form_custom_width . 'px' : ($booking_form_width_mode === 'full' ? 'none' : $booking_form_width_mode . 'px');
+$booking_flow_max_width = $booking_form_width_mode === 'full'
+    ? 'none'
+    : (($booking_form_width_mode === 'custom' ? $booking_form_custom_width : (int) $booking_form_width_mode) + 40) . 'px';
 $booking_form_width = $booking_form_width_mode === 'full' ? '100%' : '100%';
 $select_time_layout = (string) ($settings['select_time_layout'] ?? 'grid');
 if (!in_array($select_time_layout, ['list', 'grid'], true)) {
@@ -99,9 +102,10 @@ if ($theme === 'custom') {
 }
 
 $style_vars = sprintf(
-    '--sltr-booking-form-width:%s;--sltr-booking-form-max-width:%s;--sltr-package-columns-desktop:%d;--sltr-package-columns-tablet:%d;--sltr-package-columns-mobile:%d;--sltr-price-old-decoration:%s;--sltr-price-old-ratio:%s;--sltr-tooltip-size-ratio:%s;--sltr-tooltip-text-size:%spx;%s',
+    '--sltr-booking-form-width:%s;--sltr-booking-form-max-width:%s;--sltr-booking-flow-max-width:%s;--sltr-package-columns-desktop:%d;--sltr-package-columns-tablet:%d;--sltr-package-columns-mobile:%d;--sltr-price-old-decoration:%s;--sltr-price-old-ratio:%s;--sltr-tooltip-size-ratio:%s;--sltr-tooltip-text-size:%spx;%s',
     esc_attr($booking_form_width),
     esc_attr($booking_form_max_width),
+    esc_attr($booking_flow_max_width),
     $columns_desktop,
     $columns_tablet,
     $columns_mobile,
@@ -207,18 +211,7 @@ $mode_config = static function (array $package, string $mode): array {
     $configs = json_decode((string) ($package['mode_configs_json'] ?? ''), true);
     return is_array($configs) && isset($configs[$mode]) && is_array($configs[$mode]) ? $configs[$mode] : [];
 };
-$format_duration = static function ($minutes): string {
-    $minutes = max(0, (int) $minutes);
-    $hours = intdiv($minutes, 60);
-    $mins = $minutes % 60;
-    if ($hours > 0 && $mins > 0) {
-        return sprintf(sltr_t('%dh %dmin'), $hours, $mins);
-    }
-    if ($hours > 0) {
-        return sprintf(sltr_t('%dh'), $hours);
-    }
-    return sprintf(sltr_t('%dmin'), $mins);
-};
+$format_duration = static fn ($minutes): string => \Slotera\Application\Services\FrontendDurationFormatter::format((int) $minutes);
 
 $campaign_note_for_package = static function (array $package, array $active_mode_config): string {
     $note = trim((string) ($active_mode_config['campaign_note'] ?? ''));
@@ -238,7 +231,7 @@ $get_date_flow = static function (array $package): string {
 };
 ?>
 <div
-    class="sltr-booking sltr-theme-<?php echo esc_attr($theme); ?> sltr-time-layout-<?php echo esc_attr($select_time_layout); ?>"
+    class="sltr-booking sltr-booking-flow sltr-theme-<?php echo esc_attr($theme); ?> sltr-time-layout-<?php echo esc_attr($select_time_layout); ?>"
     id="sltr-booking"
     data-sltr-version="<?php echo esc_attr(SLTR_VERSION); ?>"
     data-payment-required-unavailable="<?php echo esc_attr($payment_required_unavailable ? '1' : '0'); ?>"

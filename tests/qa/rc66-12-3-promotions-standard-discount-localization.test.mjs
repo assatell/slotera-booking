@@ -30,6 +30,6 @@ test('RC66.12.3 provides Standard discount across every declared locale variant'
 test('RC66.12.3 refreshes the customer-facing translation freeze baseline', () => {
   const freeze = read('includes/config/translation-freeze.php');
   const lock = JSON.parse(read('languages/slotera-booking.translation-keys.lock.json'));
-  assert.match(freeze, /'ru_RU'\s*=>[\s\S]*?'items'\s*=>\s*376[\s\S]*?'sha256'\s*=>\s*'1c2782540307f3135bf5e5a5bce4863a010b7cbe4f2ac8e003e8b72490e78258'/);
+  assert.match(freeze, /'ru_RU'\s*=>[\s\S]*?'items'\s*=>\s*383[\s\S]*?'sha256'\s*=>\s*'adad2888875579c8a7a8070b9cba2cc1786bcadebee5bf684a9dd462e7d971bc'/);
   assert.equal(lock.keys['frontend.standard_discount'].group, 'frontend');
 });

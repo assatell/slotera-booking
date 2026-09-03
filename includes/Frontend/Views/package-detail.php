@@ -141,18 +141,7 @@ $booking_mode = (string) ($package['booking_mode'] ?? 'fixed');
 if ($booking_mode === 'flexible') { $booking_mode = 'flex'; }
 $mode_configs = json_decode((string) ($package['mode_configs_json'] ?? ''), true);
 $active_mode_config = is_array($mode_configs) && isset($mode_configs[$booking_mode]) && is_array($mode_configs[$booking_mode]) ? $mode_configs[$booking_mode] : [];
-$format_duration = static function ($minutes): string {
-    $minutes = max(0, (int) $minutes);
-    $hours = intdiv($minutes, 60);
-    $mins = $minutes % 60;
-    if ($hours > 0 && $mins > 0) {
-        return sprintf(sltr_t('%dh %dmin'), $hours, $mins);
-    }
-    if ($hours > 0) {
-        return sprintf(sltr_t('%dh'), $hours);
-    }
-    return sprintf(sltr_t('%dmin'), $mins);
-};
+$format_duration = static fn ($minutes): string => \Slotera\Application\Services\FrontendDurationFormatter::format((int) $minutes);
 $hide_price_on_frontend = !empty($active_mode_config['hide_price_on_frontend']);
 $show_duration = in_array($booking_mode, ['fixed', 'flex'], true) && ((array_key_exists('show_duration_frontend', $package) && (int) $package['show_duration_frontend'] === 1) || (!array_key_exists('show_duration_frontend', $package) && !empty($active_mode_config['show_duration'])));
 $duration = $show_duration ? (int) ($package['duration_minutes'] ?? 0) : 0;

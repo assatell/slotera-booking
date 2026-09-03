@@ -8,6 +8,7 @@ use Slotera\Application\Services\BookingAccessTokenService;
 use Slotera\Application\Services\AccountMagicLinkService;
 use Slotera\Application\Services\RequestValidator;
 use Slotera\Application\Services\BookingSpamProtectionService;
+use Slotera\Application\Services\TranslationService;
 use WP_Error;
 use Slotera\Infrastructure\Repositories\BookingRepository;
 use Slotera\Infrastructure\Repositories\BookingHistoryRepository;
@@ -150,7 +151,10 @@ final class BookingShortcode
             $to = get_option('admin_email');
         }
 
-        $contact_locale = isset($_POST['sltr_contact_locale']) ? sanitize_text_field((string) wp_unslash($_POST['sltr_contact_locale'])) : $this->detect_contact_locale();
+        // The submitted locale is display metadata, not an authority. Resolve it
+        // from Slotera's canonical frontend context so browser headers or a
+        // tampered hidden field cannot change the language of this site form.
+        $contact_locale = $this->detect_contact_locale();
         $page_url = esc_url_raw($redirect_to);
         $page_title = $this->contact_page_title($page_url);
         $contact_data = [
@@ -178,61 +182,30 @@ final class BookingShortcode
 
     private function detect_contact_locale(): string
     {
-        $accepted = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? sanitize_text_field((string) wp_unslash($_SERVER['HTTP_ACCEPT_LANGUAGE'])) : '';
-        $supported = $this->contact_supported_locales();
-        foreach (explode(',', $accepted) as $part) {
-            $code = strtolower(trim((string) explode(';', $part)[0]));
-            if ($code === '') {
-                continue;
-            }
-            $normalized = str_replace('-', '_', $code);
-            foreach ($supported as $locale) {
-                if (strtolower($locale) === $normalized || strtolower(substr($locale, 0, 2)) === substr($normalized, 0, 2)) {
-                    return $locale;
-                }
-            }
-        }
-        return function_exists('determine_locale') ? (string) determine_locale() : (string) get_locale();
-    }
-
-    private function contact_supported_locales(): array
-    {
-        return ['en_US','de_DE','nl_NL','pl_PL','lt_LT','lv','bg_BG','et','fr_FR','it_IT','es_ES','ru_RU','pt_PT','pt_BR','ro_RO','sv_SE','da_DK','fi','cs_CZ','sk_SK','hu_HU','el','hr','sl_SI','no_NO','nb_NO','is_IS','ga_IE'];
+        return (new TranslationService())->locale_for_group('frontend');
     }
 
     private function contact_form_labels(string $locale): array
     {
-        $language = strtolower(substr(str_replace('_', '-', $locale), 0, 2));
-        $labels = [
-            'en' => ['name'=>'Name','email'=>'Email','phone'=>'Phone','subject'=>'Message Subject','message'=>'Message','company'=>'Company website','submit'=>'Send Message','sent'=>'Thank you. Your message has been sent.','invalid'=>'Please fill in your name, email address and message.','spam'=>'Message could not be processed. Please try again.','failed'=>'Message could not be sent. Please try again later.'],
-            'de' => ['name'=>'Name','email'=>'E-Mail','subject'=>'Betreff','message'=>'Nachricht','company'=>'Firmenwebsite','submit'=>'Nachricht senden','sent'=>'Danke. Ihre Nachricht wurde gesendet.','invalid'=>'Bitte füllen Sie Name, E-Mail-Adresse und Nachricht aus.','spam'=>'Die Nachricht konnte nicht verarbeitet werden. Bitte versuchen Sie es erneut.','failed'=>'Die Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.'],
-            'fr' => ['name'=>'Nom','email'=>'E-mail','subject'=>'Objet du message','message'=>'Message','company'=>'Site web de l’entreprise','submit'=>'Envoyer le message','sent'=>'Merci. Votre message a été envoyé.','invalid'=>'Veuillez indiquer votre nom, votre adresse e-mail et votre message.','spam'=>'Le message n’a pas pu être traité. Veuillez réessayer.','failed'=>'Le message n’a pas pu être envoyé. Veuillez réessayer plus tard.'],
-            'it' => ['name'=>'Nome','email'=>'Email','subject'=>'Oggetto del messaggio','message'=>'Messaggio','company'=>'Sito web aziendale','submit'=>'Invia messaggio','sent'=>'Grazie. Il tuo messaggio è stato inviato.','invalid'=>'Inserisci nome, indirizzo email e messaggio.','spam'=>'Non è stato possibile elaborare il messaggio. Riprova.','failed'=>'Non è stato possibile inviare il messaggio. Riprova più tardi.'],
-            'es' => ['name'=>'Nombre','email'=>'Correo electrónico','subject'=>'Asunto del mensaje','message'=>'Mensaje','company'=>'Sitio web de la empresa','submit'=>'Enviar mensaje','sent'=>'Gracias. Tu mensaje ha sido enviado.','invalid'=>'Completa tu nombre, correo electrónico y mensaje.','spam'=>'No se pudo procesar el mensaje. Inténtalo de nuevo.','failed'=>'No se pudo enviar el mensaje. Inténtalo de nuevo más tarde.'],
-            'pt' => ['name'=>'Nome','email'=>'Email','subject'=>'Assunto da mensagem','message'=>'Mensagem','company'=>'Site da empresa','submit'=>'Enviar mensagem','sent'=>'Obrigado. A sua mensagem foi enviada.','invalid'=>'Preencha o nome, email e mensagem.','spam'=>'A mensagem não pôde ser processada. Tente novamente.','failed'=>'A mensagem não pôde ser enviada. Tente novamente mais tarde.'],
-            'ru' => ['name'=>'Имя','email'=>'Email','phone'=>'Телефон','subject'=>'Тема сообщения','message'=>'Сообщение','company'=>'Сайт компании','submit'=>'Отправить сообщение','sent'=>'Спасибо. Ваше сообщение отправлено.','invalid'=>'Заполните имя, email и сообщение.','spam'=>'Сообщение не удалось обработать. Попробуйте ещё раз.','failed'=>'Сообщение не удалось отправить. Попробуйте позже.'],
-            'nl' => ['name'=>'Naam','email'=>'E-mail','subject'=>'Onderwerp','message'=>'Bericht','company'=>'Bedrijfswebsite','submit'=>'Bericht verzenden','sent'=>'Bedankt. Je bericht is verzonden.','invalid'=>'Vul je naam, e-mailadres en bericht in.','spam'=>'Het bericht kon niet worden verwerkt. Probeer het opnieuw.','failed'=>'Het bericht kon niet worden verzonden. Probeer het later opnieuw.'],
-            'pl' => ['name'=>'Imię i nazwisko','email'=>'E-mail','subject'=>'Temat wiadomości','message'=>'Wiadomość','company'=>'Strona firmy','submit'=>'Wyślij wiadomość','sent'=>'Dziękujemy. Wiadomość została wysłana.','invalid'=>'Podaj imię i nazwisko, adres e-mail oraz wiadomość.','spam'=>'Nie udało się przetworzyć wiadomości. Spróbuj ponownie.','failed'=>'Nie udało się wysłać wiadomości. Spróbuj ponownie później.'],
-            'lt' => ['name'=>'Vardas','email'=>'El. paštas','subject'=>'Žinutės tema','message'=>'Žinutė','company'=>'Įmonės svetainė','submit'=>'Siųsti žinutę','sent'=>'Ačiū. Jūsų žinutė išsiųsta.','invalid'=>'Įveskite vardą, el. pašto adresą ir žinutę.','spam'=>'Žinutės apdoroti nepavyko. Bandykite dar kartą.','failed'=>'Žinutės išsiųsti nepavyko. Bandykite vėliau.'],
-            'lv' => ['name'=>'Vārds','email'=>'E-pasts','subject'=>'Ziņojuma temats','message'=>'Ziņojums','company'=>'Uzņēmuma vietne','submit'=>'Sūtīt ziņojumu','sent'=>'Paldies. Jūsu ziņojums ir nosūtīts.','invalid'=>'Lūdzu, aizpildiet vārdu, e-pasta adresi un ziņojumu.','spam'=>'Ziņojumu nevarēja apstrādāt. Lūdzu, mēģiniet vēlreiz.','failed'=>'Ziņojumu nevarēja nosūtīt. Lūdzu, mēģiniet vēlāk.'],
-            'bg' => ['name'=>'Име','email'=>'Имейл','subject'=>'Тема на съобщението','message'=>'Съобщение','company'=>'Уебсайт на компания','submit'=>'Изпрати съобщение','sent'=>'Благодарим. Вашето съобщение е изпратено.','invalid'=>'Моля, попълнете име, имейл адрес и съобщение.','spam'=>'Съобщението не можа да бъде обработено. Опитайте отново.','failed'=>'Съобщението не можа да бъде изпратено. Опитайте по-късно.'],
-            'et' => ['name'=>'Nimi','email'=>'E-post','phone'=>'Telefon','subject'=>'Sõnumi teema','message'=>'Sõnum','company'=>'Ettevõtte veebisait','submit'=>'Saada sõnum','sent'=>'Aitäh. Sinu sõnum on saadetud.','invalid'=>'Palun täida nimi, e-posti aadress ja sõnum.','spam'=>'Sõnumit ei saanud töödelda. Proovi uuesti.','failed'=>'Sõnumit ei saanud saata. Proovi hiljem uuesti.'],
-            'ro' => ['name'=>'Nume','email'=>'Email','subject'=>'Subiectul mesajului','message'=>'Mesaj','company'=>'Site-ul companiei','submit'=>'Trimite mesajul','sent'=>'Mulțumim. Mesajul a fost trimis.','invalid'=>'Completați numele, adresa de email și mesajul.','spam'=>'Mesajul nu a putut fi procesat. Încercați din nou.','failed'=>'Mesajul nu a putut fi trimis. Încercați mai târziu.'],
-            'sv' => ['name'=>'Namn','email'=>'E-post','subject'=>'Meddelandets ämne','message'=>'Meddelande','company'=>'Företagets webbplats','submit'=>'Skicka meddelande','sent'=>'Tack. Ditt meddelande har skickats.','invalid'=>'Fyll i namn, e-postadress och meddelande.','spam'=>'Meddelandet kunde inte behandlas. Försök igen.','failed'=>'Meddelandet kunde inte skickas. Försök igen senare.'],
-            'da' => ['name'=>'Navn','email'=>'E-mail','subject'=>'Beskedens emne','message'=>'Besked','company'=>'Firmawebsted','submit'=>'Send besked','sent'=>'Tak. Din besked er sendt.','invalid'=>'Udfyld navn, e-mailadresse og besked.','spam'=>'Beskeden kunne ikke behandles. Prøv igen.','failed'=>'Beskeden kunne ikke sendes. Prøv igen senere.'],
-            'fi' => ['name'=>'Nimi','email'=>'Sähköposti','subject'=>'Viestin aihe','message'=>'Viesti','company'=>'Yrityksen verkkosivusto','submit'=>'Lähetä viesti','sent'=>'Kiitos. Viestisi on lähetetty.','invalid'=>'Täytä nimi, sähköpostiosoite ja viesti.','spam'=>'Viestiä ei voitu käsitellä. Yritä uudelleen.','failed'=>'Viestiä ei voitu lähettää. Yritä myöhemmin uudelleen.'],
-            'cs' => ['name'=>'Jméno','email'=>'E-mail','subject'=>'Předmět zprávy','message'=>'Zpráva','company'=>'Web společnosti','submit'=>'Odeslat zprávu','sent'=>'Děkujeme. Vaše zpráva byla odeslána.','invalid'=>'Vyplňte jméno, e-mailovou adresu a zprávu.','spam'=>'Zprávu se nepodařilo zpracovat. Zkuste to znovu.','failed'=>'Zprávu se nepodařilo odeslat. Zkuste to později.'],
-            'sk' => ['name'=>'Meno','email'=>'E-mail','subject'=>'Predmet správy','message'=>'Správa','company'=>'Web spoločnosti','submit'=>'Odoslať správu','sent'=>'Ďakujeme. Vaša správa bola odoslaná.','invalid'=>'Vyplňte meno, e-mailovú adresu a správu.','spam'=>'Správu sa nepodarilo spracovať. Skúste to znova.','failed'=>'Správu sa nepodarilo odoslať. Skúste to neskôr.'],
-            'hu' => ['name'=>'Név','email'=>'E-mail','subject'=>'Üzenet tárgya','message'=>'Üzenet','company'=>'Cég weboldala','submit'=>'Üzenet küldése','sent'=>'Köszönjük. Az üzenetet elküldtük.','invalid'=>'Adja meg a nevét, e-mail-címét és üzenetét.','spam'=>'Az üzenetet nem sikerült feldolgozni. Próbálja újra.','failed'=>'Az üzenetet nem sikerült elküldeni. Próbálja meg később.'],
-            'el' => ['name'=>'Όνομα','email'=>'Email','subject'=>'Θέμα μηνύματος','message'=>'Μήνυμα','company'=>'Ιστότοπος εταιρείας','submit'=>'Αποστολή μηνύματος','sent'=>'Ευχαριστούμε. Το μήνυμά σας στάλθηκε.','invalid'=>'Συμπληρώστε όνομα, email και μήνυμα.','spam'=>'Δεν ήταν δυνατή η επεξεργασία του μηνύματος. Δοκιμάστε ξανά.','failed'=>'Δεν ήταν δυνατή η αποστολή του μηνύματος. Δοκιμάστε ξανά αργότερα.'],
-            'hr' => ['name'=>'Ime','email'=>'Email','subject'=>'Predmet poruke','message'=>'Poruka','company'=>'Web stranica tvrtke','submit'=>'Pošalji poruku','sent'=>'Hvala. Vaša poruka je poslana.','invalid'=>'Unesite ime, email adresu i poruku.','spam'=>'Poruku nije moguće obraditi. Pokušajte ponovno.','failed'=>'Poruku nije moguće poslati. Pokušajte kasnije.'],
-            'sl' => ['name'=>'Ime','email'=>'Email','subject'=>'Zadeva sporočila','message'=>'Sporočilo','company'=>'Spletna stran podjetja','submit'=>'Pošlji sporočilo','sent'=>'Hvala. Vaše sporočilo je bilo poslano.','invalid'=>'Vnesite ime, e-poštni naslov in sporočilo.','spam'=>'Sporočila ni bilo mogoče obdelati. Poskusite znova.','failed'=>'Sporočila ni bilo mogoče poslati. Poskusite pozneje.'],
-            'no' => ['name'=>'Navn','email'=>'E-post','subject'=>'Meldingsemne','message'=>'Melding','company'=>'Firmas nettsted','submit'=>'Send melding','sent'=>'Takk. Meldingen din er sendt.','invalid'=>'Fyll ut navn, e-postadresse og melding.','spam'=>'Meldingen kunne ikke behandles. Prøv igjen.','failed'=>'Meldingen kunne ikke sendes. Prøv igjen senere.'],
-            'nb' => ['name'=>'Navn','email'=>'E-post','subject'=>'Meldingsemne','message'=>'Melding','company'=>'Firmas nettsted','submit'=>'Send melding','sent'=>'Takk. Meldingen din er sendt.','invalid'=>'Fyll ut navn, e-postadresse og melding.','spam'=>'Meldingen kunne ikke behandles. Prøv igjen.','failed'=>'Meldingen kunne ikke sendes. Prøv igjen senere.'],
-            'is' => ['name'=>'Nafn','email'=>'Netfang','subject'=>'Efni skilaboða','message'=>'Skilaboð','company'=>'Vefsíða fyrirtækis','submit'=>'Senda skilaboð','sent'=>'Takk. Skilaboðin hafa verið send.','invalid'=>'Fylltu út nafn, netfang og skilaboð.','spam'=>'Ekki var hægt að vinna úr skilaboðunum. Reyndu aftur.','failed'=>'Ekki var hægt að senda skilaboðin. Reyndu aftur síðar.'],
-            'ga' => ['name'=>'Ainm','email'=>'Ríomhphost','subject'=>'Ábhar na teachtaireachta','message'=>'Teachtaireacht','company'=>'Suíomh Gréasáin na cuideachta','submit'=>'Seol teachtaireacht','sent'=>'Go raibh maith agat. Seoladh do theachtaireacht.','invalid'=>'Líon isteach d’ainm, do sheoladh ríomhphoist agus do theachtaireacht.','spam'=>'Níorbh fhéidir an teachtaireacht a phróiseáil. Bain triail eile as.','failed'=>'Níorbh fhéidir an teachtaireacht a sheoladh. Bain triail eile as níos déanaí.'],
+        $defaults = [
+            'name' => 'Name',
+            'email' => 'Email',
+            'phone' => 'Phone',
+            'subject' => 'Message Subject',
+            'message' => 'Message',
+            'company' => 'Company website',
+            'submit' => 'Send Message',
+            'sent' => 'Thank you. Your message has been sent.',
+            'invalid' => 'Please fill in your name, email address and message.',
+            'spam' => 'Message could not be processed. Please try again.',
+            'failed' => 'Message could not be sent. Please try again later.',
         ];
-        return $labels[$language] ?? $labels['en'];
+
+        foreach ($defaults as $key => $default) {
+            $defaults[$key] = sltr_t($default, 'frontend', $locale);
+        }
+
+        return $defaults;
     }
 
     private function build_contact_template_email(array $data): array
