@@ -1,3 +1,11 @@
+## 1.0.1048 RC67.8 — Frontend localization and booking width cleanup
+
+- Make the public contact form follow the configured frontend locale and canonical translation registry.
+- Add localized contact labels and delivery-status messages across supported frontend locales.
+- Centralize locale-aware duration formatting across booking, catalog and solo package views.
+- Widen the booking flow, calendar and detail fields by 40px on tablets and desktops while preserving mobile and catalog layouts.
+- Refresh translation lock/freeze baselines and add regression coverage for localization and responsive booking geometry.
+
 ## 1.0.1047 RC67.7 — Acceptance cleanup
 
 - Format zero due-now amounts with the canonical currency formatter.
