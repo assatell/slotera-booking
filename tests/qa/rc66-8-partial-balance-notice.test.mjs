@@ -37,6 +37,6 @@ test('RC66.8 refreshes strict frontend and email freeze item baselines', () => {
   const templateStart = freeze.indexOf("'email_templates' =>", emailStart);
   const f = freeze.slice(frontendStart, emailStart);
   const e = freeze.slice(emailStart, templateStart);
-  assert.match(f, /'items' => 376/);
+  assert.match(f, /'items' => 383/);
   assert.match(e, /'items' => 154/);
 });

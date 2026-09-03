@@ -75,14 +75,7 @@ $get_final_price = static function (array $package): float {
     if ($discount_type === 'fixed') { return max(0, $price - $discount_value); }
     return $price;
 };
-$format_duration = static function ($minutes): string {
-    $minutes = max(0, (int) $minutes);
-    $hours = intdiv($minutes, 60);
-    $mins = $minutes % 60;
-    if ($hours > 0 && $mins > 0) { return sprintf(sltr_t('%dh %dmin'), $hours, $mins); }
-    if ($hours > 0) { return sprintf(sltr_t('%dh'), $hours); }
-    return sprintf(sltr_t('%dmin'), $mins);
-};
+$format_duration = static fn ($minutes): string => \Slotera\Application\Services\FrontendDurationFormatter::format((int) $minutes);
 ?>
 
 <div
@@ -193,4 +186,3 @@ $format_duration = static function ($minutes): string {
     });
 })();
 </script>
-

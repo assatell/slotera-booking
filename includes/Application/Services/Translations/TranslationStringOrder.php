@@ -1477,6 +1477,13 @@ final class TranslationStringOrder
             'emails.settings.emails' => 'emails',
             'emails.templates.template' => 'emails',
             'emails.settings.admin_notification_email' => 'emails',
+            'frontend.contact_message_subject' => 'frontend',
+            'frontend.contact_message' => 'frontend',
+            'frontend.contact_send_message' => 'frontend',
+            'frontend.contact_sent' => 'frontend',
+            'frontend.contact_invalid' => 'frontend',
+            'frontend.contact_spam' => 'frontend',
+            'frontend.contact_failed' => 'frontend',
         ];
     }
 }

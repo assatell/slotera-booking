@@ -116,18 +116,7 @@ $mode_config = static function (array $package, string $mode): array {
     $configs = json_decode((string) ($package['mode_configs_json'] ?? ''), true);
     return is_array($configs) && isset($configs[$mode]) && is_array($configs[$mode]) ? $configs[$mode] : [];
 };
-$format_duration = static function ($minutes): string {
-    $minutes = max(0, (int) $minutes);
-    $hours = intdiv($minutes, 60);
-    $mins = $minutes % 60;
-    if ($hours > 0 && $mins > 0) {
-        return sprintf(sltr_t('%dh %dmin'), $hours, $mins);
-    }
-    if ($hours > 0) {
-        return sprintf(sltr_t('%dh'), $hours);
-    }
-    return sprintf(sltr_t('%dmin'), $mins);
-};
+$format_duration = static fn ($minutes): string => \Slotera\Application\Services\FrontendDurationFormatter::format((int) $minutes);
 
 $get_date_flow = static function (array $package): string {
     $flow = sanitize_key((string) ($package['date_flow'] ?? ''));

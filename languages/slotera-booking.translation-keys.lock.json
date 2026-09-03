@@ -3,10 +3,10 @@
   "plugin_version": "1.0.400",
   "generated_at": "2026-05-19T13:32:06+00:00",
   "description": "Frozen customer-facing Slotera translation key contract (frontend and emails only). Admin UI is intentionally English-only and is excluded from the public translation freeze.",
-  "key_count": 363,
+  "key_count": 370,
   "groups": {
     "emails": 73,
-    "frontend": 290
+    "frontend": 297
   },
   "keys": {
     "email.booking.confirmation_intro": {
@@ -732,6 +732,41 @@
     "frontend.company_website": {
       "group": "frontend",
       "default_sha1": "8e9e4e7a1ebfee804ae067c9ddb56d6b57bd0cfc",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_failed": {
+      "group": "frontend",
+      "default_sha1": "0920a025c4983fde0434bddbc5e33ab852e5fa22",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_invalid": {
+      "group": "frontend",
+      "default_sha1": "e40793f8eca9dbc814d448535d5b0cd68a52dad7",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_message": {
+      "group": "frontend",
+      "default_sha1": "68f4145fee7dde76afceb910165924ad14cf0d00",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_message_subject": {
+      "group": "frontend",
+      "default_sha1": "98ce980580cb03ab83076de814320e71aeca548d",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_send_message": {
+      "group": "frontend",
+      "default_sha1": "6dcd151222c0c288e39811b96a54d91e50f9c4a8",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_sent": {
+      "group": "frontend",
+      "default_sha1": "ff77235e5d765d614b163678bf25020f520ea5c8",
+      "placeholder_signature": ""
+    },
+    "frontend.contact_spam": {
+      "group": "frontend",
+      "default_sha1": "2a7eee079d774a251d2ff6bb13b1cff5f5b28248",
       "placeholder_signature": ""
     },
     "frontend.confirm_cancellation": {

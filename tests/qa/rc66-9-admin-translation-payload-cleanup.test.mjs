@@ -16,15 +16,15 @@ test('RC66.9 keeps Admin UI English-only without shipping locale payload', () =>
 test('RC66.9 translation lock contains only customer-facing groups', () => {
   const lock = JSON.parse(read('languages/slotera-booking.translation-keys.lock.json'));
   assert.equal(lock.groups.admin, undefined);
-  assert.equal(lock.groups.frontend, 290);
+  assert.equal(lock.groups.frontend, 297);
   assert.equal(lock.groups.emails, 73);
-  assert.equal(lock.key_count, 363);
+  assert.equal(lock.key_count, 370);
   for (const meta of Object.values(lock.keys)) assert.notEqual(meta.group, 'admin');
 });
 
 test('RC66.9 leaves frontend/email freeze baselines unchanged', () => {
   const freeze = read('includes/config/translation-freeze.php');
-  assert.match(freeze, /'items' => 376/);
+  assert.match(freeze, /'items' => 383/);
   assert.match(freeze, /'items' => 154/);
 });
 
