@@ -56,9 +56,6 @@ if (!in_array($booking_form_width_mode, ['full', '1100', '1280', 'custom'], true
 }
 $booking_form_custom_width = max(800, min(2400, (int) ($settings['booking_form_custom_width'] ?? 1280)));
 $booking_form_max_width = $booking_form_width_mode === 'custom' ? $booking_form_custom_width . 'px' : ($booking_form_width_mode === 'full' ? 'none' : $booking_form_width_mode . 'px');
-$booking_flow_max_width = $booking_form_width_mode === 'full'
-    ? 'none'
-    : (($booking_form_width_mode === 'custom' ? $booking_form_custom_width : (int) $booking_form_width_mode) + 40) . 'px';
 $booking_form_width = $booking_form_width_mode === 'full' ? '100%' : '100%';
 $select_time_layout = (string) ($settings['select_time_layout'] ?? 'grid');
 if (!in_array($select_time_layout, ['list', 'grid'], true)) {
@@ -102,10 +99,9 @@ if ($theme === 'custom') {
 }
 
 $style_vars = sprintf(
-    '--sltr-booking-form-width:%s;--sltr-booking-form-max-width:%s;--sltr-booking-flow-max-width:%s;--sltr-package-columns-desktop:%d;--sltr-package-columns-tablet:%d;--sltr-package-columns-mobile:%d;--sltr-price-old-decoration:%s;--sltr-price-old-ratio:%s;--sltr-tooltip-size-ratio:%s;--sltr-tooltip-text-size:%spx;%s',
+    '--sltr-booking-form-width:%s;--sltr-booking-form-max-width:%s;--sltr-package-columns-desktop:%d;--sltr-package-columns-tablet:%d;--sltr-package-columns-mobile:%d;--sltr-price-old-decoration:%s;--sltr-price-old-ratio:%s;--sltr-tooltip-size-ratio:%s;--sltr-tooltip-text-size:%spx;%s',
     esc_attr($booking_form_width),
     esc_attr($booking_form_max_width),
-    esc_attr($booking_flow_max_width),
     $columns_desktop,
     $columns_tablet,
     $columns_mobile,
