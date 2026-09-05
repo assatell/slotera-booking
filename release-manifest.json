@@ -1,18 +1,18 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1050",
+  "version": "1.0.1051",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
-    "version": "2.6.0",
+    "version": "2.6.1",
     "runtime": "Node.js 20+, CPython 3.9+ (PYTHON override, py -3, python3, or python), in-tree deterministic fixed-Huffman DEFLATE writer, and Windows PowerShell 5.1+ or PowerShell 7+ for signed release packaging"
   },
   "source": {
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1050-rc67.10"
+    "tag": "v1.0.1051-rc67.11"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -144,10 +144,11 @@
 "1.0.1050 RC67.10: exclude source QA and build tooling from the WordPress install ZIP and bind the first-party Update URI",
 "1.0.1050 RC67.10: strengthen privacy migration completion checks and preserve semantic migration registry order",
 "1.0.1050 RC67.10: make dynamic booking guidance and email price summaries follow the selected Appearance palette",
-"1.0.1050 RC67.10: make Windows PHP-runtime, CSS and attestation QA portable"
+"1.0.1050 RC67.10: make Windows PHP-runtime, CSS and attestation QA portable",
+"1.0.1051 RC67.11: preserve leading dots in exclusion normalization, remove repository dotfiles from the install ZIP and close exact-tag reproducibility"
   ],
-  "release_notes": "RC67.10 hardens cross-platform release reproducibility, canonical signed attestations, install-ZIP boundaries, Update URI and privacy migrations while making dynamic booking guidance and email price summaries fully compatible with the selected Appearance palette, including Dark.",
-  "candidate": "RC67.10",
+  "release_notes": "RC67.11 fixes release exclusion normalization so repository dotfiles cannot enter the WordPress install ZIP or reintroduce checkout-dependent bytes, superseding the unpublished RC67.10 artifacts without moving its tag.",
+  "candidate": "RC67.11",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },
