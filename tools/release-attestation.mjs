@@ -10,6 +10,7 @@ const REQUIRED_MATERIALS = ['build-provenance.json', 'checksums.sha256', 'releas
 const ARCHIVE_ROOT = 'slotera-booking/';
 const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
 const read = (file) => fs.readFileSync(file);
+const canonicalText = (data) => Buffer.from(data.toString('utf8').replace(/\r\n?/g, '\n'), 'utf8');
 const writeExclusive = (file, data, mode) => fs.writeFileSync(file, data, { flag: 'wx', mode });
 const publicFingerprint = (publicKey) => sha256(publicKey.export({ type: 'spki', format: 'der' }));
 const generatedAtUtc = () => {
@@ -61,7 +62,14 @@ function signRelease(archivePath, privatePath, attestationPath, signaturePath, p
   const manifest = JSON.parse(read(path.join(pluginRoot, 'release-manifest.json')));
   const keyId = `sha256:${publicFingerprint(publicKey)}`;
   if (manifest.signing?.key_id !== keyId) throw new Error(`Signing key does not match release manifest: ${keyId}`);
-  const materials = REQUIRED_MATERIALS.map((name) => ({ name, sha256: sha256(read(path.join(pluginRoot, name))) }));
+  const zipEntries = readCanonicalZipEntries(archivePath);
+  const materials = REQUIRED_MATERIALS.map((name) => {
+    const entry = zipEntries.get(name);
+    if (!entry) throw new Error(`Required attestation material is missing from ZIP: ${name}`);
+    const sourceHash = sha256(canonicalText(read(path.join(pluginRoot, name))));
+    if (entry.sha256 !== sourceHash) throw new Error(`Canonical source material differs from ZIP: ${name}`);
+    return { name, sha256: entry.sha256 };
+  });
   const candidate = String(manifest.candidate || '');
   if (candidate && !path.basename(archivePath).toLowerCase().includes(candidate.toLowerCase())) throw new Error(`Archive filename does not contain manifest candidate ${candidate}`);
   const attestation = {

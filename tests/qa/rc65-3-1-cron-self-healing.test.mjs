@@ -3,10 +3,12 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { readFileSync } from 'node:fs';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const file = resolve(root,'includes/Application/Services/CronScheduleRegistry.php').replaceAll('\\','\\\\').replaceAll("'","\\'");
 const source = readFileSync(resolve(root,'includes/Application/Services/CronScheduleRegistry.php'),'utf8');
+const phpExecutable = resolvePhpExecutable();
 
 test('RC65.3.1 invalidates the cron audit throttle when registry schema changes', () => {
   assert.match(source, /AUDIT_SCHEMA_OPTION/);
@@ -40,7 +42,7 @@ test('RC65.3.1 throttled audit self-heals missing secure cleanup and PayPal reco
     \\Slotera\\Application\\Services\\CronScheduleRegistry::maybe_ensure();
     ksort($scheduled); echo json_encode($scheduled);
   `;
-  const out = JSON.parse(execFileSync('php',['-r',php],{encoding:'utf8'}).trim());
+  const out = JSON.parse(execFileSync(phpExecutable,['-r',php],{encoding:'utf8'}).trim());
   assert.equal(out.sltr_cleanup_secure_mail_attachments, 'daily');
   assert.equal(out.sltr_paypal_reconcile_processing, 'sltr_every_fifteen_minutes');
   assert.equal(out.sltr_process_promotion_digest, 'hourly');

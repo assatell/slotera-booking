@@ -5,8 +5,10 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = process.cwd();
+const phpExecutable = resolvePhpExecutable();
 
 test('RC63.1 Simple quote executes production extras pricing with discounts and coupon', () => {
   const php = `<?php
@@ -40,7 +42,7 @@ test('RC63.1 Simple quote executes production extras pricing with discounts and 
   let run;
   try {
     fs.writeFileSync(tmp, php);
-    run = spawnSync('php', [tmp], { encoding: 'utf8' });
+    run = spawnSync(phpExecutable, [tmp], { encoding: 'utf8' });
   } finally {
     rmSync(fixtureDir, { recursive: true, force: true });
   }

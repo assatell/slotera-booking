@@ -26,13 +26,13 @@ Release candidate package for Slotera Booking v1.0.1049.
 
 ## Quality assurance
 
-- `php tools/qa.php qa` runs self-contained PHP syntax, security-regression and release-content checks.
-- `composer qa` provides the same reproducible entry point without third-party Composer dependencies.
-- `corepack pnpm install --frozen-lockfile && pnpm test` runs the included Node regression suite.
-- `sha256sum -c checksums.sha256` verifies package contents.
+- The WordPress installation ZIP contains runtime files and release-verification metadata, not source tests or build tooling.
+- From the exact public Git tag, `php tools/qa.php qa` runs self-contained PHP syntax, security-regression and release-content checks.
+- From that same tag, `composer qa` provides the equivalent entry point and `corepack pnpm install --frozen-lockfile && pnpm test` runs the Node regression suite.
+- After extracting the installation ZIP, `sha256sum -c checksums.sha256` verifies its canonical payload.
 - `release-manifest.json` is the single source of truth for the current release version and build policy. All version-bearing runtime files are generated from it.
 - Official archives are accompanied by a detached attestation, RSA-PSS signature and public key outside the ZIP.
-- See `QA.md`, `release-manifest.json` and `build-provenance.json` for exact build command, builder/runtime version, VCS commit/tag state, source hash, release-tree hashes and the full transformation chain.
+- In the public source tag, see `QA.md`, `release-manifest.json` and `build-provenance.json` for the exact build command, builder/runtime version, VCS commit/tag state, source hash, release-tree hashes and the full transformation chain.
 
 ## License
 

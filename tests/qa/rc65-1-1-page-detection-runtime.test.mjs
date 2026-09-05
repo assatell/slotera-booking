@@ -2,9 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const repo = resolve(root, 'includes/Infrastructure/Repositories/SettingsRepository.php').replaceAll('\\', '\\\\').replaceAll("'", "\\'");
+const phpExecutable = resolvePhpExecutable();
 
 function probe(content, key) {
   const encoded = Buffer.from(content).toString('base64');
@@ -15,7 +17,7 @@ function probe(content, key) {
     $r = new \\Slotera\\Infrastructure\\Repositories\\SettingsRepository();
     echo $r->is_published_page_for_key(12, '${key}') ? '1' : '0';
   `;
-  return execFileSync('php', ['-r', php], { encoding: 'utf8' }).trim() === '1';
+  return execFileSync(phpExecutable, ['-r', php], { encoding: 'utf8' }).trim() === '1';
 }
 
 test('RC65.1.1 detects system-page shortcode markup without add_shortcode/has_shortcode runtime', () => {

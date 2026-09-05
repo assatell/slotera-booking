@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const servicePath = 'includes/Application/Services/PromotionCampaignService.php';
 const service = fs.readFileSync(servicePath, 'utf8');
@@ -15,7 +16,7 @@ test('RC66.12.2 percent-encodes Unicode promotion image URLs for email HTML', ()
 });
 
 test('RC66.12.2 email URL helper converts Cyrillic filename without changing ASCII URL structure', (t) => {
-  const php = process.env.PHP || 'php';
+  const php = resolvePhpExecutable();
   const code = `
     define('ABSPATH', __DIR__ . '/');
     require ${JSON.stringify(process.cwd() + '/' + servicePath)};

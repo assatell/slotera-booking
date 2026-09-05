@@ -1,6 +1,29 @@
 # Canonical text line endings for reproducible release builds.
 * text=auto eol=lf
 
+# Release/source formats are explicit so Git never classifies long or mixed-EOL
+# source files as binary and silently bypasses checkout normalization.
+*.css text eol=lf
+*.html text eol=lf
+*.ini text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.mjs text eol=lf
+*.php text eol=lf
+*.po text eol=lf
+*.pot text eol=lf
+*.py text eol=lf
+*.sql text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+CHANGELOG text eol=lf
+LICENSE text eol=lf
+README text eol=lf
+
 # Windows-native command files retain canonical CRLF.
 *.ps1 text eol=crlf
 *.bat text eol=crlf

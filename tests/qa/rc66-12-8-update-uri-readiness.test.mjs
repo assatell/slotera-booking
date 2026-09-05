@@ -5,9 +5,9 @@ import { applyUpdateUri, normalizeUpdateUri } from '../../tools/update-uri.mjs';
 
 const plugin = fs.readFileSync(new URL('../../slotera-booking.php', import.meta.url), 'utf8');
 
-test('RC66.12.8 leaves Update URI intentionally unbound until an official endpoint exists', () => {
-  assert.doesNotMatch(plugin, /^ \* Update URI:/m);
-  assert.match(plugin, /define\('SLTR_UPDATE_URI', ''\);/);
+test('first-party Update URI is explicitly bound to the official HTTPS namespace', () => {
+  assert.match(plugin, /^ \* Update URI: https:\/\/getslotera\.com\/\?plugin=slotera-booking$/m);
+  assert.match(plugin, /define\('SLTR_UPDATE_URI', 'https:\/\/getslotera\.com\/\?plugin=slotera-booking'\);/);
   assert.match(plugin, /function sltr_update_uri\(\): string/);
   assert.match(plugin, /apply_filters\('sltr_update_uri', \$uri\)/);
 });

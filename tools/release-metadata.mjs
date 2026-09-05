@@ -19,11 +19,21 @@ const utf8 = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const write = (file, value) => fs.writeFileSync(path.join(root, file), value.replace(/\r\n/g, '\n'), 'utf8');
 const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
 const generated = new Set(['build-provenance.json', 'checksums.sha256']);
+const textExtensions = new Set(['.css', '.html', '.ini', '.js', '.json', '.md', '.mjs', '.php', '.po', '.pot', '.sql', '.svg', '.txt', '.xml', '.yaml', '.yml']);
+const textFilenames = new Set(['CHANGELOG', 'LICENSE', 'README']);
+const archiveExclusions = (manifest.archive?.exclude || []).map((item) => String(item).replaceAll('\\', '/').replace(/^\.\//, ''));
 const vcsPolicy = manifest.source?.type === 'git' ? manifest.source : null;
 const vcsRequired = vcsPolicy?.required === true || process.env.SLTR_VCS_REQUIRED === '1';
 const expectedVcsTag = String(vcsPolicy?.tag || process.env.SLTR_VCS_TAG || '').trim();
 const normalizedRelativePath = (absolute) => path.relative(root, absolute).replaceAll('\\', '/');
 const utf8PathCompare = (a, b) => Buffer.compare(Buffer.from(a, 'utf8'), Buffer.from(b, 'utf8'));
+const isArchiveExcluded = (relative) => archiveExclusions.some((item) => item.endsWith('/') ? relative.startsWith(item) : relative === item);
+const canonicalFileData = (absolute) => {
+  const data = fs.readFileSync(absolute);
+  const extension = path.extname(absolute).toLowerCase();
+  if (!textExtensions.has(extension) && !textFilenames.has(path.basename(absolute))) return data;
+  return Buffer.from(data.toString('utf8').replace(/\r\n?/g, '\n'), 'utf8');
+};
 
 function listFiles({ includeGenerated = false } = {}) {
   const found = [];
@@ -32,7 +42,11 @@ function listFiles({ includeGenerated = false } = {}) {
       if (item.name === '.git' || item.name === 'node_modules') continue;
       const absolute = path.join(directory, item.name);
       if (item.isDirectory()) walk(absolute);
-      else if (includeGenerated || !generated.has(item.name)) found.push(absolute);
+      else {
+        const relative = normalizedRelativePath(absolute);
+        if (isArchiveExcluded(relative)) continue;
+        if (includeGenerated || !generated.has(item.name)) found.push(absolute);
+      }
     }
   };
   walk(root);
@@ -41,7 +55,7 @@ function listFiles({ includeGenerated = false } = {}) {
 
 function fileRecords({ includeGenerated = false } = {}) {
   return listFiles({ includeGenerated }).map((absolute) => {
-    const data = fs.readFileSync(absolute);
+    const data = canonicalFileData(absolute);
     return { path: normalizedRelativePath(absolute), sha256: sha256(data), size: data.length };
   });
 }
@@ -126,7 +140,7 @@ function syncVersions() {
   const before = treeHash();
   const targets = [];
 
-  const updateUriState = applyUpdateUri(utf8('slotera-booking.php'), process.env.SLTR_UPDATE_URI || '');
+  const updateUriState = applyUpdateUri(utf8('slotera-booking.php'), process.env.SLTR_UPDATE_URI || manifest.update_uri || '');
   write('slotera-booking.php', updateUriState.source);
   targets.push(updateUriState.uri === '' ? 'slotera-booking.php:update-uri-ready-unbound' : 'slotera-booking.php:update-uri-bound');
   const syncText = (file, replacements) => {
@@ -356,7 +370,7 @@ function verify() {
   });
   for (const entry of checksumEntries) {
     const absolute = path.join(root, entry.path);
-    if (!fs.existsSync(absolute) || sha256(fs.readFileSync(absolute)) !== entry.sha256) throw new Error(`checksum mismatch: ${entry.path}`);
+    if (!fs.existsSync(absolute) || sha256(canonicalFileData(absolute)) !== entry.sha256) throw new Error(`checksum mismatch: ${entry.path}`);
   }
   if (provenance.file_count !== checksumEntries.length - 1) throw new Error('provenance file_count does not match checksum tree manifest');
   const provenanceChecksum = checksumLines.find((line) => line.endsWith('  build-provenance.json'));

@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
+
+const phpExecutable = resolvePhpExecutable();
 
 test('RC67 ICS preserves UTF-8 and fixed multi-day bookings as all-day ranges', () => {
   const customerName = '\u041d\u0410\u0422\u0410\u041b\u042c\u042f \u0418\u0421\u0422\u041e\u041c\u0418\u041d\u0410';
@@ -79,7 +82,7 @@ namespace {
 }
 `;
 
-  const result = spawnSync('php', ['-r', php], {
+  const result = spawnSync(phpExecutable, ['-r', php], {
     cwd: process.cwd(),
     encoding: 'utf8',
   });

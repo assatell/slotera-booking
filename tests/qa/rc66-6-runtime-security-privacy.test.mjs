@@ -5,9 +5,11 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (name) => fs.readFileSync(path.join(root, name), 'utf8');
+const phpExecutable = resolvePhpExecutable();
 
 test('RC66.6 public REST booking authenticates each request object only once', () => {
   const source = read('includes/Frontend/Controllers/RestApiController.php');
@@ -48,7 +50,7 @@ namespace {
 }
 `);
   try {
-    const run = spawnSync('php', [script], { encoding: 'utf8' });
+    const run = spawnSync(phpExecutable, [script], { encoding: 'utf8' });
     assert.equal(run.status, 0, run.stderr || run.stdout);
     assert.equal(run.stderr, '');
     assert.equal(run.stdout, '011');

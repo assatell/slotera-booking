@@ -1,12 +1,38 @@
 #!/usr/bin/env python3
 """Build an unsigned, cross-host deterministic Slotera release-candidate ZIP."""
 from __future__ import annotations
-import argparse, hashlib, os, pathlib, subprocess, sys, time
+import argparse, hashlib, json, os, pathlib, subprocess, sys, time
 sys.dont_write_bytecode = True
 from deterministic_zip import write_zip
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 ARCHIVE_ROOT = 'slotera-booking/'
+TEXT_EXTENSIONS = {
+    '.css', '.html', '.ini', '.js', '.json', '.md', '.mjs', '.php', '.po',
+    '.pot', '.sql', '.svg', '.txt', '.xml', '.yaml', '.yml',
+}
+TEXT_FILENAMES = {'CHANGELOG', 'LICENSE', 'README'}
+
+
+def archive_exclusions() -> tuple[str, ...]:
+    manifest = json.loads((ROOT / 'release-manifest.json').read_text(encoding='utf-8'))
+    return tuple(str(item).replace('\\', '/').lstrip('./') for item in manifest.get('archive', {}).get('exclude', []))
+
+
+def is_excluded(relative: str, exclusions: tuple[str, ...]) -> bool:
+    for item in exclusions:
+        if item.endswith('/') and relative.startswith(item):
+            return True
+        if relative == item:
+            return True
+    return False
+
+
+def canonical_file_bytes(path: pathlib.Path) -> bytes:
+    raw = path.read_bytes()
+    if path.suffix.lower() in TEXT_EXTENSIONS or path.name in TEXT_FILENAMES:
+        return raw.replace(b'\r\n', b'\n').replace(b'\r', b'\n')
+    return raw
 
 
 def git(args: list[str]) -> str:
@@ -55,15 +81,18 @@ def capture_vcs(env: dict[str, str]) -> None:
     env['SLTR_VCS_STATE'] = 'git-dirty' if dirty else 'git-clean'
 
 
-def canonical_files() -> list[tuple[bytes, str, pathlib.Path]]:
-    files: list[tuple[bytes, str, pathlib.Path]] = []
+def canonical_files() -> list[tuple[bytes, str, bytes]]:
+    files: list[tuple[bytes, str, bytes]] = []
+    exclusions = archive_exclusions()
     for path in ROOT.rglob('*'):
         if not path.is_file() or '.git' in path.parts or 'node_modules' in path.parts or '__pycache__' in path.parts or path.suffix == '.pyc':
             continue
         rel = path.relative_to(ROOT).as_posix()
+        if is_excluded(rel, exclusions):
+            continue
         if path.suffix.lower() == '.zip':
             raise SystemExit(f'nested ZIP is not allowed in release source tree: {rel}')
-        files.append((rel.encode('utf-8'), rel, path))
+        files.append((rel.encode('utf-8'), rel, canonical_file_bytes(path)))
     files.sort(key=lambda item: item[0])
     return files
 

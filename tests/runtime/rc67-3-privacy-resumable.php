@@ -58,6 +58,15 @@ namespace {
 
         public function get_results(string $query, string $output): array
         {
+            if (str_contains($query, 'ip_address IS NOT NULL') && str_contains($query, 'user_agent IS NOT NULL')) {
+                foreach ($this->rows as $row) {
+                    if ((string) ($row['ip_address'] ?? '') !== '' || (string) ($row['user_agent'] ?? '') !== '') {
+                        return [['id' => $row['id']]];
+                    }
+                }
+                return [];
+            }
+
             preg_match('/WHERE id > (\d+)/', $query, $mCursor);
             preg_match('/LIMIT (\d+)/', $query, $mLimit);
             $cursor = isset($mCursor[1]) ? (int) $mCursor[1] : 0;
@@ -177,6 +186,11 @@ namespace {
     assert_true(($valid['ip_address'] ?? null) === '[redacted]', 'valid payload must redact ip_address');
     assert_true(($valid['user_agent'] ?? null) === '[redacted]', 'valid payload must redact user_agent');
     assert_true(($valid['safe'] ?? '') === 'row-1', 'non-sensitive payload data must be preserved');
+
+    $wpdb->rows[0]['ip_address'] = '203.0.113.10';
+    assert_true(!$migration::is_complete(), 'completion marker must fail closed when raw network data remains');
+    $migration::apply();
+    assert_true($migration::is_complete(), 'migration must repair raw network data even after a stale completion marker');
 
     echo "OK: RC67.3 privacy migration processed 205 rows in 3 bounded batches\n";
 }
