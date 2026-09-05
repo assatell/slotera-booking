@@ -2,8 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 const root = resolve(import.meta.dirname, '../..');
 const file = resolve(root,'includes/Application/Services/CronScheduleRegistry.php').replaceAll('\\','\\\\').replaceAll("'","\\'");
+const phpExecutable = resolvePhpExecutable();
 
 test('RC65.2 cron audit skips schedule scans while throttle is fresh', () => {
   const php = `
@@ -23,6 +25,6 @@ test('RC65.2 cron audit skips schedule scans while throttle is fresh', () => {
     \\Slotera\\Application\\Services\\CronScheduleRegistry::maybe_ensure();
     echo $calls;
   `;
-  const out = execFileSync('php',['-r',php],{encoding:'utf8'}).trim();
+  const out = execFileSync(phpExecutable,['-r',php],{encoding:'utf8'}).trim();
   assert.equal(out,'0');
 });

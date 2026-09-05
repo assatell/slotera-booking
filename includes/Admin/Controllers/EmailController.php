@@ -382,6 +382,11 @@ final class EmailController
     private function sample_price_summary(): string
     {
         $locale = (new TranslationService())->locale_for_group('emails');
+        $colors = $this->email_theme_colors();
+        $card_background = esc_attr($colors['card_bg']);
+        $card_border = esc_attr($colors['card_border']);
+        $text_color = esc_attr($colors['text']);
+        $muted_color = esc_attr($colors['muted']);
         $labels = [
             'Package price' => __('Package price', 'slotera-booking'),
             'Package discount' => __('Package discount', 'slotera-booking'),
@@ -404,11 +409,12 @@ final class EmailController
             ];
         }
 
-        return '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:18px 0;border-collapse:collapse;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">'
-            . '<tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;color:#64748b;">' . esc_html($labels['Package price']) . '</td><td align="right" style="padding:10px 12px;border-bottom:1px solid #e5e7eb;">100.00 EUR</td></tr>'
-            . '<tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;color:#64748b;">' . esc_html($labels['Package discount']) . '</td><td align="right" style="padding:10px 12px;border-bottom:1px solid #e5e7eb;">-20.00 EUR</td></tr>'
-            . '<tr><td style="padding:10px 12px;border-bottom:1px solid #e5e7eb;color:#64748b;">' . esc_html($labels['Coupon']) . ' (WELCOME10)</td><td align="right" style="padding:10px 12px;border-bottom:1px solid #e5e7eb;">-8.00 EUR</td></tr>'
-            . '<tr><td style="padding:10px 12px;color:#64748b;">' . esc_html($labels['Total']) . '</td><td align="right" style="padding:10px 12px;font-weight:700;">72.00 EUR</td></tr>'
+        $row_style = 'padding:10px 12px;border-bottom:1px solid ' . $card_border . ';background:' . $card_background . ';';
+        return '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" bgcolor="' . $card_background . '" style="margin:18px 0;border-collapse:collapse;border:1px solid ' . $card_border . ';border-radius:12px;overflow:hidden;background:' . $card_background . ';color:' . $text_color . ';">'
+            . '<tr><td bgcolor="' . $card_background . '" style="' . $row_style . 'color:' . $muted_color . ';">' . esc_html($labels['Package price']) . '</td><td align="right" bgcolor="' . $card_background . '" style="' . $row_style . 'color:' . $text_color . ';">100.00 EUR</td></tr>'
+            . '<tr><td bgcolor="' . $card_background . '" style="' . $row_style . 'color:' . $muted_color . ';">' . esc_html($labels['Package discount']) . '</td><td align="right" bgcolor="' . $card_background . '" style="' . $row_style . 'color:' . $text_color . ';">-20.00 EUR</td></tr>'
+            . '<tr><td bgcolor="' . $card_background . '" style="' . $row_style . 'color:' . $muted_color . ';">' . esc_html($labels['Coupon']) . ' (WELCOME10)</td><td align="right" bgcolor="' . $card_background . '" style="' . $row_style . 'color:' . $text_color . ';">-8.00 EUR</td></tr>'
+            . '<tr><td bgcolor="' . $card_background . '" style="padding:10px 12px;background:' . $card_background . ';color:' . $muted_color . ';">' . esc_html($labels['Total']) . '</td><td align="right" bgcolor="' . $card_background . '" style="padding:10px 12px;background:' . $card_background . ';color:' . $text_color . ';font-weight:700;">72.00 EUR</td></tr>'
             . '</table>';
     }
 

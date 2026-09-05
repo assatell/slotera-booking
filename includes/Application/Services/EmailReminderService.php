@@ -608,11 +608,16 @@ final class EmailReminderService
         if ($remaining > 0) { $rows[$this->email_price_label('pay_later', $locale)] = $this->format_money($remaining); }
         if ($paid > 0) { $rows[$this->email_price_label('paid', $locale)] = $this->format_money($paid); }
 
-        $summary = '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" style="margin:18px 0;border-collapse:collapse;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;background:#ffffff;color:#111827;">';
+        $colors = $this->email_theme_colors();
+        $card_background = esc_attr($colors['card_bg']);
+        $card_border = esc_attr($colors['card_border']);
+        $text_color = esc_attr($colors['text']);
+        $muted_color = esc_attr($colors['muted']);
+        $summary = '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" bgcolor="' . $card_background . '" style="margin:18px 0;border-collapse:collapse;border:1px solid ' . $card_border . ';border-radius:12px;overflow:hidden;background:' . $card_background . ';color:' . $text_color . ';">';
         foreach ($rows as $label => $value) {
             $strong = $label === $this->email_price_label('total', $locale);
-            $summary .= '<tr style="background:#ffffff;color:#111827;"><td bgcolor="#ffffff" style="padding:10px 12px;border-bottom:1px solid #e5e7eb;background:#ffffff;color:#64748b;font-family:Arial,sans-serif;font-size:14px;">' . esc_html($label) . '</td>'
-                . '<td align="right" bgcolor="#ffffff" style="padding:10px 12px;border-bottom:1px solid #e5e7eb;background:#ffffff;color:#0f172a;font-family:Arial,sans-serif;font-size:14px;font-weight:' . ($strong ? '700' : '400') . ';">' . esc_html($value) . '</td></tr>';
+            $summary .= '<tr style="background:' . $card_background . ';color:' . $text_color . ';"><td bgcolor="' . $card_background . '" style="padding:10px 12px;border-bottom:1px solid ' . $card_border . ';background:' . $card_background . ';color:' . $muted_color . ';font-family:Arial,sans-serif;font-size:14px;">' . esc_html($label) . '</td>'
+                . '<td align="right" bgcolor="' . $card_background . '" style="padding:10px 12px;border-bottom:1px solid ' . $card_border . ';background:' . $card_background . ';color:' . $text_color . ';font-family:Arial,sans-serif;font-size:14px;font-weight:' . ($strong ? '700' : '400') . ';">' . esc_html($value) . '</td></tr>';
         }
         $summary .= '</table>';
 

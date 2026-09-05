@@ -3,10 +3,12 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const servicePath = resolve(root, 'includes/Application/Services/AccountMagicLinkService.php');
 const service = readFileSync(servicePath, 'utf8');
+const phpExecutable = resolvePhpExecutable();
 
 test('RC65.1.3 account page detection no longer depends on has_shortcode runtime registration', () => {
   assert.doesNotMatch(service, /if \(!has_shortcode\(\(string\) \$post->post_content, \$shortcode\)\)/);
@@ -27,6 +29,6 @@ test('RC65.1.3 configured account page permalink resolves without registered sho
     $m->setAccessible(true);
     echo $m->invoke($s, 12, 'slotera_account');
   `;
-  const out = execFileSync('php', ['-r', php], { encoding: 'utf8' }).trim();
+  const out = execFileSync(phpExecutable, ['-r', php], { encoding: 'utf8' }).trim();
   assert.equal(out, 'https://example.test/client-account/');
 });

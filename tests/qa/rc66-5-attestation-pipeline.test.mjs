@@ -6,9 +6,11 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolvePython } from '../../tools/python-runtime.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
+const canonicalText = (data) => Buffer.from(data.toString('utf8').replace(/\r\n?/g, '\n'), 'utf8');
 const readText = (name) => fs.readFileSync(path.join(root, name), 'utf8');
 
 function copyTree(src, dst) {
@@ -58,7 +60,7 @@ test('release attestation verifier is fail-closed and compares extracted tree to
       schema: 'slotera-release-attestation/v1',
       generated_at_utc: '2026-08-16T15:21:00Z',
       subject: { name: path.basename(archive), sha256: sha256(fs.readFileSync(archive)) },
-      materials: materialNames.map((name) => ({ name, sha256: sha256(fs.readFileSync(path.join(tree, name))) })),
+      materials: materialNames.map((name) => ({ name, sha256: sha256(canonicalText(fs.readFileSync(path.join(tree, name)))) })),
       signature: { algorithm: 'RSA-PSS-SHA256', key_id: keyId, salt_length: 32 },
     };
     const encoded = Buffer.from(`${JSON.stringify(attestation, null, 2)}\n`);
@@ -71,12 +73,15 @@ test('release attestation verifier is fail-closed and compares extracted tree to
     fs.writeFileSync(pubPath, publicKey.export({ type: 'spki', format: 'pem' }));
 
     const extracted = path.join(temp, 'extracted');
-    copyTree(tree, extracted);
-    const ok = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, extracted], { cwd: tree, encoding: 'utf8' });
+    const python = resolvePython();
+    const extraction = spawnSync(python.command, [...python.prefix, '-c', 'import pathlib,sys,zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])', archive, extracted], { encoding: 'utf8' });
+    assert.equal(extraction.status, 0, extraction.stderr || extraction.stdout);
+    const extractedPlugin = path.join(extracted, 'slotera-booking');
+    const ok = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, extractedPlugin], { cwd: tree, encoding: 'utf8' });
     assert.equal(ok.status, 0, ok.stderr || ok.stdout);
 
-    fs.appendFileSync(path.join(extracted, 'README.md'), '\nCONTROLLED TAMPER\n');
-    const tampered = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, extracted], { cwd: tree, encoding: 'utf8' });
+    fs.appendFileSync(path.join(extractedPlugin, 'README.md'), '\nCONTROLLED TAMPER\n');
+    const tampered = spawnSync(process.execPath, ['tools/release-attestation.mjs', 'verify', archive, attPath, sigPath, pubPath, extractedPlugin], { cwd: tree, encoding: 'utf8' });
     assert.notEqual(tampered.status, 0, 'tampered extracted tree must fail verification even after local metadata regeneration');
     assert.match(tampered.stderr, /differs from signed ZIP|file count differs|unsigned extra file/);
 

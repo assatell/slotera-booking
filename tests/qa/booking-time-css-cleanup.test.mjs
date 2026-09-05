@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
-const css = fs.readFileSync(new URL('../../assets/css/frontend.css', import.meta.url), 'utf8');
+const css = fs.readFileSync(new URL('../../assets/css/frontend.css', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const marker = 'Booking time slots: canonical Appearance-aware surface, states and layout.';
 
 assert.equal(css.split(marker).length - 1, 1, 'Booking time slots must have one canonical marker');

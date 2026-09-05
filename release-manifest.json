@@ -14,11 +14,20 @@
     "required": true,
     "tag": "v1.0.1049-rc67.9"
   },
+  "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
     "root": "slotera-booking/",
     "exclude": [
       ".git/",
-      "node_modules/"
+      "node_modules/",
+      ".gitattributes",
+      ".gitignore",
+      "tests/",
+      "tools/",
+      "QA.md",
+      "composer.json",
+      "package.json",
+      "pnpm-lock.yaml"
     ]
   },
   "signing": {

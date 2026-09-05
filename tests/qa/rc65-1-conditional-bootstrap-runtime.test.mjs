@@ -2,9 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const plugin = resolve(root, 'includes/Core/Plugin.php').replaceAll('\\', '\\\\').replaceAll("'", "\\'");
+const phpExecutable = resolvePhpExecutable();
 
 function probe(admin, ajax, cron) {
   const php = `<?php
@@ -20,7 +22,7 @@ function probe(admin, ajax, cron) {
   $f->setAccessible(true);
   echo json_encode(['admin'=>$a->invoke($p),'frontend'=>$f->invoke($p)]);
   `;
-  return JSON.parse(execFileSync('php', ['-r', php.replace(/^<\?php\s*/, '')], { encoding: 'utf8' }));
+  return JSON.parse(execFileSync(phpExecutable, ['-r', php.replace(/^<\?php\s*/, '')], { encoding: 'utf8' }));
 }
 
 test('RC65.1 runtime context gates preserve frontend, AJAX and admin needs', () => {

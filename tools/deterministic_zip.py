@@ -92,12 +92,12 @@ def _dos_datetime(dt):
     return ((y-1980)<<9)|(m<<5)|d, (hh<<11)|(mm<<5)|(ss//2)
 
 def write_zip(output:pathlib.Path, entries, dt):
-    """Write canonical ZIP. entries iterable of (archive_name:str, source:pathlib.Path)."""
+    """Write canonical ZIP. Entry sources may be pathlib paths or canonical bytes."""
     date,time = _dos_datetime(dt)
     central=[]
     with output.open('wb') as fh:
         for name,src in entries:
-            raw=src.read_bytes(); comp=deflate_fixed(raw); crc=binascii.crc32(raw)&0xffffffff
+            raw=src if isinstance(src,bytes) else src.read_bytes(); comp=deflate_fixed(raw); crc=binascii.crc32(raw)&0xffffffff
             name_b=name.encode('utf-8'); offset=fh.tell(); flags=0x0800; method=8
             local=struct.pack('<IHHHHHIIIHH',0x04034b50,20,flags,method,time,date,crc,len(comp),len(raw),len(name_b),0)
             fh.write(local); fh.write(name_b); fh.write(comp)

@@ -173,6 +173,10 @@
         return localizedDate(date, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
     }
 
+    function normalizeTerminalPunctuation(value) {
+        return String(value || '').replace(/([.!?])\1+$/, '$1');
+    }
+
     function formatTime(value) {
         return value ? String(value).slice(0, 5) : '';
     }
@@ -653,7 +657,15 @@
                 return;
             }
 
-            setMessage('sltr-slot-message', sltrFormat(data.data.length === 1 ? '%d available time for %s.' : '%d available times for %s.', data.data.length, formatHumanDate(dateValue)), 'success');
+            setMessage(
+                'sltr-slot-message',
+                normalizeTerminalPunctuation(sltrFormat(
+                    data.data.length === 1 ? '%d available time for %s.' : '%d available times for %s.',
+                    data.data.length,
+                    formatHumanDate(dateValue)
+                )),
+                'success'
+            );
 
             data.data.forEach(function (slot) {
                 const button = document.createElement('button');

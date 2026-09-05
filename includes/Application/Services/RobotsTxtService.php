@@ -230,9 +230,7 @@ final class RobotsTxtService
 
     public function sanitize_content(string $content): string
     {
-        $content = str_replace(["
-", ""], "
-", $content);
+        $content = str_replace(["\r\n", "\r"], "\n", $content);
         $content = preg_replace('/[^\P{C}
 	]/u', '', $content);
         if (!is_string($content)) {

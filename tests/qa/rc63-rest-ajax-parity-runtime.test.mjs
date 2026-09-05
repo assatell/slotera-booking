@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const normalizer = 'includes/Application/Services/PublicBookingRequestNormalizer.php';
 const ajaxController = readFileSync('includes/Frontend/Controllers/BookingController.php', 'utf8');
 const restController = readFileSync('includes/Frontend/Controllers/RestApiController.php', 'utf8');
+const phpExecutable = resolvePhpExecutable();
 
 function runPhp(payloadA, payloadB) {
   const script = String.raw`
@@ -27,7 +29,7 @@ echo json_encode(['a'=>$outA,'b'=>$outB], JSON_UNESCAPED_SLASHES);
     Buffer.from(JSON.stringify(payloadA)).toString('base64'),
     Buffer.from(JSON.stringify(payloadB)).toString('base64'),
   ];
-  const result = spawnSync('php', args, { encoding: 'utf8' });
+  const result = spawnSync(phpExecutable, args, { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   return JSON.parse(result.stdout);
 }

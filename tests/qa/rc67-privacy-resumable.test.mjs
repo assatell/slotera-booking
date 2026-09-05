@@ -31,4 +31,7 @@ test('RC67.3 repair is bounded and redacts malformed payloads', () => {
   assert.match(migration, /DataRedactor::payload/);
   assert.match(migration, /\$updates\['ip_address'\] = null/);
   assert.match(migration, /\$updates\['user_agent'\] = null/);
+  assert.match(migration, /ip_address IS NOT NULL/);
+  assert.match(migration, /user_agent IS NOT NULL/);
+  assert.match(migration, /return is_array\(\$unsafe\) && \$unsafe === \[\]/);
 });

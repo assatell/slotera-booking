@@ -2,9 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const plugin = resolve(root, 'includes/Core/Plugin.php').replaceAll('\\', '\\\\').replaceAll("'", "\\'");
+const phpExecutable = resolvePhpExecutable();
 
 function probe(action, script = '/wp-admin/admin-post.php') {
   const actionLiteral = JSON.stringify(action);
@@ -25,7 +27,7 @@ function probe(action, script = '/wp-admin/admin-post.php') {
     $m->setAccessible(true);
     echo $m->invoke($p);
   `;
-  return execFileSync('php', ['-r', php], { encoding: 'utf8' }).trim();
+  return execFileSync(phpExecutable, ['-r', php], { encoding: 'utf8' }).trim();
 }
 
 test('RC65.1.2 recognizes all frontend admin-post actions needed by account/contact flows', () => {

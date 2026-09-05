@@ -4,8 +4,10 @@ import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
+const phpExecutable = resolvePhpExecutable();
 
 test('RC65 SettingsRepository memoizes expensive resolution but observes same-request option changes', () => {
   const dir = mkdtempSync(join(tmpdir(), 'sltr-rc65-'));
@@ -17,7 +19,7 @@ namespace Slotera\\Application\\Services { final class PerformanceProfiler { pub
 namespace Slotera\\Application\\Security { final class SecretStore { public static int $decryptCalls=0; public static function sensitive_keys():array{return [];} public static function is_encrypted(string $v):bool{return true;} public static function encryption_available():bool{return true;} public static function encrypt_settings(array $s):array{return $s;} public static function decrypt_settings(array $s):array{self::$decryptCalls++; return $s;} } }
 namespace { require '${repo}'; $a=new \\Slotera\\Infrastructure\\Repositories\\SettingsRepository(); $b=new \\Slotera\\Infrastructure\\Repositories\\SettingsRepository(); $a->all(); $b->all(); echo \\Slotera\\Application\\Security\\SecretStore::$decryptCalls . ',' . \\Slotera\\Application\\Services\\EmailTemplateRegistry::$scenarioCalls . ',' . \\Slotera\\Application\\Services\\EmailTemplateRegistry::$resolveCalls . "\\n"; $GLOBALS['sltr_opt']['payment_currency']='USD'; $v=$a->all(); echo \\Slotera\\Application\\Security\\SecretStore::$decryptCalls . ',' . ($v['payment_currency'] ?? '') . "\\n"; }
 `);
-  const run = spawnSync('php', [script], { encoding: 'utf8' });
+  const run = spawnSync(phpExecutable, [script], { encoding: 'utf8' });
   rmSync(dir, { recursive: true, force: true });
   assert.equal(run.status, 0, run.stderr || 'PHP fixture exited non-zero');
   assert.equal(run.stderr.trim(), '', `PHP fixture emitted warnings/errors on stderr:\n${run.stderr}`);

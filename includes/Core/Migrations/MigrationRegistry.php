@@ -230,6 +230,7 @@ final class MigrationRegistry
             '1.0.711' => Version_1_0_711::class,
             '1.0.712' => Version_1_0_712::class,
             '1.0.713' => Version_1_0_713::class,
+            '1.0.714' => null,
             '1.0.856' => Version_1_0_856::class,
             '1.0.916' => Version_1_0_916::class,
             '1.0.963' => Version_1_0_963::class,
@@ -246,7 +247,7 @@ final class MigrationRegistry
             '1.0.1042' => null,
             '1.0.1043' => Version_1_0_1043::class,
             '1.0.1047' => Version_1_0_1047::class,
-            '1.0.714' => null,
+            '1.0.1050' => Version_1_0_1050::class,
         ];
     }
 

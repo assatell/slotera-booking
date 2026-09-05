@@ -123,6 +123,23 @@ final class Version_1_0_1043 implements MigrationInterface
 
     public static function is_complete(): bool
     {
-        return (string) get_option(self::COMPLETE_OPTION, '') === '1';
+        if ((string) get_option(self::COMPLETE_OPTION, '') !== '1') {
+            return false;
+        }
+
+        global $wpdb;
+
+        $table = Database::activity_log_table();
+        $unsafe = $wpdb->get_results(
+            "SELECT id
+             FROM {$table}
+             WHERE (ip_address IS NOT NULL AND CAST(ip_address AS CHAR) <> '')
+                OR (user_agent IS NOT NULL AND CAST(user_agent AS CHAR) <> '')
+             ORDER BY id ASC
+             LIMIT 1",
+            ARRAY_A
+        );
+
+        return is_array($unsafe) && $unsafe === [];
     }
 }
