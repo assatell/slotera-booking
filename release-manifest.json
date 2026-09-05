@@ -1,18 +1,18 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1049",
+  "version": "1.0.1050",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
-    "version": "2.5.0",
+    "version": "2.6.0",
     "runtime": "Node.js 20+, CPython 3.9+ (PYTHON override, py -3, python3, or python), in-tree deterministic fixed-Huffman DEFLATE writer, and Windows PowerShell 5.1+ or PowerShell 7+ for signed release packaging"
   },
   "source": {
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1049-rc67.9"
+    "tag": "v1.0.1050-rc67.10"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -139,10 +139,15 @@
 "1.0.1046 RC67.6: allow repeated customer reschedules while atomically rotating the public reschedule token after every successful change",
 "1.0.1047 RC67.7: normalize zero payment and absent end-date display/storage while clearing and redacting public action secrets",
 "1.0.1048 RC67.8: localize contact and duration UI and widen the responsive booking flow",
-"1.0.1049 RC67.9: keep the booking width expansion internal and acknowledge the valid French Message translation"
+"1.0.1049 RC67.9: keep the booking width expansion internal and acknowledge the valid French Message translation",
+"1.0.1050 RC67.10: canonicalize release payload bytes across checkout line endings and bind attestations to canonical ZIP materials",
+"1.0.1050 RC67.10: exclude source QA and build tooling from the WordPress install ZIP and bind the first-party Update URI",
+"1.0.1050 RC67.10: strengthen privacy migration completion checks and preserve semantic migration registry order",
+"1.0.1050 RC67.10: make dynamic booking guidance and email price summaries follow the selected Appearance palette",
+"1.0.1050 RC67.10: make Windows PHP-runtime, CSS and attestation QA portable"
   ],
-  "release_notes": "RC67.9 restores the outer booking form to its configured Appearance width while retaining the 40px expansion for the calendar, customer-detail fields and time-slot grid, and removes the false French same-as-English warning for the correct Message translation.",
-  "candidate": "RC67.9",
+  "release_notes": "RC67.10 hardens cross-platform release reproducibility, canonical signed attestations, install-ZIP boundaries, Update URI and privacy migrations while making dynamic booking guidance and email price summaries fully compatible with the selected Appearance palette, including Dark.",
+  "candidate": "RC67.10",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

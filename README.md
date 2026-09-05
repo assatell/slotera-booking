@@ -1,6 +1,6 @@
 # Slotera Booking
 
-Release candidate package for Slotera Booking v1.0.1049.
+Release candidate package for Slotera Booking v1.0.1050.
 
 ## Requirements
 
