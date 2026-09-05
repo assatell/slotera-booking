@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Slotera Booking
  * Description: Complete WordPress booking platform with payments, packages, coupons, marketing automation, analytics and customer management.
- * Version: 1.0.1050
+ * Version: 1.0.1051
  * Update URI: https://getslotera.com/?plugin=slotera-booking
  * Requires at least: 6.0
  * Requires PHP: 8.0
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SLTR_VERSION', '1.0.1050');
+define('SLTR_VERSION', '1.0.1051');
 define('SLTR_UPDATE_URI', 'https://getslotera.com/?plugin=slotera-booking');
 define('SLTR_MINIMUM_WP_VERSION', '6.0');
 define('SLTR_MINIMUM_PHP_VERSION', '8.0');

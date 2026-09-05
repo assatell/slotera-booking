@@ -1,3 +1,10 @@
+## 1.0.1051 RC67.11 — Dotfile exclusion reproducibility fix
+
+- Preserve leading dots while normalizing release exclusion paths.
+- Exclude `.gitignore` and `.gitattributes` from the WordPress installation ZIP as declared.
+- Classify repository dotfiles as canonical text defensively and verify their absence from the built archive.
+- Supersede the unpublished RC67.10 artifacts without moving or reusing the existing RC67.10 tag.
+
 ## 1.0.1050 RC67.10 — Release pipeline and dark-theme hardening
 
 - Canonicalize textual install payloads independently of checkout CRLF/LF and bind signed attestations to the canonical bytes stored in the ZIP.
