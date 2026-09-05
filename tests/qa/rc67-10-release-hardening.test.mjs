@@ -22,6 +22,9 @@ test('release payload excludes source QA and build tooling', () => {
   }
   assert.match(builder, /is_excluded\(rel, exclusions\)/);
   assert.match(metadata, /isArchiveExcluded\(relative\)/);
+  assert.ok(builder.includes(".removeprefix('./')"));
+  assert.ok(!builder.includes(".lstrip('./')"));
+  assert.match(builder, /TEXT_FILENAMES = \{[^}]*'\.gitattributes'[^}]*'\.gitignore'[^}]*\}/s);
 });
 
 test('release content is canonicalized independently of checkout line endings', () => {
@@ -93,6 +96,8 @@ test('fresh cross-platform worktrees produce the same install ZIP', { timeout: 6
     assert.equal(listing.status, 0, listing.stderr || listing.stdout);
     assert.doesNotMatch(listing.stdout, /^slotera-booking\/(?:tests|tools)\//m);
     assert.doesNotMatch(listing.stdout, /^slotera-booking\/(?:QA\.md|composer\.json|package\.json|pnpm-lock\.yaml)$/m);
+    assert.doesNotMatch(listing.stdout, /^slotera-booking\/\.gitattributes$/m);
+    assert.doesNotMatch(listing.stdout, /^slotera-booking\/\.gitignore$/m);
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });
   }

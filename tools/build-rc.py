@@ -11,12 +11,12 @@ TEXT_EXTENSIONS = {
     '.css', '.html', '.ini', '.js', '.json', '.md', '.mjs', '.php', '.po',
     '.pot', '.sql', '.svg', '.txt', '.xml', '.yaml', '.yml',
 }
-TEXT_FILENAMES = {'CHANGELOG', 'LICENSE', 'README'}
+TEXT_FILENAMES = {'CHANGELOG', 'LICENSE', 'README', '.gitattributes', '.gitignore'}
 
 
 def archive_exclusions() -> tuple[str, ...]:
     manifest = json.loads((ROOT / 'release-manifest.json').read_text(encoding='utf-8'))
-    return tuple(str(item).replace('\\', '/').lstrip('./') for item in manifest.get('archive', {}).get('exclude', []))
+    return tuple(str(item).replace('\\', '/').removeprefix('./') for item in manifest.get('archive', {}).get('exclude', []))
 
 
 def is_excluded(relative: str, exclusions: tuple[str, ...]) -> bool:
