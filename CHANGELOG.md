@@ -1,3 +1,14 @@
+## 1.0.1050 RC67.10 — Release pipeline and dark-theme hardening
+
+- Canonicalize textual install payloads independently of checkout CRLF/LF and bind signed attestations to the canonical bytes stored in the ZIP.
+- Exclude source QA, tests and build tooling from the WordPress installation archive while retaining them in the public source tag.
+- Bind the plugin to the official first-party HTTPS Update URI namespace.
+- Strengthen privacy-migration completion verification, re-run it for already-upgraded installations and keep the migration registry in semantic-version order.
+- Make dynamic booking guidance and email price summaries follow the selected Slotera Appearance palette, including Dark.
+- Remove duplicate terminal punctuation from localized availability messages.
+- Make the Node/PHP runtime QA and CSS/attestation regression fixtures portable on Windows.
+- Add cross-platform exact-commit ZIP reproducibility and release-payload boundary coverage.
+
 ## 1.0.1049 RC67.9 — Inner booking width and scanner cleanup
 
 - Restore the outer booking form to the width configured in Appearance.
