@@ -101,18 +101,6 @@
 
 
 <tr>
-                <th scope="row"><?php esc_html_e('Package page image', 'slotera-booking'); ?></th>
-                <td>
-                    <input type="hidden" class="sltr-media-ids" id="sltr-package-card-image-id" name="card_image_id" value="<?php echo esc_attr((string) ($package['card_image_id'] ?? '')); ?>" data-max="1">
-                    <button type="button" class="button sltr-media-select" data-target="#sltr-package-card-image-id" data-multiple="0" data-max="1"><?php esc_html_e('Select package page image', 'slotera-booking'); ?></button>
-                    <button type="button" class="button sltr-media-clear" data-target="#sltr-package-card-image-id"><?php esc_html_e('Clear', 'slotera-booking'); ?></button>
-                    <input type="hidden" id="sltr-package-card-image-focus" name="card_image_focus" value="<?php echo esc_attr((string) ($package['card_image_focus'] ?? '50,50')); ?>">
-                    <div class="sltr-media-preview sltr-media-preview-large sltr-focus-enabled" data-source="#sltr-package-card-image-id" data-focus-source="#sltr-package-card-image-focus" data-focus-ratio="16 / 9"></div>
-                    <p class="description"><?php esc_html_e('Displayed in the package selection on the Slotera Booking page. If empty, no image is shown.', 'slotera-booking'); ?></p>
-                    <p class="description"><strong><?php esc_html_e('Focus Point:', 'slotera-booking'); ?></strong> <?php esc_html_e('Click the important area of the image. The marker and preview update immediately.', 'slotera-booking'); ?></p>
-                </td>
-            </tr>
-<tr>
                 <th scope="row"><?php esc_html_e('Slotera Booking page image', 'slotera-booking'); ?></th>
                 <td>
                     <input type="hidden" class="sltr-media-ids" id="sltr-booking-card-image-id" name="booking_card_image_id" value="<?php echo esc_attr((string) ($package['booking_card_image_id'] ?? '')); ?>" data-max="1">

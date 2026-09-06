@@ -39,7 +39,12 @@ test('frontend renders social links separately and safely', () => {
   assert.match(view, /target="_blank" rel="noopener noreferrer"/);
   assert.match(view, /\$sltr_social_labels/);
   assert.match(view, /sltr-package-contact-address/);
-  assert.match(view, /Open in Google Maps/);
+  assert.match(view, />Google Maps<\/a>/);
+  assert.match(view, /sltr-package-social-link/);
+  assert.doesNotMatch(view, /esc_html_e\('Open', 'slotera-booking'\)/);
+  for (const platform of ['instagram', 'facebook', 'linkedin', 'x', 'youtube']) {
+    assert.match(view, new RegExp(`sltr_social_platform === '${platform}'`));
+  }
   assert.doesNotMatch(view, /<iframe src=/);
   const addressAt = view.indexOf('sltr-package-contact-address');
   const mapsAt = view.indexOf('data-sltr-google-maps-popup');

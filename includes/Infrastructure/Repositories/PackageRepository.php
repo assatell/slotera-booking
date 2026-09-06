@@ -335,6 +335,8 @@ final class PackageRepository
             $clean[$mode] = [
                 'duration_minutes' => max(1, min(1440, (int) ($src['duration_minutes'] ?? 60))),
                 'full_day_booking' => $mode === 'fixed' && $this->bool_from_source($src, 'full_day_booking') ? 1 : 0,
+                'full_day_singular_label' => $mode === 'fixed' ? substr(sanitize_text_field((string) ($src['full_day_singular_label'] ?? '')), 0, 60) : '',
+                'full_day_plural_label' => $mode === 'fixed' ? substr(sanitize_text_field((string) ($src['full_day_plural_label'] ?? '')), 0, 60) : '',
                 'slot_step' => max(1, min(1440, (int) ($src['slot_step'] ?? ($src['duration_minutes'] ?? 60)))),
                 'max_bookings_per_slot' => max(1, (int) ($src['max_bookings_per_slot'] ?? 1)),
                 'show_duration' => $this->bool_from_source($src, 'show_duration') ? 1 : 0,

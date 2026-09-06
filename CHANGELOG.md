@@ -1,3 +1,10 @@
+## 1.0.1052 RC67.12 — Booking and Solo page UI polish
+
+- Center the calendar month navigation chevrons with theme-resistant SVG geometry.
+- Add optional singular and plural day labels for Fixed 24-hour / multi-day booking totals.
+- Remove the obsolete Package page image control while preserving existing legacy image data.
+- Show the Solo contact map link as `Google Maps` and replace social `Open` links with accessible platform icons.
+
 ## 1.0.1051 RC67.11 — Dotfile exclusion reproducibility fix
 
 - Preserve leading dots while normalizing release exclusion paths.

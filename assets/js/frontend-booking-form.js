@@ -728,7 +728,9 @@
         if (!out || !selectedPackageMeta || !selectedPackageMeta.fullDayBooking) return;
         const days = fixedFullDayDays();
         const base = numericAmount(selectedPackageMeta.priceRaw || selectedPackageMeta.price);
-        out.textContent = formatMoney(base * days) + ' · ' + days + (days === 1 ? ' day' : ' days');
+        const singular = selectedPackageMeta.fullDaySingularLabel || 'day';
+        const plural = selectedPackageMeta.fullDayPluralLabel || 'days';
+        out.textContent = formatMoney(base * days) + ' · ' + days + ' ' + (days === 1 ? singular : plural);
         renderDateRangePayment(selectedPackageMeta.policy || 'booking_only');
         updateSummary();
     }
@@ -1208,6 +1210,8 @@
             hidePriceOnFrontend: packageButton.getAttribute('data-hide-price-on-frontend') === '1',
             displayStartTimeOnly: packageButton.getAttribute('data-display-start-time-only') === '1',
             fullDayBooking: packageButton.getAttribute('data-full-day-booking') === '1',
+            fullDaySingularLabel: packageButton.getAttribute('data-full-day-singular-label') || '',
+            fullDayPluralLabel: packageButton.getAttribute('data-full-day-plural-label') || '',
             bookingButtonText: packageButton.getAttribute('data-booking-button-text') || sltrT('Book now'),
             hasAvailableCoupon: packageButton.getAttribute('data-has-available-coupon') === '1',
             extras: (function(){
