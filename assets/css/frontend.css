@@ -160,18 +160,18 @@
     font-size: 18px;
 }
 
-.sltr-calendar-prev,
-.sltr-calendar-next {
-    width: 38px;
-    height: 38px;
+.sltr-calendar .sltr-calendar-prev,
+.sltr-calendar .sltr-calendar-next {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; padding: 0;
     border-radius: 999px;
     border: 1px solid var(--sltr-calendar-border, var(--sltr-card-border, #dbe3ef));
     background: var(--sltr-calendar-day-bg, var(--sltr-card-bg, #fff));
-    font-size: 24px;
-    line-height: 1;
+    line-height: 0;
     cursor: pointer;
 }
 
+.sltr-calendar-prev svg, .sltr-calendar-next svg { display: block; width: 18px; height: 18px; flex: 0 0 18px; }
 .sltr-calendar-weekdays,
 .sltr-calendar-days {
     display: grid;
@@ -4438,7 +4438,6 @@ body.sltr-media-lightbox-open { overflow: hidden; }
     object-fit: cover;
     border-radius: 12px;
 }
-
 .sltr-package-contact-details {
     display: grid;
     gap: 10px;
@@ -4451,6 +4450,7 @@ body.sltr-media-lightbox-open { overflow: hidden; }
     align-items: center;
     width: fit-content;
 }
+.sltr-package-contact-socials { display:flex; flex-wrap:wrap; gap:10px; } .sltr-package-contact-socials .sltr-package-social-link { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; padding:0; border:1px solid var(--sltr-border, rgba(148,163,184,.35)); border-radius:50%; color:var(--sltr-primary, #2563eb); background:var(--sltr-card-bg, #fff); text-decoration:none; } .sltr-package-contact-socials .sltr-package-social-link:hover, .sltr-package-contact-socials .sltr-package-social-link:focus-visible { border-color:var(--sltr-primary, #2563eb); transform:translateY(-1px); } .sltr-package-social-link svg { display:block; width:21px; height:21px; }
 .sltr-package-contact-detail {
     display: flex;
     gap: 12px;

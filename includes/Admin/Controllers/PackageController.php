@@ -113,9 +113,13 @@ final class PackageController
             'show_solo_down_content' => trim(wp_strip_all_tags($solo_down_content)) !== '' || trim($solo_down_content) !== '' ? 1 : 0,
             'show_more_info' => $show_more_info,
             'solo_page_enabled' => $solo_page_enabled,
-            'card_image_id' => $this->request->post_int('card_image_id'),
+            'card_image_id' => $this->request->post_has('card_image_id')
+                ? $this->request->post_int('card_image_id')
+                : (int) ($existing_package['card_image_id'] ?? 0),
             'booking_card_image_id' => $this->request->post_int('booking_card_image_id'),
-            'card_image_focus' => $this->request->post_text('card_image_focus', '50,50'),
+            'card_image_focus' => $this->request->post_has('card_image_focus')
+                ? $this->request->post_text('card_image_focus', '50,50')
+                : (string) ($existing_package['card_image_focus'] ?? '50,50'),
             'booking_card_image_focus' => $this->request->post_text('booking_card_image_focus', '50,50'),
             'popular_icon' => $this->request->post_key('popular_icon', ''),
             'popular_icon_color' => sanitize_hex_color($this->request->post_text('popular_icon_color', '#7c3aed')) ?: '#7c3aed',
