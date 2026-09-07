@@ -6,6 +6,7 @@ namespace Slotera\Application\BookingModeConfiguration;
 
 use Slotera\Application\Services\RequestValidator;
 use Slotera\Application\Services\BusinessValidator;
+use Slotera\Application\Support\UnicodeText;
 use Slotera\Infrastructure\Repositories\PackageRepository;
 
 if (!defined('ABSPATH')) {
@@ -217,8 +218,8 @@ final class BookingModeConfigurationManager
         return [
             'duration_minutes' => BusinessValidator::duration_minutes($duration, 60, 1, 1440),
             'full_day_booking' => $full_day_booking ? 1 : 0,
-            'full_day_singular_label' => $mode === 'fixed' ? substr(sanitize_text_field((string) ($source['full_day_singular_label'] ?? '')), 0, 60) : '',
-            'full_day_plural_label' => $mode === 'fixed' ? substr(sanitize_text_field((string) ($source['full_day_plural_label'] ?? '')), 0, 60) : '',
+            'full_day_singular_label' => $mode === 'fixed' ? UnicodeText::limit(sanitize_text_field((string) ($source['full_day_singular_label'] ?? '')), 60) : '',
+            'full_day_plural_label' => $mode === 'fixed' ? UnicodeText::limit(sanitize_text_field((string) ($source['full_day_plural_label'] ?? '')), 60) : '',
             'slot_step' => BusinessValidator::duration_minutes($full_day_booking ? 60 : $slot_step, 60, 1, 1440),
             'max_bookings_per_slot' => BusinessValidator::capacity($source['max_bookings_per_slot'] ?? 1),
             'show_duration' => $show_duration ? 1 : 0,

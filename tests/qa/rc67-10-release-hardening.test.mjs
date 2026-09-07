@@ -6,6 +6,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolvePython } from '../../tools/python-runtime.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const manifest = JSON.parse(fs.readFileSync(new URL('../../release-manifest.json', import.meta.url), 'utf8'));
@@ -14,6 +15,11 @@ const metadata = fs.readFileSync(new URL('../../tools/release-metadata.mjs', imp
 const plugin = fs.readFileSync(new URL('../../slotera-booking.php', import.meta.url), 'utf8');
 const attributes = fs.readFileSync(new URL('../../.gitattributes', import.meta.url), 'utf8');
 const robots = fs.readFileSync(new URL('../../includes/Application/Services/RobotsTxtService.php', import.meta.url), 'utf8');
+const python = resolvePython();
+const runPython = (args, options = {}) => spawnSync(python.command, [...python.prefix, ...args], {
+  windowsHide: true,
+  ...options,
+});
 
 test('release payload excludes source QA and build tooling', () => {
   const excluded = new Set(manifest.archive.exclude);
@@ -92,7 +98,7 @@ test('fresh cross-platform worktrees produce the same install ZIP', { timeout: 6
       assert.equal(build.status, 0, build.stderr || build.stdout);
     }
     assert.equal(sha256(outLf), sha256(outCrlf));
-    const listing = spawnSync('python3', ['-c', "import sys,zipfile; print('\\n'.join(zipfile.ZipFile(sys.argv[1]).namelist()))", outLf], { encoding: 'utf8', env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' } });
+    const listing = runPython(['-c', "import sys,zipfile; print('\\n'.join(zipfile.ZipFile(sys.argv[1]).namelist()))", outLf], { encoding: 'utf8', env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' } });
     assert.equal(listing.status, 0, listing.stderr || listing.stdout);
     assert.doesNotMatch(listing.stdout, /^slotera-booking\/(?:tests|tools)\//m);
     assert.doesNotMatch(listing.stdout, /^slotera-booking\/(?:QA\.md|composer\.json|package\.json|pnpm-lock\.yaml)$/m);
@@ -117,7 +123,7 @@ test('canonical file reader collapses LF, CRLF and CR to identical bytes', () =>
     "c.write_bytes(b'one\\rtwo\\r')",
     'assert module.canonical_file_bytes(a) == module.canonical_file_bytes(b) == module.canonical_file_bytes(c)',
   ].join(';');
-  const result = spawnSync('python3', ['-c', script], { cwd: root, encoding: 'utf8', env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' } });
+  const result = runPython(['-c', script], { cwd: root, encoding: 'utf8', env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' } });
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 

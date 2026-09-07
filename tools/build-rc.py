@@ -115,7 +115,9 @@ def main() -> int:
     env.setdefault('SLTR_BUILD_COMMAND', f"node tools/build-rc.mjs --output ../{output.name} --source-date-epoch {args.source_date_epoch}")
     env['SLTR_SIGNING_STATUS'] = env.get('SLTR_SIGNING_STATUS', 'not-performed-release-candidate')
     capture_vcs(env)
-    subprocess.run(['node', 'tools/release-metadata.mjs', 'prepare'], cwd=ROOT, env=env, check=True)
+    # Release metadata is committed before the tag. Building must verify it
+    # without mutating the clean exact-tag source tree.
+    subprocess.run(['node', 'tools/release-metadata.mjs', 'verify'], cwd=ROOT, env=env, check=True)
 
     dt = time.gmtime(args.source_date_epoch)[:6]
     # Canonical archive bytes are produced by the in-tree fixed-Huffman DEFLATE

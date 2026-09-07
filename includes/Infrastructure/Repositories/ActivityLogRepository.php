@@ -15,7 +15,7 @@ final class ActivityLogRepository
     {
         global $wpdb;
         $table = Database::activity_log_table();
-        $payload = DataRedactor::payload($d['payload'] ?? []);
+        $payload = DataRedactor::activity_payload($d['payload'] ?? []);
         $gateway = sanitize_key((string) ($d['gateway'] ?? ($payload['gateway'] ?? ($payload['payment_gateway'] ?? ''))));
         $error = sanitize_textarea_field(DataRedactor::text((string) ($d['error_message'] ?? ($payload['error'] ?? ''))));
 

@@ -21,6 +21,9 @@ if (-not (Test-Path -LiteralPath (Split-Path -Parent $output) -PathType Containe
 
 $manifest = Get-Content -LiteralPath (Join-Path $pluginRoot 'release-manifest.json') -Raw | ConvertFrom-Json
 if ($manifest.schema -ne 'slotera-release-manifest/v2') { throw 'Unsupported release manifest schema.' }
+$provenance = Get-Content -LiteralPath (Join-Path $pluginRoot 'build-provenance.json') -Raw | ConvertFrom-Json
+$provenanceTimestamp = [DateTimeOffset]::Parse([string]$provenance.build.source_date_epoch_utc)
+$expectedSourceDateEpoch = $provenanceTimestamp.ToUnixTimeSeconds().ToString()
 
 if ($SourceArtifactPath) {
     $sourceArtifact = [System.IO.Path]::GetFullPath($SourceArtifactPath)
@@ -45,9 +48,14 @@ if (-not $expectedVcsTag) {
 }
 $env:SLTR_VCS_TAG = $expectedVcsTag
 if (-not $env:SOURCE_DATE_EPOCH) {
-    throw 'SOURCE_DATE_EPOCH is required for a reproducible release build.'
+    $env:SOURCE_DATE_EPOCH = $expectedSourceDateEpoch
+} elseif ([string]$env:SOURCE_DATE_EPOCH -ne $expectedSourceDateEpoch) {
+    throw "SOURCE_DATE_EPOCH does not match committed provenance. Expected $expectedSourceDateEpoch"
 }
 $entryTimestamp = [DateTimeOffset]::FromUnixTimeSeconds([long]$env:SOURCE_DATE_EPOCH)
+
+& $NodePath (Join-Path $PSScriptRoot 'release-gate.mjs') tag
+if ($LASTEXITCODE -ne 0) { throw 'Clean exact-tag mandatory QA failed.' }
 
 & $NodePath (Join-Path $PSScriptRoot 'build-rc.mjs') --output $output --source-date-epoch $env:SOURCE_DATE_EPOCH
 if ($LASTEXITCODE -ne 0) { throw 'Canonical release archive build failed.' }

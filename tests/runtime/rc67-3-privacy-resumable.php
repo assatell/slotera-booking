@@ -19,6 +19,15 @@ namespace {
         return true;
     }
 
+    function add_option(string $key, mixed $value, mixed $deprecated = '', mixed $autoload = null): bool
+    {
+        if (array_key_exists($key, $GLOBALS['sltr_test_options'])) {
+            return false;
+        }
+        $GLOBALS['sltr_test_options'][$key] = $value;
+        return true;
+    }
+
     function delete_option(string $key): bool
     {
         unset($GLOBALS['sltr_test_options'][$key]);
@@ -46,6 +55,7 @@ namespace {
     {
         /** @var array<int,array<string,mixed>> */
         public array $rows = [];
+        public int $fail_update_id = 0;
 
         public function prepare(string $query, mixed ...$args): string
         {
@@ -59,12 +69,21 @@ namespace {
         public function get_results(string $query, string $output): array
         {
             if (str_contains($query, 'ip_address IS NOT NULL') && str_contains($query, 'user_agent IS NOT NULL')) {
+                $unsafe = [];
                 foreach ($this->rows as $row) {
-                    if ((string) ($row['ip_address'] ?? '') !== '' || (string) ($row['user_agent'] ?? '') !== '') {
-                        return [['id' => $row['id']]];
+                    $payload = json_decode((string) ($row['payload_json'] ?? ''), true);
+                    $payload_unsafe = (string) ($row['payload_json'] ?? '') !== ''
+                        && (!is_array($payload) || (int) ($payload['_sltr_redaction_schema'] ?? 0) !== 2);
+                    if ((string) ($row['ip_address'] ?? '') !== '' || (string) ($row['user_agent'] ?? '') !== '' || $payload_unsafe) {
+                        $unsafe[] = $row;
                     }
                 }
-                return [];
+                usort($unsafe, static fn(array $a, array $b): int => ((int) $a['id']) <=> ((int) $b['id']));
+                if (str_contains($query, 'SELECT id, payload_json')) {
+                    preg_match('/LIMIT (\d+)/', $query, $mLimit);
+                    return array_slice($unsafe, 0, isset($mLimit[1]) ? (int) $mLimit[1] : 100);
+                }
+                return $unsafe === [] ? [] : [['id' => $unsafe[0]['id']]];
             }
 
             preg_match('/WHERE id > (\d+)/', $query, $mCursor);
@@ -103,6 +122,9 @@ namespace {
             array $whereFormat = []
         ): int|false {
             $id = (int) ($where['id'] ?? 0);
+            if ($this->fail_update_id === $id) {
+                return false;
+            }
 
             foreach ($this->rows as &$row) {
                 if ((int) $row['id'] !== $id) {
@@ -160,15 +182,13 @@ namespace {
 
     $migration::apply();
     assert_true(!$migration::is_complete(), 'migration must not complete after batch 1');
-    assert_true((int) get_option('sltr_migration_1043_activity_log_cursor', 0) === 100, 'cursor must be 100 after batch 1');
 
     $migration::apply();
     assert_true(!$migration::is_complete(), 'migration must not complete after batch 2');
-    assert_true((int) get_option('sltr_migration_1043_activity_log_cursor', 0) === 200, 'cursor must be 200 after batch 2');
 
     $migration::apply();
     assert_true($migration::is_complete(), 'migration must complete after batch 3');
-    assert_true(get_option('sltr_migration_1043_activity_log_cursor', null) === null, 'cursor must be removed after completion');
+    assert_true(get_option('sltr_migration_1043_activity_log_cursor', null) === null, 'legacy cursor must be removed after completion');
 
     foreach ($wpdb->rows as $row) {
         assert_true($row['ip_address'] === null, "row {$row['id']} raw ip_address must be cleared");
@@ -186,11 +206,42 @@ namespace {
     assert_true(($valid['ip_address'] ?? null) === '[redacted]', 'valid payload must redact ip_address');
     assert_true(($valid['user_agent'] ?? null) === '[redacted]', 'valid payload must redact user_agent');
     assert_true(($valid['safe'] ?? '') === 'row-1', 'non-sensitive payload data must be preserved');
+    assert_true(($valid['_sltr_redaction_schema'] ?? 0) === 2, 'redacted payload must carry schema v2');
 
     $wpdb->rows[0]['ip_address'] = '203.0.113.10';
     assert_true(!$migration::is_complete(), 'completion marker must fail closed when raw network data remains');
     $migration::apply();
     assert_true($migration::is_complete(), 'migration must repair raw network data even after a stale completion marker');
+
+    // A late update below the old cursor must invalidate the completion marker.
+    $wpdb->rows[0]['payload_json'] = wp_json_encode([
+        'nested' => ['customer_email' => 'late@example.test', 'safe' => 'kept'],
+    ]);
+    assert_true(!$migration::is_complete(), 'late payload without the current schema must invalidate completion');
+    $migration::apply();
+    assert_true($migration::is_complete(), 'late payload below the old cursor must be repaired');
+    $late = json_decode((string) $wpdb->rows[0]['payload_json'], true);
+    assert_true(($late['nested']['customer_email'] ?? null) === '[redacted]', 'nested late PII must be redacted');
+    assert_true(($late['nested']['safe'] ?? '') === 'kept', 'late payload safe data must survive');
+
+    // A live lease must prevent a concurrent worker from changing the corpus.
+    $wpdb->rows[1]['payload_json'] = wp_json_encode(['ip_address' => '192.0.2.9']);
+    update_option('sltr_migration_1043_activity_log_lease', wp_json_encode(['token' => 'other', 'expires' => time() + 60]), false);
+    $before_lease = $wpdb->rows[1]['payload_json'];
+    $migration::apply();
+    assert_true($wpdb->rows[1]['payload_json'] === $before_lease, 'concurrent worker must respect the active lease');
+    delete_option('sltr_migration_1043_activity_log_lease');
+
+    // A DB write failure must fail closed, retain diagnostics and resume later.
+    $wpdb->rows[2]['payload_json'] = wp_json_encode(['user_agent' => 'Late browser']);
+    $wpdb->fail_update_id = 3;
+    $migration::apply();
+    assert_true(!$migration::is_complete(), 'DB write failure must leave migration incomplete');
+    $diagnostics = get_option('sltr_migration_1043_activity_log_diagnostics', []);
+    assert_true((int) ($diagnostics['failures'] ?? 0) >= 1, 'DB failure must be recorded in diagnostics');
+    $wpdb->fail_update_id = 0;
+    $migration::apply();
+    assert_true($migration::is_complete(), 'migration must resume after a transient DB failure');
 
     echo "OK: RC67.3 privacy migration processed 205 rows in 3 bounded batches\n";
 }

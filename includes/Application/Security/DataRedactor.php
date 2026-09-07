@@ -9,6 +9,8 @@ if (!defined('ABSPATH')) { exit; }
 final class DataRedactor
 {
     private const REDACTED = '[redacted]';
+    public const ACTIVITY_PAYLOAD_SCHEMA_KEY = '_sltr_redaction_schema';
+    public const ACTIVITY_PAYLOAD_SCHEMA_VERSION = 2;
 
     /** @var string[] */
     private const SENSITIVE_KEY_PARTS = [
@@ -36,6 +38,23 @@ final class DataRedactor
     public static function payload($value)
     {
         return self::walk($value, 0);
+    }
+
+    /** @return array<mixed> */
+    public static function activity_payload($value): array
+    {
+        $redacted = self::payload($value);
+        if (!is_array($redacted)) {
+            $redacted = ['value' => $redacted];
+        }
+        $redacted[self::ACTIVITY_PAYLOAD_SCHEMA_KEY] = self::ACTIVITY_PAYLOAD_SCHEMA_VERSION;
+        return $redacted;
+    }
+
+    /** @param array<mixed> $payload */
+    public static function has_current_activity_schema(array $payload): bool
+    {
+        return (int) ($payload[self::ACTIVITY_PAYLOAD_SCHEMA_KEY] ?? 0) === self::ACTIVITY_PAYLOAD_SCHEMA_VERSION;
     }
 
     public static function text(string $value): string

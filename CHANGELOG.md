@@ -1,3 +1,13 @@
+## 1.0.1053 RC67.13 — Release integrity and privacy completion
+
+- Commit release provenance and checksums before tagging so clean exact-tag QA is read-only and self-contained.
+- Add cross-platform pre-tag/exact-tag release gates that run PHP and Node QA and reject dirty trees.
+- Revalidate activity-log `payload_json` against a versioned redaction schema with bounded batches, a concurrency lease and persistent diagnostics.
+- Resolve Python through the shared portable launcher in every release-hardening fixture.
+- Limit Fixed multi-day labels by Unicode characters without splitting UTF-8 sequences.
+- Point public `Powered by Slotera` attribution to the first-party `https://getslotera.com/` domain.
+- Document manual security-update delivery for release candidates; a signed automatic updater remains a production milestone.
+
 ## 1.0.1052 RC67.12 — Booking and Solo page UI polish
 
 - Center the calendar month navigation chevrons with theme-resistant SVG geometry.

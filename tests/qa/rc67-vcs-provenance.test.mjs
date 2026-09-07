@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (name) => fs.readFileSync(path.join(root, name), 'utf8');
 
-test('RC67 builder captures VCS before release metadata mutates generated files', () => {
+test('RC67 builder verifies committed metadata without mutating the exact tag', () => {
   const builder = read('tools/build-rc.py');
   const metadata = read('tools/release-metadata.mjs');
 
@@ -17,7 +17,8 @@ test('RC67 builder captures VCS before release metadata mutates generated files'
   assert.match(builder, /VCS-bound build requires a clean working tree/);
   assert.match(builder, /VCS-bound build requires SLTR_VCS_TAG/);
 
-  assert.match(metadata, /capture:\s*'pre-metadata'/);
+  assert.match(builder, /release-metadata\.mjs', 'verify'/);
+  assert.doesNotMatch(builder, /release-metadata\.mjs', 'prepare'/);
   assert.match(metadata, /SLTR_VCS_REQUIRED/);
 });
 
@@ -80,10 +81,10 @@ test('legacy sandbox builds remain source-archive compatible for reproducibility
     /VCS-bound build cannot use source-archive state/,
   );
 });
-test('RC67 Git source is direct provenance source while RC18 remains historical lineage', () => {
+test('RC67 committed provenance binds the future tag tree without commit self-reference', () => {
   const metadata = read('tools/release-metadata.mjs');
 
-  assert.match(metadata, /type:\s*'git'/);
+  assert.match(metadata, /type:\s*'git-tag-target'/);
   assert.match(metadata, /repository:\s*vcsPolicy\?\.repository/);
   assert.match(metadata, /lineage:\s*\{/);
   assert.match(metadata, /previous_source:\s*previousSource/);
@@ -100,11 +101,11 @@ test('RC67 Git source is direct provenance source while RC18 remains historical 
 
   assert.match(
     metadata,
-    /Git source commit does not match VCS provenance/,
+    /provenance release tree hash mismatch/,
   );
 
   assert.match(
     metadata,
-    /Git source tag does not match VCS provenance/,
+    /VCS-bound verification requires exact tag/,
   );
 });

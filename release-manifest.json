@@ -1,24 +1,25 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1052",
+  "version": "1.0.1053",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
-    "version": "2.6.1",
+    "version": "2.7.0",
     "runtime": "Node.js 20+, CPython 3.9+ (PYTHON override, py -3, python3, or python), in-tree deterministic fixed-Huffman DEFLATE writer, and Windows PowerShell 5.1+ or PowerShell 7+ for signed release packaging"
   },
   "source": {
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1052-rc67.12"
+    "tag": "v1.0.1053-rc67.13"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
     "root": "slotera-booking/",
     "exclude": [
       ".git/",
+      ".github/",
       "node_modules/",
       ".gitattributes",
       ".gitignore",
@@ -146,10 +147,11 @@
 "1.0.1050 RC67.10: make dynamic booking guidance and email price summaries follow the selected Appearance palette",
 "1.0.1050 RC67.10: make Windows PHP-runtime, CSS and attestation QA portable",
 "1.0.1051 RC67.11: preserve leading dots in exclusion normalization, remove repository dotfiles from the install ZIP and close exact-tag reproducibility",
-"1.0.1052 RC67.12: center calendar navigation, add Fixed multi-day labels, remove the obsolete package image control and replace Solo contact Open labels"
+"1.0.1052 RC67.12: center calendar navigation, add Fixed multi-day labels, remove the obsolete package image control and replace Solo contact Open labels",
+"1.0.1053 RC67.13: commit immutable release metadata, revalidate activity-log payload privacy, normalize Python discovery, preserve Unicode labels and correct the Slotera platform URL"
   ],
-  "release_notes": "RC67.12 polishes the booking calendar and Solo contact UI, adds package-level Fixed multi-day unit labels, and removes the obsolete Package page image control without clearing legacy data.",
-  "candidate": "RC67.12",
+  "release_notes": "RC67.13 makes clean exact-tag QA self-contained, strengthens activity-log payload privacy completion, removes hard-coded Python launchers, preserves Unicode day labels and points attribution to getslotera.com.",
+  "candidate": "RC67.13",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

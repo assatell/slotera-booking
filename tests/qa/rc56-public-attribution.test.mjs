@@ -20,7 +20,8 @@ test('RC57 public Slotera attribution is centered and vendor suppression works i
   assert.match(service, /public function public_attribution_visible\(\): bool/);
   assert.match(service, /return !\$this->hide_vendor_branding\(\);/);
   assert.match(service, /apply_filters\('sltr_platform_url', \$default\)/);
-  assert.match(service, /https:\/\/slotera\.app\//);
+  assert.match(service, /https:\/\/getslotera\.com\//);
+  assert.doesNotMatch(service, /slotera\.app/);
   assert.match(css, /\.sltr-platform-attribution \{[^}]*text-align:center;[^}]*font-size:12px;/);
   assert.match(service, /public function hide_vendor_branding\(\): bool[\s\S]*?return \(int\) \(\$this->settings\(\)\['white_label_hide_vendor_branding'\] \?\? 0\) === 1;/);
   assert.doesNotMatch(service, /hide_vendor_branding\(\): bool[\s\S]{0,180}\$this->enabled\(\)/);
