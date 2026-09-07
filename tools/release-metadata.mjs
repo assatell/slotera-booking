@@ -23,7 +23,7 @@ const textExtensions = new Set(['.css', '.html', '.ini', '.js', '.json', '.md', 
 const textFilenames = new Set(['CHANGELOG', 'LICENSE', 'README']);
 const archiveExclusions = (manifest.archive?.exclude || []).map((item) => String(item).replaceAll('\\', '/').replace(/^\.\//, ''));
 const vcsPolicy = manifest.source?.type === 'git' ? manifest.source : null;
-const vcsRequired = vcsPolicy?.required === true || process.env.SLTR_VCS_REQUIRED === '1';
+const vcsRequired = process.env.SLTR_VCS_REQUIRED === '1';
 const expectedVcsTag = String(vcsPolicy?.tag || process.env.SLTR_VCS_TAG || '').trim();
 const normalizedRelativePath = (absolute) => path.relative(root, absolute).replaceAll('\\', '/');
 const utf8PathCompare = (a, b) => Buffer.compare(Buffer.from(a, 'utf8'), Buffer.from(b, 'utf8'));
@@ -124,7 +124,8 @@ function runtimeInfo() {
 }
 
 function buildCommand() {
-  return process.env.SLTR_BUILD_COMMAND || `node tools/release-metadata.mjs ${process.argv[2] || 'verify'}`;
+  const candidate = String(manifest.candidate || '').toLowerCase();
+  return process.env.SLTR_BUILD_COMMAND || `powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath "C:\\Slotera\\Releases\\slotera-booking-${version}-${candidate}.zip" -SigningKeyPath "C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem" -NodePath "node"`;
 }
 
 function generatedAtUtc() {
@@ -191,7 +192,7 @@ function generateMetadata(syncState = null) {
   const releaseFiles = fileRecords();
   const releaseTreeSha256 = treeHash();
   const manifestSha256 = sha256(fs.readFileSync(manifestPath));
-  const vcs = detectVcs();
+  if (!expectedVcsTag) throw new Error('release manifest source tag is required');
   const lineageSource = manifest.lineage?.previous_source || {};
   const previousSource = {
     artifact: lineageSource.artifact || null,
@@ -201,23 +202,17 @@ function generateMetadata(syncState = null) {
     tree_sha256: lineageSource.tree_sha256 || null,
   };
 
-  const source = vcs.state === 'git-clean'
-    ? {
-        type: 'git',
-        repository: vcsPolicy?.repository || null,
-        commit: vcs.commit,
-        tag: vcs.tag,
-        dirty: vcs.dirty,
-      }
-    : {
-        type: 'archive',
-        ...previousSource,
-      };
+  const source = {
+    type: 'git-tag-target',
+    repository: vcsPolicy?.repository || null,
+    tag: expectedVcsTag,
+    release_tree_sha256: releaseTreeSha256,
+  };
   const canonicalBuildCommand = buildCommand();
   const sync = syncState || { before: releaseTreeSha256, after: releaseTreeSha256, targets: [] };
 
   const provenance = {
-    schema: 'slotera-build-provenance/v3',
+    schema: 'slotera-build-provenance/v4',
     version,
     candidate: manifest.candidate || null,
     channel: manifest.channel || 'production',
@@ -230,20 +225,24 @@ function generateMetadata(syncState = null) {
       declared_runtime: manifest.builder.runtime,
       runtime: runtimeInfo(),
     },
-    vcs,
+    vcs: {
+      repository: vcsPolicy?.repository || null,
+      expected_tag: expectedVcsTag,
+      binding: 'The clean exact tag and commit are verified at QA/build time; the actual commit is recorded in the detached signed attestation to avoid an in-commit self-reference.',
+    },
     source,
     lineage: {
       previous_source: previousSource,
     },
     build: {
       command: canonicalBuildCommand,
-      metadata_command: 'node tools/release-metadata.mjs prepare',
+      metadata_command: 'node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)',
       archive_root: manifest.archive?.root || 'slotera-booking/',
-      output: process.env.SLTR_BUILD_OUTPUT || `slotera-booking-${version}.zip`,
+      output: process.env.SLTR_BUILD_OUTPUT || `slotera-booking-${version}-${String(manifest.candidate || '').toLowerCase()}.zip`,
       source_date_epoch_utc: generatedAtUtc(),
     },
     hashes: {
-      source_artifact_sha256: source.type === 'archive' ? source.sha256 : null,
+      source_artifact_sha256: null,
       release_manifest_sha256: manifestSha256,
       pre_version_sync_tree_sha256: sync.before,
       release_tree_sha256: releaseTreeSha256,
@@ -291,7 +290,7 @@ function generateMetadata(syncState = null) {
         order: 6,
         name: 'archive-packaging',
         command: canonicalBuildCommand,
-        output: process.env.SLTR_BUILD_OUTPUT || `slotera-booking-${version}.zip`,
+        output: process.env.SLTR_BUILD_OUTPUT || `slotera-booking-${version}-${String(manifest.candidate || '').toLowerCase()}.zip`,
         signing_policy: {
           algorithm: manifest.signing?.algorithm || null,
           key_id: manifest.signing?.key_id || null,
@@ -333,31 +332,19 @@ function verify() {
   if (!firstChangelog || firstChangelog[1] !== candidate) throw new Error(`CHANGELOG top candidate does not match release manifest ${candidate}`);
 
   const provenance = JSON.parse(utf8('build-provenance.json'));
-  if (provenance.schema !== 'slotera-build-provenance/v3') throw new Error('Unexpected provenance schema');
+  if (provenance.schema !== 'slotera-build-provenance/v4') throw new Error('Unexpected provenance schema');
   if (provenance.version !== version || provenance.candidate !== manifest.candidate || provenance.release_manifest_sha256 !== sha256(fs.readFileSync(manifestPath))) throw new Error('provenance does not match release manifest');
   if (provenance.builder?.version !== builderVersion) throw new Error('provenance builder version mismatch');
-  if (!Object.hasOwn(provenance.vcs || {}, 'commit') || !Object.hasOwn(provenance.vcs || {}, 'tag')) throw new Error('provenance must contain commit/tag fields');
-
-  if (provenance.vcs?.state === 'git-clean') {
-    if (!/^[0-9a-f]{40}$/.test(String(provenance.vcs.commit || ''))) throw new Error('git-clean provenance must contain a full commit hash');
-    if (provenance.vcs.dirty !== false) throw new Error('git-clean provenance must record dirty=false');
-  }
-
+  if (provenance.vcs?.repository !== vcsPolicy?.repository || provenance.vcs?.expected_tag !== expectedVcsTag) throw new Error('provenance VCS target mismatch');
+  if (provenance.source?.type !== 'git-tag-target') throw new Error('VCS-bound provenance must use a Git tag target');
+  if (provenance.source?.repository !== vcsPolicy?.repository || provenance.source?.tag !== expectedVcsTag) throw new Error('provenance source target mismatch');
+  const currentTreeHash = treeHash();
+  if (provenance.source?.release_tree_sha256 !== currentTreeHash || provenance.hashes?.release_tree_sha256 !== currentTreeHash) throw new Error('provenance release tree hash mismatch');
   if (vcsRequired) {
-    if (provenance.vcs?.state !== 'git-clean') throw new Error('VCS-bound provenance must be git-clean');
-    if (!expectedVcsTag || provenance.vcs?.tag !== expectedVcsTag) throw new Error('VCS-bound provenance tag mismatch');
-    if (provenance.source?.type !== 'git') throw new Error('VCS-bound provenance must use Git as the direct source');
-    if (provenance.source?.repository !== vcsPolicy?.repository) throw new Error('VCS-bound provenance repository mismatch');
-  }
-
-  if (provenance.source?.type === 'archive') {
-    if (vcsRequired) throw new Error('Required VCS provenance cannot fall back to an archive source');
-    if (provenance.source?.sha256 !== manifest.lineage?.previous_source?.sha256) throw new Error('provenance lineage source hash mismatch');
-  } else if (provenance.source?.type === 'git') {
-    if (provenance.source?.commit !== provenance.vcs?.commit) throw new Error('Git source commit does not match VCS provenance');
-    if (provenance.source?.tag !== provenance.vcs?.tag) throw new Error('Git source tag does not match VCS provenance');
-  } else {
-    throw new Error('Unsupported provenance source type');
+    const actual = detectVcs();
+    if (actual.state !== 'git-clean' || actual.dirty !== false) throw new Error('VCS-bound verification requires a clean Git tree');
+    if (actual.tag !== expectedVcsTag) throw new Error(`VCS-bound verification requires exact tag ${expectedVcsTag}`);
+    if (!/^[0-9a-f]{40}$/.test(String(actual.commit || ''))) throw new Error('VCS-bound verification requires a full commit hash');
   }
   if (!Array.isArray(provenance.transformation_chain) || provenance.transformation_chain.length < 6) throw new Error('provenance transformation chain is incomplete');
   if (!provenance.build?.command) throw new Error('provenance exact build command is missing');
@@ -368,6 +355,10 @@ function verify() {
     if (!match) throw new Error(`Invalid checksums.sha256 line: ${line}`);
     return { sha256: match[1], path: match[2] };
   });
+  const expectedChecksumFiles = fileRecords();
+  const expectedPaths = [...expectedChecksumFiles.map((entry) => entry.path), 'build-provenance.json'].sort(utf8PathCompare);
+  const actualPaths = checksumEntries.map((entry) => entry.path).sort(utf8PathCompare);
+  if (JSON.stringify(actualPaths) !== JSON.stringify(expectedPaths)) throw new Error('checksums.sha256 file set does not match the release tree');
   for (const entry of checksumEntries) {
     const absolute = path.join(root, entry.path);
     if (!fs.existsSync(absolute) || sha256(canonicalFileData(absolute)) !== entry.sha256) throw new Error(`checksum mismatch: ${entry.path}`);

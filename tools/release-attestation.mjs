@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import childProcess from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const pluginRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -19,6 +20,13 @@ const generatedAtUtc = () => {
   return (raw !== '' ? new Date(Number(raw) * 1000) : new Date()).toISOString().replace(/\.\d{3}Z$/, 'Z');
 };
 const isSha256 = (value) => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
+const git = (args) => {
+  try {
+    return childProcess.execFileSync('git', args, { cwd: pluginRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+  } catch {
+    return '';
+  }
+};
 
 function assertSafeRelative(name) {
   if (typeof name !== 'string' || !name || name.includes('\\') || name.startsWith('/') || name.split('/').some((part) => part === '' || part === '.' || part === '..')) {
@@ -38,6 +46,9 @@ function validateAttestation(attestation, archivePath) {
   if (attestation.signature.salt_length !== 32) throw new Error('Attestation RSA-PSS salt length must be 32');
   if (typeof attestation.signature.key_id !== 'string' || !/^sha256:[0-9a-f]{64}$/.test(attestation.signature.key_id)) throw new Error('Attestation signing key ID is missing or invalid');
   if (!Array.isArray(attestation.materials) || attestation.materials.length !== REQUIRED_MATERIALS.length) throw new Error('Attestation must contain the complete required materials allowlist');
+  if (!attestation.source || attestation.source.type !== 'git') throw new Error('Attestation Git source binding is required');
+  if (!/^[0-9a-f]{40}$/.test(String(attestation.source.commit || ''))) throw new Error('Attestation source commit is invalid');
+  if (typeof attestation.source.tag !== 'string' || attestation.source.tag === '') throw new Error('Attestation source tag is missing');
   const materialNames = attestation.materials.map((m) => m?.name).sort();
   if (JSON.stringify(materialNames) !== JSON.stringify([...REQUIRED_MATERIALS].sort())) throw new Error('Attestation materials allowlist is incomplete or contains unexpected entries');
   for (const material of attestation.materials) {
@@ -72,10 +83,22 @@ function signRelease(archivePath, privatePath, attestationPath, signaturePath, p
   });
   const candidate = String(manifest.candidate || '');
   if (candidate && !path.basename(archivePath).toLowerCase().includes(candidate.toLowerCase())) throw new Error(`Archive filename does not contain manifest candidate ${candidate}`);
+  const sourceCommit = git(['rev-parse', 'HEAD']);
+  const sourceTag = git(['describe', '--tags', '--exact-match', 'HEAD']);
+  const sourceDirty = git(['status', '--porcelain']) !== '';
+  if (!sourceCommit || sourceDirty || sourceTag !== String(manifest.source?.tag || '')) throw new Error('Signing requires the clean exact manifest tag');
+  const provenance = JSON.parse(read(path.join(pluginRoot, 'build-provenance.json')));
   const attestation = {
     schema: ATTESTATION_SCHEMA,
     generated_at_utc: generatedAtUtc(),
     subject: { name: path.basename(archivePath), sha256: sha256(read(archivePath)) },
+    source: {
+      type: 'git',
+      repository: manifest.source?.repository || null,
+      commit: sourceCommit,
+      tag: sourceTag,
+      release_tree_sha256: provenance.hashes?.release_tree_sha256 || null,
+    },
     materials,
     signature: { algorithm: 'RSA-PSS-SHA256', key_id: keyId, salt_length: 32 },
   };

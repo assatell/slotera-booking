@@ -65,7 +65,7 @@ final class WhiteLabelService
 
     public function platform_url(): string
     {
-        $default = 'https://slotera.app/';
+        $default = 'https://getslotera.com/';
         $url = apply_filters('sltr_platform_url', $default);
         $url = is_string($url) ? esc_url_raw($url) : '';
         return $url !== '' ? $url : $default;

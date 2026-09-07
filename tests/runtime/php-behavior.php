@@ -56,6 +56,12 @@ require_once ABSPATH . 'includes/Application/Services/DateRangeInventoryService.
 require_once ABSPATH . 'includes/Application/Services/BookingAccessTokenService.php';
 require_once ABSPATH . 'includes/Application/Services/MarketingConsentService.php';
 require_once ABSPATH . 'includes/Application/Security/SecretStore.php';
+require_once ABSPATH . 'includes/Application/Support/UnicodeText.php';
+
+$unicodeBoundary = str_repeat('a', 59) . '🙂' . 'Ж';
+$unicodeLimited = \Slotera\Application\Support\UnicodeText::limit($unicodeBoundary, 60);
+assert_runtime($unicodeLimited === str_repeat('a', 59) . '🙂', 'Unicode label limit must preserve a complete multibyte character at the boundary.');
+assert_runtime(json_encode($unicodeLimited, JSON_UNESCAPED_UNICODE) !== false, 'Unicode label limit must preserve valid UTF-8.');
 
 if (\Slotera\Application\Security\SecretStore::encryption_available()) {
     $secretPlain = 'runtime-secret';

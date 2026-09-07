@@ -195,7 +195,9 @@ function verifyRelease(string $root): void {
     foreach(['builder','vcs','source','build','hashes','transformation_chain','release_manifest_sha256'] as $field) if(!array_key_exists($field, $provenanceMetadata)) fail('provenance field missing: '.$field);
     if(!preg_match('/^[a-f0-9]{64}  build-provenance\.json\r?$/m', (string) file_get_contents($root.'/checksums.sha256'))) fail('provenance is not included in checksum manifest');
     if((string) ($releaseManifest['schema'] ?? '') !== 'slotera-release-manifest/v2') fail('release manifest schema mismatch');
-    if((string) ($provenanceMetadata['schema'] ?? '') !== 'slotera-build-provenance/v3') fail('provenance schema mismatch');
+    if((string) ($provenanceMetadata['schema'] ?? '') !== 'slotera-build-provenance/v4') fail('provenance schema mismatch');
+    if((string) ($provenanceMetadata['candidate'] ?? '') !== (string) ($releaseManifest['candidate'] ?? '')) fail('release metadata candidate mismatch');
+    if((string) ($provenanceMetadata['source']['tag'] ?? '') !== (string) ($releaseManifest['source']['tag'] ?? '')) fail('release metadata tag mismatch');
     if((string) ($releaseManifest['signing']['algorithm'] ?? '') !== 'RSA-PSS-SHA256' || !preg_match('/^sha256:[a-f0-9]{64}$/', (string) ($releaseManifest['signing']['key_id'] ?? ''))) fail('release signing policy missing');
     ok('release contents verified');
 }

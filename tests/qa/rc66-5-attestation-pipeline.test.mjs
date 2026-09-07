@@ -27,15 +27,11 @@ test('release metadata binds current candidate identity and changelog top entry'
 
   assert.equal(provenance.version, manifest.version);
   assert.match(provenance.candidate, /^RC\d+(?:\.\d+)*$/);
-  assert.equal(provenance.schema, 'slotera-build-provenance/v3');
-
-  if (provenance.vcs?.state === 'git-clean') {
-    assert.equal(provenance.candidate, manifest.candidate);
-    assert.equal(provenance.builder.version, manifest.builder.version);
-  } else {
-    assert.equal(provenance.source?.sha256, manifest.lineage?.previous_source?.sha256);
-    assert.equal(provenance.source?.tree_sha256, manifest.lineage?.previous_source?.tree_sha256);
-  }
+  assert.equal(provenance.schema, 'slotera-build-provenance/v4');
+  assert.equal(provenance.candidate, manifest.candidate);
+  assert.equal(provenance.builder.version, manifest.builder.version);
+  assert.equal(provenance.source?.type, 'git-tag-target');
+  assert.equal(provenance.source?.tag, manifest.source.tag);
 });
 
 test('release attestation verifier is fail-closed and compares extracted tree to signed ZIP', () => {
@@ -60,6 +56,13 @@ test('release attestation verifier is fail-closed and compares extracted tree to
       schema: 'slotera-release-attestation/v1',
       generated_at_utc: '2026-08-16T15:21:00Z',
       subject: { name: path.basename(archive), sha256: sha256(fs.readFileSync(archive)) },
+      source: {
+        type: 'git',
+        repository: manifest.source.repository,
+        commit: spawnSync('git', ['rev-parse', 'HEAD'], { cwd: tree, encoding: 'utf8' }).stdout.trim(),
+        tag: manifest.source.tag,
+        release_tree_sha256: JSON.parse(fs.readFileSync(path.join(tree, 'build-provenance.json'), 'utf8')).hashes.release_tree_sha256,
+      },
       materials: materialNames.map((name) => ({ name, sha256: sha256(canonicalText(fs.readFileSync(path.join(tree, name)))) })),
       signature: { algorithm: 'RSA-PSS-SHA256', key_id: keyId, salt_length: 32 },
     };

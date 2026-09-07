@@ -130,26 +130,19 @@ test('release metadata has one version source and reproducible provenance', () =
   assert.match(build, new RegExp(`SLTR_BUILD_VERSION', '${manifest.version.replaceAll('.', '\\.')}`));
   assert.equal(pkg.version, manifest.version);
   assert.equal(provenance.version, manifest.version);
-  assert.equal(provenance.schema, 'slotera-build-provenance/v3');
+  assert.equal(provenance.schema, 'slotera-build-provenance/v4');
   assert.ok(Array.isArray(provenance.transformation_chain));
   assert.ok(provenance.transformation_chain.length >= 6);
   assert.ok(provenance.build.command);
-  assert.ok(Object.hasOwn(provenance.vcs, 'commit'));
-  assert.ok(Object.hasOwn(provenance.vcs, 'tag'));
+  assert.equal(provenance.vcs.expected_tag, manifest.source.tag);
   assert.ok(provenance.hashes.release_tree_sha256);
   assert.equal(manifest.schema, 'slotera-release-manifest/v2');
 
-  if (provenance.vcs?.state === 'git-clean') {
-    assert.equal(provenance.candidate, manifest.candidate);
-    assert.equal(provenance.builder.version, manifest.builder.version);
-    assert.equal(provenance.source?.type, 'git');
-    assert.equal(provenance.source?.commit, provenance.vcs.commit);
-    assert.equal(provenance.source?.tag, provenance.vcs.tag);
-    assert.equal(provenance.vcs?.dirty, false);
-  } else {
-    assert.equal(provenance.source?.sha256, manifest.lineage?.previous_source?.sha256);
-    assert.equal(provenance.source?.tree_sha256, manifest.lineage?.previous_source?.tree_sha256);
-  }
+  assert.equal(provenance.candidate, manifest.candidate);
+  assert.equal(provenance.builder.version, manifest.builder.version);
+  assert.equal(provenance.source?.type, 'git-tag-target');
+  assert.equal(provenance.source?.tag, manifest.source.tag);
+  assert.equal(provenance.source?.release_tree_sha256, provenance.hashes.release_tree_sha256);
 });
 
 test('release provenance is covered by an external signing workflow', () => {
