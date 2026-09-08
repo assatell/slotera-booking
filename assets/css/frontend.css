@@ -108,7 +108,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 18px;
     width: 100%;
     padding: 14px 16px;
     border: 1px dashed var(--sltr-card-border, #cbd5e1);
@@ -4386,7 +4386,7 @@ body.sltr-media-lightbox-open { overflow: hidden; }
     text-align: center;
 }
 .sltr-package-card-meta-row { min-height: 1.6em; margin: 0 0 10px; }
-.sltr-package-card-promo-row { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 4.2em; margin: 0 0 10px; text-align: center; }
+.sltr-package-card-promo-row { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 0; margin: 0 0 10px; text-align: center; }
 .sltr-package-card-price-row { min-height: 2.2em; margin: 0 0 10px; }
 .sltr-package-card-link-row { min-height: 2.7em; margin: 0 0 10px !important; }
 .sltr-package-card-meta-row.is-empty,
@@ -4418,6 +4418,9 @@ body.sltr-media-lightbox-open { overflow: hidden; }
 .sltr-packages-list .sltr-package-card .sltr-package-card-actions .sltr-select-button,
 #sltr-booking .sltr-step[data-step="1"] .sltr-package .sltr-package-card-actions .sltr-select-button {
     margin: 0 !important;
+    min-height: 46px;
+    padding: 12px 20px;
+    font-size: 1.05em;
 }
 .sltr-package-card-actions .sltr-package-info-button {
     flex: 0 0 auto;
@@ -4426,6 +4429,7 @@ body.sltr-media-lightbox-open { overflow: hidden; }
     min-width: calc(24px * var(--sltr-tooltip-size-ratio, 1.15));
     border: 1px solid currentColor;
     border-radius: 50%;
+    transform: translateX(4px);
 }
 .sltr-package-card-actions .sltr-package-info-button .sltr-tooltip-content {
     right: 0;

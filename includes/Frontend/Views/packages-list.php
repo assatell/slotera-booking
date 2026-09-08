@@ -212,7 +212,6 @@ $campaign_note_for_package = static function (array $package, array $active_mode
                     <div class="sltr-package-card-meta-row<?php echo $show_duration_for_package ? '' : ' is-empty'; ?>">
                         <?php if ($show_duration_for_package) : ?><p class="sltr-package-meta"><span aria-hidden="true">◷</span> <?php echo esc_html($format_duration($package['duration_minutes'] ?? 0)); ?></p><?php endif; ?>
                     </div>
-                    <div class="sltr-package-card-promo-row is-empty"></div>
                     <div class="sltr-package-card-price-row<?php echo $hide_price_on_frontend ? ' is-empty' : ''; ?>">
                         <?php if (!$hide_price_on_frontend) : ?>
                             <p class="sltr-package-price">
@@ -223,6 +222,7 @@ $campaign_note_for_package = static function (array $package, array $active_mode
                             </p>
                         <?php endif; ?>
                     </div>
+                    <div class="sltr-package-card-promo-row is-empty"></div>
                     <div class="sltr-package-card-link-row<?php echo (!empty($package['show_more_info']) && $package_url !== '#') ? '' : ' is-empty'; ?>">
                         <?php if (!empty($package['show_more_info']) && $package_url !== '#') : ?><a class="sltr-more-info-link" href="<?php echo esc_url($package_url); ?>"><?php echo esc_html(sltr_t('More info')); ?></a><?php endif; ?>
                     </div>

@@ -345,12 +345,6 @@ $get_date_flow = static function (array $package): string {
                             <?php if ($show_duration_for_package) : ?><span class="sltr-package-meta"><?php echo esc_html($format_duration($package['duration_minutes'] ?? 0)); ?></span><?php endif; ?>
                         </div>
 
-                        <div class="sltr-package-card-promo-row<?php echo ($campaign_note !== '' || (!$hide_price_on_frontend && ($dynamic_label_preview !== '' || $tax_amount_preview > 0))) ? '' : ' is-empty'; ?>">
-                            <?php if ($campaign_note !== '') : ?><span class="sltr-urgency-note"><?php echo esc_html($campaign_note); ?></span><?php endif; ?>
-                            <?php if (!$hide_price_on_frontend && $dynamic_label_preview !== '') : ?><span class="sltr-dynamic-offer-note"><?php echo esc_html($dynamic_label_preview); ?></span><?php endif; ?>
-                            <?php if (!$hide_price_on_frontend && $tax_amount_preview > 0) : ?><span class="sltr-tax-note"><?php echo esc_html(sprintf(sltr_t('%s included in total'), $tax_label_preview)); ?></span><?php endif; ?>
-                        </div>
-
                         <div class="sltr-package-card-price-row<?php echo $hide_price_on_frontend ? ' is-empty' : ''; ?>">
                         <?php if (!$hide_price_on_frontend) : ?><span class="sltr-package-price">
                             <?php if ($booking_mode === 'simple' && $simple_price_mode === 'request') : ?>
@@ -365,6 +359,11 @@ $get_date_flow = static function (array $package): string {
                             <?php endif; ?>
                         </span>
                         <?php endif; ?>
+                        </div>
+                        <div class="sltr-package-card-promo-row<?php echo ($campaign_note !== '' || (!$hide_price_on_frontend && ($dynamic_label_preview !== '' || $tax_amount_preview > 0))) ? '' : ' is-empty'; ?>">
+                            <?php if ($campaign_note !== '') : ?><span class="sltr-urgency-note"><?php echo esc_html($campaign_note); ?></span><?php endif; ?>
+                            <?php if (!$hide_price_on_frontend && $dynamic_label_preview !== '') : ?><span class="sltr-dynamic-offer-note"><?php echo esc_html($dynamic_label_preview); ?></span><?php endif; ?>
+                            <?php if (!$hide_price_on_frontend && $tax_amount_preview > 0) : ?><span class="sltr-tax-note"><?php echo esc_html(sprintf(sltr_t('%s included in total'), $tax_label_preview)); ?></span><?php endif; ?>
                         </div>
                         <div class="sltr-package-card-link-row<?php echo (!empty($package['show_more_info']) && $package_url !== '') ? '' : ' is-empty'; ?>">
                             <?php if (!empty($package['show_more_info']) && $package_url !== '') : ?>

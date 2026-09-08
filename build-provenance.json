@@ -3,7 +3,7 @@
   "version": "1.0.1055",
   "candidate": "RC67.15",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-08T16:53:38Z",
+  "generated_at_utc": "2026-09-08T17:31:42Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
   "release_manifest_sha256": "8bd66173fbf8eebb55881ef9c0c695b3cac2f40f9bb088c31b591d4248026686",
   "builder": {
@@ -24,7 +24,7 @@
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
     "tag": "v1.0.1055-rc67.15",
-    "release_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596"
+    "release_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e"
   },
   "lineage": {
     "previous_source": {
@@ -40,13 +40,13 @@
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
     "output": "slotera-booking-1.0.1055-rc67.15.zip",
-    "source_date_epoch_utc": "2026-09-08T16:53:38Z"
+    "source_date_epoch_utc": "2026-09-08T17:31:42Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
     "release_manifest_sha256": "8bd66173fbf8eebb55881ef9c0c695b3cac2f40f9bb088c31b591d4248026686",
-    "pre_version_sync_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596",
-    "release_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596"
+    "pre_version_sync_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e",
+    "release_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e"
   },
   "transformation_chain": [
     {
@@ -61,7 +61,7 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596",
+      "output_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e",
       "changes_manifest_sha256": "8bd66173fbf8eebb55881ef9c0c695b3cac2f40f9bb088c31b591d4248026686",
       "latest_change": "1.0.1055 RC67.15: align package card rows, restore light calendar chevrons and use full-screen Solo media",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
@@ -70,8 +70,8 @@
       "order": 3,
       "name": "manifest-version-sync",
       "version": "1.0.1055",
-      "input_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596",
-      "output_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596",
+      "input_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e",
+      "output_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e",
       "generated_targets": [
         "slotera-booking.php:update-uri-bound",
         "slotera-booking.php:plugin-header",
@@ -87,7 +87,7 @@
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "66258e6a361590da2fee5d681547de36f8fdcbc1a0b3eab5ce7c02eee0f05596",
+      "output_tree_sha256": "e1eef9d8570c90e8e580ef566d3c8b95788cfcc1ff8ade39a8aa3cbd82d3cd8e",
       "file_count": 393
     },
     {

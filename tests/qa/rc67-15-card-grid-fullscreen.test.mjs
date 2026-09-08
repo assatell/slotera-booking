@@ -26,13 +26,16 @@ test('package cards use stable semantic rows and put info beside the CTA', () =>
     assert.match(view, /sltr-package-card-price-row/);
     assert.match(view, /sltr-package-card-link-row/);
     assert.match(view, /sltr-package-card-actions[\s\S]*?sltr-select-button[\s\S]*?sltr-package-info-button/);
+    assert.ok(view.indexOf('sltr-package-card-price-row') < view.indexOf('sltr-package-card-promo-row'));
   }
   assert.match(css, /Canonical package-card row grid/);
   assert.match(css, /grid-auto-rows: 1fr/);
   assert.match(css, /\.sltr-package\.sltr-package-card \{[\s\S]*?height: 100%/);
   assert.match(css, /\.sltr-package-card-promo-row\.is-empty \{\s*display: none;/);
+  assert.match(css, /\.sltr-package-card-promo-row \{[^}]*min-height: 0;/);
   assert.match(css, /\.sltr-package-card-link-row \{ min-height: 2\.7em/);
   assert.match(css, /\.sltr-package-card-actions \.sltr-package-info-button/);
+  assert.match(css, /gap: 18px;[\s\S]*?min-height: 46px;[\s\S]*?transform: translateX\(4px\);/);
 });
 
 test('Solo images request full screen and autoplay video has no custom sound button', () => {
