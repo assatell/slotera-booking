@@ -4390,11 +4390,13 @@ body.sltr-media-lightbox-open { overflow: hidden; }
 .sltr-package-card-price-row { min-height: 2.2em; margin: 0 0 10px; }
 .sltr-package-card-link-row { min-height: 2.7em; margin: 0 0 10px !important; }
 .sltr-package-card-meta-row.is-empty,
-.sltr-package-card-promo-row.is-empty,
 .sltr-package-card-price-row.is-empty,
 .sltr-package-card-link-row.is-empty {
     visibility: hidden;
     pointer-events: none;
+}
+.sltr-package-card-promo-row.is-empty {
+    display: none;
 }
 .sltr-package-card-meta-row .sltr-package-meta,
 .sltr-package-card-price-row .sltr-package-price {
