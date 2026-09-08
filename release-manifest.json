@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1053",
+  "version": "1.0.1054",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1053-rc67.13"
+    "tag": "v1.0.1054-rc67.14"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -148,10 +148,11 @@
 "1.0.1050 RC67.10: make Windows PHP-runtime, CSS and attestation QA portable",
 "1.0.1051 RC67.11: preserve leading dots in exclusion normalization, remove repository dotfiles from the install ZIP and close exact-tag reproducibility",
 "1.0.1052 RC67.12: center calendar navigation, add Fixed multi-day labels, remove the obsolete package image control and replace Solo contact Open labels",
-"1.0.1053 RC67.13: commit immutable release metadata, revalidate activity-log payload privacy, normalize Python discovery, preserve Unicode labels and correct the Slotera platform URL"
+"1.0.1053 RC67.13: commit immutable release metadata, revalidate activity-log payload privacy, normalize Python discovery, preserve Unicode labels and correct the Slotera platform URL",
+"1.0.1054 RC67.14: replace substring payload checks with structural redaction and an indexed per-row migration invariant"
   ],
-  "release_notes": "RC67.13 makes clean exact-tag QA self-contained, strengthens activity-log payload privacy completion, removes hard-coded Python launchers, preserves Unicode day labels and points attribution to getslotera.com.",
-  "candidate": "RC67.13",
+  "release_notes": "RC67.14 structurally validates activity-log payloads, migrates them through an indexed per-row schema state in bounded background batches, and covers marker-bypass, malformed-data, concurrency and failure cases.",
+  "candidate": "RC67.14",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

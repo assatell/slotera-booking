@@ -346,6 +346,7 @@ final class DatabaseSchemaInstaller
             message TEXT NULL,
             error_message TEXT NULL,
             payload_json LONGTEXT NULL,
+            redaction_schema_version TINYINT UNSIGNED NOT NULL DEFAULT 0,
             ip_address VARCHAR(100) NULL,
             user_agent VARCHAR(255) NULL,
             created_at DATETIME NOT NULL,
@@ -357,7 +358,8 @@ final class DatabaseSchemaInstaller
             KEY created_at (created_at),
             KEY sltr_activity_object_created (object_type,object_id,created_at),
             KEY sltr_activity_event_created (event,created_at),
-            KEY sltr_activity_status_created (status,created_at)
+            KEY sltr_activity_status_created (status,created_at),
+            KEY sltr_activity_redaction_schema (redaction_schema_version,id)
         ) {$charset};";
         $sql_history="CREATE TABLE {$history} (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

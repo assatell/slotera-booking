@@ -17,10 +17,17 @@ final class Version_1_0_1043 implements MigrationInterface
     private const DIAGNOSTICS_OPTION = 'sltr_migration_1043_activity_log_diagnostics';
     private const LEASE_OPTION = 'sltr_migration_1043_activity_log_lease';
     private const LEASE_TTL_SECONDS = 120;
+    private const CRON_HOOK = 'sltr_activity_log_redaction_batch';
+    private const MAX_BATCH_SECONDS = 2.0;
 
     public static function apply(): void
     {
         if (self::is_complete()) {
+            return;
+        }
+
+        if (!self::is_background_context()) {
+            self::schedule_next_batch();
             return;
         }
 
@@ -41,17 +48,14 @@ final class Version_1_0_1043 implements MigrationInterface
         global $wpdb;
 
         $table = Database::activity_log_table();
-        $schema_fragment = '%"' . DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_KEY . '":' . DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_VERSION . '%';
         $rows = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT id, payload_json, ip_address, user_agent
+                "SELECT id, payload_json, ip_address, user_agent, redaction_schema_version
                  FROM {$table}
-                 WHERE (ip_address IS NOT NULL AND CAST(ip_address AS CHAR) <> '')
-                    OR (user_agent IS NOT NULL AND CAST(user_agent AS CHAR) <> '')
-                    OR (payload_json IS NOT NULL AND payload_json <> '' AND payload_json NOT LIKE %s)
+                 WHERE redaction_schema_version <> %d
                  ORDER BY id ASC
                  LIMIT %d",
-                $schema_fragment,
+                DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_VERSION,
                 self::BATCH_SIZE
             ),
             ARRAY_A
@@ -65,8 +69,13 @@ final class Version_1_0_1043 implements MigrationInterface
         $last_id = 0;
         $redacted_count = 0;
         $malformed_count = 0;
+        $processed_count = 0;
+        $deadline = microtime(true) + self::MAX_BATCH_SECONDS;
 
         foreach ($rows as $row) {
+            if ($processed_count > 0 && microtime(true) >= $deadline) {
+                break;
+            }
             $id = (int) ($row['id'] ?? 0);
             if ($id <= $last_id) {
                 continue;
@@ -104,7 +113,20 @@ final class Version_1_0_1043 implements MigrationInterface
                     $updates['payload_json'] = $encoded;
                     $formats[] = '%s';
                 }
+            } else {
+                $encoded = wp_json_encode(DataRedactor::activity_payload([]));
+                if (!is_string($encoded) || $encoded === '') {
+                    self::record_diagnostics(count($rows), $redacted_count, $malformed_count, 1, $last_id, false);
+                    return;
+                }
+                $updates['payload_json'] = $encoded;
+                $formats[] = '%s';
             }
+
+            // This indexed marker is written only after structural decoding and
+            // privacy redaction, in the same row update as the sanitized data.
+            $updates['redaction_schema_version'] = DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_VERSION;
+            $formats[] = '%d';
 
             if ($updates !== []) {
                 $updated = $wpdb->update($table, $updates, ['id' => $id], $formats, ['%d']);
@@ -116,10 +138,12 @@ final class Version_1_0_1043 implements MigrationInterface
             }
 
             $last_id = $id;
+            ++$processed_count;
         }
 
-        if (count($rows) === self::BATCH_SIZE) {
-            self::record_diagnostics(count($rows), $redacted_count, $malformed_count, 0, $last_id, false);
+        if ($processed_count < count($rows) || count($rows) === self::BATCH_SIZE) {
+            self::record_diagnostics($processed_count, $redacted_count, $malformed_count, 0, $last_id, false);
+            self::schedule_next_batch();
             return;
         }
 
@@ -127,6 +151,7 @@ final class Version_1_0_1043 implements MigrationInterface
             delete_option(self::CURSOR_OPTION);
             delete_option(self::COMPLETE_OPTION);
             self::record_diagnostics(count($rows), $redacted_count, $malformed_count, 0, $last_id, false);
+            self::schedule_next_batch();
             return;
         }
 
@@ -134,6 +159,9 @@ final class Version_1_0_1043 implements MigrationInterface
         // Remove the cursor used by pre-schema releases. Selection is now based
         // on the per-row redaction schema, so late low-ID rows cannot be missed.
         delete_option(self::CURSOR_OPTION);
+        if (function_exists('wp_clear_scheduled_hook')) {
+            wp_clear_scheduled_hook(self::CRON_HOOK);
+        }
         self::record_diagnostics(count($rows), $redacted_count, $malformed_count, 0, $last_id, true);
     }
 
@@ -147,22 +175,36 @@ final class Version_1_0_1043 implements MigrationInterface
         global $wpdb;
 
         $table = Database::activity_log_table();
-        $schema_fragment = '%"' . DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_KEY . '":' . DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_VERSION . '%';
-        $unsafe = $wpdb->get_results(
+        $unsafe = $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT id
                  FROM {$table}
-                 WHERE (ip_address IS NOT NULL AND CAST(ip_address AS CHAR) <> '')
-                    OR (user_agent IS NOT NULL AND CAST(user_agent AS CHAR) <> '')
-                    OR (payload_json IS NOT NULL AND payload_json <> '' AND payload_json NOT LIKE %s)
+                 WHERE redaction_schema_version <> %d
                  ORDER BY id ASC
                  LIMIT 1",
-                $schema_fragment
-            ),
-            ARRAY_A
+                DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_VERSION
+            )
         );
 
-        return is_array($unsafe) && $unsafe === [];
+        return $unsafe === null;
+    }
+
+    private static function schedule_next_batch(): void
+    {
+        if (!function_exists('wp_next_scheduled') || !function_exists('wp_schedule_single_event')) {
+            return;
+        }
+        if (!wp_next_scheduled(self::CRON_HOOK)) {
+            wp_schedule_single_event(time() + 60, self::CRON_HOOK);
+        }
+    }
+
+    private static function is_background_context(): bool
+    {
+        if (defined('WP_CLI') && WP_CLI) {
+            return true;
+        }
+        return function_exists('wp_doing_cron') && wp_doing_cron();
     }
 
     private static function acquire_lease(): string

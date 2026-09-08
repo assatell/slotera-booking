@@ -30,6 +30,7 @@ final class ActivityLogRepository
             'message' => sanitize_text_field(DataRedactor::text((string) ($d['message'] ?? ''))),
             'error_message' => $error,
             'payload_json' => wp_json_encode($payload),
+            'redaction_schema_version' => DataRedactor::ACTIVITY_PAYLOAD_SCHEMA_VERSION,
             'ip_address' => null,
             'user_agent' => null,
             'created_at' => current_time('mysql'),
