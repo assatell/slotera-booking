@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1054",
+  "version": "1.0.1055",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1054-rc67.14"
+    "tag": "v1.0.1055-rc67.15"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -149,10 +149,11 @@
 "1.0.1051 RC67.11: preserve leading dots in exclusion normalization, remove repository dotfiles from the install ZIP and close exact-tag reproducibility",
 "1.0.1052 RC67.12: center calendar navigation, add Fixed multi-day labels, remove the obsolete package image control and replace Solo contact Open labels",
 "1.0.1053 RC67.13: commit immutable release metadata, revalidate activity-log payload privacy, normalize Python discovery, preserve Unicode labels and correct the Slotera platform URL",
-"1.0.1054 RC67.14: replace substring payload checks with structural redaction and an indexed per-row migration invariant"
+"1.0.1054 RC67.14: replace substring payload checks with structural redaction and an indexed per-row migration invariant",
+"1.0.1055 RC67.15: align package card rows, restore light calendar chevrons and use full-screen Solo media"
   ],
-  "release_notes": "RC67.14 structurally validates activity-log payloads, migrates them through an indexed per-row schema state in bounded background batches, and covers marker-bypass, malformed-data, concurrency and failure cases.",
-  "candidate": "RC67.14",
+  "release_notes": "RC67.15 gives package cards stable semantic rows, moves package information beside the booking CTA, restores visible calendar chevrons in light presets, opens Solo images full screen and removes the custom video sound button.",
+  "candidate": "RC67.15",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

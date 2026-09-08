@@ -38,10 +38,18 @@
     function closeLightbox() {
         var existing = document.querySelector('.sltr-gallery-lightbox');
         if (existing) {
+            existing.setAttribute('data-sltr-closing', '1');
             existing.classList.add('is-closing');
-            window.setTimeout(function () {
+            var remove = function () {
                 if (existing.parentNode) existing.parentNode.removeChild(existing);
-            }, 180);
+            };
+            if (document.fullscreenElement && existing.contains(document.fullscreenElement) && document.exitFullscreen) {
+                document.exitFullscreen().catch(function () {}).then(function () {
+                    window.setTimeout(remove, 180);
+                });
+            } else {
+                window.setTimeout(remove, 180);
+            }
         }
         if (document.body) document.body.classList.remove('sltr-gallery-lightbox-open');
     }
@@ -52,7 +60,7 @@
         return text;
     }
 
-    function openLightbox(src, alt) {
+    function openFullscreen(src, alt) {
         if (!src) return;
         var old = document.querySelector('.sltr-gallery-lightbox');
         if (old && old.parentNode) old.parentNode.removeChild(old);
@@ -81,6 +89,12 @@
         document.body.appendChild(overlay);
         document.body.classList.add('sltr-gallery-lightbox-open');
         window.requestAnimationFrame(function () { overlay.classList.add('is-open'); });
+        if (overlay.requestFullscreen) {
+            overlay.setAttribute('data-sltr-native-fullscreen', '1');
+            overlay.requestFullscreen().catch(function () {
+                overlay.removeAttribute('data-sltr-native-fullscreen');
+            });
+        }
     }
 
     function getActiveIndex(slides) {
@@ -186,7 +200,7 @@
         event.preventDefault();
         event.stopPropagation();
         if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-        openLightbox(src, img ? img.getAttribute('alt') : '');
+        openFullscreen(src, img ? img.getAttribute('alt') : '');
         return true;
     }
 
@@ -228,6 +242,13 @@
 
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape') closeLightbox();
+    });
+
+    document.addEventListener('fullscreenchange', function () {
+        var overlay = document.querySelector('.sltr-gallery-lightbox[data-sltr-native-fullscreen="1"]');
+        if (overlay && !document.fullscreenElement && overlay.getAttribute('data-sltr-closing') !== '1') {
+            closeLightbox();
+        }
     });
 
     if (document.readyState === 'loading') {

@@ -1,3 +1,11 @@
+## 1.0.1055 RC67.15 — Card alignment and Solo full-screen media
+
+- Keep calendar month chevrons visible against every built-in light preset.
+- Give package title, duration, promotion, price, More info and action controls stable card rows.
+- Move the package information tooltip to the right of the booking button.
+- Replace Solo image zoom with native full-screen presentation and a safe overlay fallback.
+- Remove the custom `Turn on sound` control while retaining the browser's native video controls.
+
 ## 1.0.1054 RC67.14 — Indexed activity-log privacy migration
 
 - Replace substring JSON marker detection with strict top-level integer schema validation.

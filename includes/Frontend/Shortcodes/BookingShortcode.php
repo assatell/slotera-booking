@@ -534,7 +534,6 @@ public function render_packages(array $atts = []): string
                         <source src="<?php echo esc_url($video_url); ?>" type="<?php echo esc_attr($video_mime); ?>">
                         <?php esc_html_e('Your browser does not support this video.', 'slotera-booking'); ?>
                     </video>
-                    <?php if ($video_autoplay) : ?><button type="button" class="sltr-package-video-unmute" data-sltr-video-unmute aria-label="<?php esc_attr_e('Turn on sound', 'slotera-booking'); ?>"><span aria-hidden="true">🔊</span><span><?php esc_html_e('Turn on sound', 'slotera-booking'); ?></span></button><?php endif; ?>
                 </div>
                 <?php
                 return (string) ob_get_clean();
@@ -588,7 +587,7 @@ public function render_packages(array $atts = []): string
                         $focus = $focus_x . '% ' . $focus_y . '%';
                         ?>
                         <img src="<?php echo esc_url($slide['large']); ?>" alt="<?php echo esc_attr($slide['alt']); ?>" loading="lazy" data-focus-x="<?php echo esc_attr((string) $focus_x); ?>" data-focus-y="<?php echo esc_attr((string) $focus_y); ?>" style="<?php echo esc_attr('object-position:' . $focus . ' !important;'); ?>">
-                        <span class="sltr-media-zoom-icon" aria-hidden="true">⌕</span>
+                        <span class="sltr-media-fullscreen-icon" aria-hidden="true">⛶</span>
                     </button>
                 <?php endforeach; ?>
             </div>
@@ -660,7 +659,7 @@ public function render_packages(array $atts = []): string
             <?php foreach ($items as $item) : ?>
                 <button type="button" class="sltr-package-gallery-item" data-full="<?php echo esc_url($item['full']); ?>" aria-label="<?php esc_attr_e('Open image preview', 'slotera-booking'); ?>">
                     <img src="<?php echo esc_url($item['large']); ?>" alt="<?php echo esc_attr($item['alt']); ?>" loading="lazy" style="--sltr-image-focus:<?php $fp=array_map('intval',explode(',',$item['focus'])); echo esc_attr(max(0,min(100,$fp[0]??50)).'% '.max(0,min(100,$fp[1]??50)).'%'); ?>">
-                    <span class="sltr-media-zoom-icon" aria-hidden="true">⌕</span>
+                    <span class="sltr-media-fullscreen-icon" aria-hidden="true">⛶</span>
                 </button>
             <?php endforeach; ?>
         </div>

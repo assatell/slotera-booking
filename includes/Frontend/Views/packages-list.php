@@ -202,22 +202,18 @@ $campaign_note_for_package = static function (array $package, array $active_mode
                     <span><?php if ($discount_badge !== '') : ?><span class="sltr-badge-discount"><?php echo esc_html($discount_badge); ?></span><?php endif; ?></span>
                     <span><?php if (!empty($package['is_popular'])) : ?><?php $popular_icons = ['star' => '★', 'fire' => '🔥', 'crown' => '♛', 'heart' => '♥', 'bolt' => '⚡']; $popular_glyph = $popular_icons[(string) ($package['popular_icon'] ?? 'star')] ?? '★'; ?><span class="sltr-badge-popular sltr-badge-popular-icon" style="--sltr-featured-icon-color:<?php echo esc_attr(sanitize_hex_color((string) ($package['popular_icon_color'] ?? '#7c3aed')) ?: '#7c3aed'); ?>;--sltr-featured-icon-size:<?php echo esc_attr((string) max(16, min(48, (int) ($package['popular_icon_size'] ?? 24)))); ?>px" aria-label="<?php echo esc_attr(sltr_t('Featured package')); ?>"><span aria-hidden="true"><?php echo esc_html($popular_glyph); ?></span></span><?php endif; ?></span>
                 </div>
-                <?php if ($card_image_url) : ?>
-                    <div class="sltr-package-card-media"><img src="<?php echo esc_url($card_image_url); ?>" alt="<?php echo esc_attr((string) ($package['title'] ?? '')); ?>" loading="lazy" style="--sltr-image-focus:<?php echo esc_attr($card_focus); ?>;object-position:var(--sltr-image-focus)"></div>
-                <?php endif; ?>
+                <div class="sltr-package-card-media<?php echo $card_image_url ? '' : ' is-empty'; ?>"<?php echo $card_image_url ? '' : ' aria-hidden="true"'; ?>>
+                    <?php if ($card_image_url) : ?><img src="<?php echo esc_url($card_image_url); ?>" alt="<?php echo esc_attr((string) ($package['title'] ?? '')); ?>" loading="lazy" style="--sltr-image-focus:<?php echo esc_attr($card_focus); ?>;object-position:var(--sltr-image-focus)"><?php endif; ?>
+                </div>
                 <div class="sltr-package-card-body">
                     <div class="sltr-package-title-row">
-                        <?php if (!empty($package['info_tooltip'])) : ?>
-                            <button type="button" class="sltr-package-info-button" style="--sltr-tooltip-size-ratio:<?php echo esc_attr((string) max(0.8, min(2.0, (float) ($package['tooltip_size_ratio'] ?? 1.15)))); ?>;--sltr-tooltip-text-size:<?php echo esc_attr((string) max(10, min(24, (int) ($package['tooltip_text_size'] ?? 13)))); ?>px;" aria-label="<?php echo esc_attr(sltr_t('Package information')); ?>"><span aria-hidden="true">i</span><span class="sltr-tooltip-content" role="tooltip"><?php echo esc_html(wp_strip_all_tags((string) $package['info_tooltip'])); ?></span></button>
-                        <?php endif; ?>
                         <h3 style="<?php echo esc_attr(trim(((string) ($package['title_font_family'] ?? '') !== '' ? 'font-family:' . (string) $package['title_font_family'] . ';' : '') . 'font-size:' . (string) max(12, min(48, (int) (($package['title_font_size'] ?? 24) ?: 24))) . 'px;')); ?>"><?php echo esc_html($package['title'] ?? ''); ?></h3>
                     </div>
-                    <?php if (!empty($package['show_more_info']) && $package_url !== '#') : ?>
-                        <div class="sltr-package-card-link-row">
-                            <a class="sltr-more-info-link" href="<?php echo esc_url($package_url); ?>"><?php echo esc_html(sltr_t('More info')); ?></a>
-                        </div>
-                    <?php endif; ?>
-                    <div class="sltr-package-card-facts">
+                    <div class="sltr-package-card-meta-row<?php echo $show_duration_for_package ? '' : ' is-empty'; ?>">
+                        <?php if ($show_duration_for_package) : ?><p class="sltr-package-meta"><span aria-hidden="true">◷</span> <?php echo esc_html($format_duration($package['duration_minutes'] ?? 0)); ?></p><?php endif; ?>
+                    </div>
+                    <div class="sltr-package-card-promo-row is-empty"></div>
+                    <div class="sltr-package-card-price-row<?php echo $hide_price_on_frontend ? ' is-empty' : ''; ?>">
                         <?php if (!$hide_price_on_frontend) : ?>
                             <p class="sltr-package-price">
                             <?php if ($booking_mode === 'simple' && $simple_price_mode === 'request') : ?><b><?php echo esc_html(sltr_t('Price on request')); ?></b>
@@ -226,10 +222,15 @@ $campaign_note_for_package = static function (array $package, array $active_mode
                             <?php else : ?><b><?php echo esc_html($format_price_with_unit($final_price, $display_price_unit)); ?></b><?php endif; ?>
                             </p>
                         <?php endif; ?>
-                        <?php if ($show_duration_for_package) : ?><p class="sltr-package-meta"><span aria-hidden="true">◷</span> <?php echo esc_html($format_duration($package['duration_minutes'] ?? 0)); ?></p><?php endif; ?>
+                    </div>
+                    <div class="sltr-package-card-link-row<?php echo (!empty($package['show_more_info']) && $package_url !== '#') ? '' : ' is-empty'; ?>">
+                        <?php if (!empty($package['show_more_info']) && $package_url !== '#') : ?><a class="sltr-more-info-link" href="<?php echo esc_url($package_url); ?>"><?php echo esc_html(sltr_t('More info')); ?></a><?php endif; ?>
                     </div>
                     <div class="sltr-package-card-actions">
                         <a class="sltr-button sltr-select-button" href="<?php echo esc_url($booking_url); ?>"><?php echo esc_html($cta_label); ?></a>
+                        <?php if (!empty($package['info_tooltip'])) : ?>
+                            <button type="button" class="sltr-package-info-button" style="--sltr-tooltip-size-ratio:<?php echo esc_attr((string) max(0.8, min(2.0, (float) ($package['tooltip_size_ratio'] ?? 1.15)))); ?>;--sltr-tooltip-text-size:<?php echo esc_attr((string) max(10, min(24, (int) ($package['tooltip_text_size'] ?? 13)))); ?>px;" aria-label="<?php echo esc_attr(sltr_t('Package information')); ?>"><span aria-hidden="true">i</span><span class="sltr-tooltip-content" role="tooltip"><?php echo esc_html(wp_strip_all_tags((string) $package['info_tooltip'])); ?></span></button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
