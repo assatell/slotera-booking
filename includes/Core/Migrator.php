@@ -64,6 +64,11 @@ final class Migrator {
 
     public static function register_hooks(): void {
         ActiveSlotHashBackfill::register_hooks();
+        add_action('sltr_activity_log_redaction_batch', [self::class, 'run_activity_log_redaction_batch']);
+    }
+
+    public static function run_activity_log_redaction_batch(): void {
+        self::migrate();
     }
 
     public static function run_active_slot_hash_backfill_batch(): void {

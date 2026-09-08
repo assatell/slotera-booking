@@ -38,6 +38,11 @@ namespace {
     {
         return json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
+
+    function wp_doing_cron(): bool
+    {
+        return true;
+    }
 }
 
 namespace Slotera\Core {
@@ -68,22 +73,14 @@ namespace {
 
         public function get_results(string $query, string $output): array
         {
-            if (str_contains($query, 'ip_address IS NOT NULL') && str_contains($query, 'user_agent IS NOT NULL')) {
-                $unsafe = [];
-                foreach ($this->rows as $row) {
-                    $payload = json_decode((string) ($row['payload_json'] ?? ''), true);
-                    $payload_unsafe = (string) ($row['payload_json'] ?? '') !== ''
-                        && (!is_array($payload) || (int) ($payload['_sltr_redaction_schema'] ?? 0) !== 2);
-                    if ((string) ($row['ip_address'] ?? '') !== '' || (string) ($row['user_agent'] ?? '') !== '' || $payload_unsafe) {
-                        $unsafe[] = $row;
-                    }
-                }
+            if (str_contains($query, 'redaction_schema_version <> 2')) {
+                $unsafe = array_values(array_filter(
+                    $this->rows,
+                    static fn(array $row): bool => (int) ($row['redaction_schema_version'] ?? 0) !== 2
+                ));
                 usort($unsafe, static fn(array $a, array $b): int => ((int) $a['id']) <=> ((int) $b['id']));
-                if (str_contains($query, 'SELECT id, payload_json')) {
-                    preg_match('/LIMIT (\d+)/', $query, $mLimit);
-                    return array_slice($unsafe, 0, isset($mLimit[1]) ? (int) $mLimit[1] : 100);
-                }
-                return $unsafe === [] ? [] : [['id' => $unsafe[0]['id']]];
+                preg_match('/LIMIT (\d+)/', $query, $mLimit);
+                return array_slice($unsafe, 0, isset($mLimit[1]) ? (int) $mLimit[1] : 100);
             }
 
             preg_match('/WHERE id > (\d+)/', $query, $mCursor);
@@ -102,6 +99,15 @@ namespace {
 
         public function get_var(string $query): mixed
         {
+            if (str_contains($query, 'redaction_schema_version <> 2')) {
+                foreach ($this->rows as $row) {
+                    if ((int) ($row['redaction_schema_version'] ?? 0) !== 2) {
+                        return (string) $row['id'];
+                    }
+                }
+                return null;
+            }
+
             preg_match('/WHERE id > (\d+)/', $query, $mCursor);
             $cursor = isset($mCursor[1]) ? (int) $mCursor[1] : 0;
 
@@ -173,6 +179,7 @@ namespace {
         $wpdb->rows[] = [
             'id' => $id,
             'payload_json' => $payload,
+            'redaction_schema_version' => 0,
             'ip_address' => "198.51.100.{$id}",
             'user_agent' => "Legacy-UA {$id}",
         ];
@@ -209,6 +216,7 @@ namespace {
     assert_true(($valid['_sltr_redaction_schema'] ?? 0) === 2, 'redacted payload must carry schema v2');
 
     $wpdb->rows[0]['ip_address'] = '203.0.113.10';
+    $wpdb->rows[0]['redaction_schema_version'] = 0;
     assert_true(!$migration::is_complete(), 'completion marker must fail closed when raw network data remains');
     $migration::apply();
     assert_true($migration::is_complete(), 'migration must repair raw network data even after a stale completion marker');
@@ -217,6 +225,7 @@ namespace {
     $wpdb->rows[0]['payload_json'] = wp_json_encode([
         'nested' => ['customer_email' => 'late@example.test', 'safe' => 'kept'],
     ]);
+    $wpdb->rows[0]['redaction_schema_version'] = 0;
     assert_true(!$migration::is_complete(), 'late payload without the current schema must invalidate completion');
     $migration::apply();
     assert_true($migration::is_complete(), 'late payload below the old cursor must be repaired');
@@ -226,6 +235,7 @@ namespace {
 
     // A live lease must prevent a concurrent worker from changing the corpus.
     $wpdb->rows[1]['payload_json'] = wp_json_encode(['ip_address' => '192.0.2.9']);
+    $wpdb->rows[1]['redaction_schema_version'] = 0;
     update_option('sltr_migration_1043_activity_log_lease', wp_json_encode(['token' => 'other', 'expires' => time() + 60]), false);
     $before_lease = $wpdb->rows[1]['payload_json'];
     $migration::apply();
@@ -234,6 +244,7 @@ namespace {
 
     // A DB write failure must fail closed, retain diagnostics and resume later.
     $wpdb->rows[2]['payload_json'] = wp_json_encode(['user_agent' => 'Late browser']);
+    $wpdb->rows[2]['redaction_schema_version'] = 0;
     $wpdb->fail_update_id = 3;
     $migration::apply();
     assert_true(!$migration::is_complete(), 'DB write failure must leave migration incomplete');
@@ -242,6 +253,43 @@ namespace {
     $wpdb->fail_update_id = 0;
     $migration::apply();
     assert_true($migration::is_complete(), 'migration must resume after a transient DB failure');
+
+    $bypass_payloads = [
+        '{"_sltr_redaction_schema":20,"customer_email":"raw@example.test"}',
+        '{"nested":{"_sltr_redaction_schema":2},"ip_address":"192.0.2.1"}',
+        '{"_sltr_redaction_schema":"2","customer_email":"raw@example.test"}',
+        '{ "_sltr_redaction_schema" : 2, "customer_email" : "raw@example.test" }',
+        '{"_sltr_redaction_schema":2,"_sltr_redaction_schema":20,"customer_email":"raw@example.test"}',
+        '{"_sltr_redaction_schema":2,"customer_email":"raw@example.test"',
+    ];
+    foreach ($bypass_payloads as $offset => $payload) {
+        $wpdb->rows[] = [
+            'id' => 300 + $offset,
+            'payload_json' => $payload,
+            'redaction_schema_version' => 0,
+            'ip_address' => null,
+            'user_agent' => null,
+        ];
+    }
+    assert_true(!$migration::is_complete(), 'fake or malformed JSON markers must enter indexed repair');
+    $migration::apply();
+    assert_true($migration::is_complete(), 'all marker bypass fixtures must be repaired');
+    foreach (array_slice($wpdb->rows, -count($bypass_payloads)) as $row) {
+        $payload = json_decode((string) $row['payload_json'], true);
+        assert_true(is_array($payload), "bypass row {$row['id']} must become valid JSON");
+        assert_true(($payload['_sltr_redaction_schema'] ?? null) === 2, "bypass row {$row['id']} must have integer schema 2");
+        assert_true(($payload['customer_email'] ?? null) !== 'raw@example.test', "bypass row {$row['id']} must not retain raw email");
+        assert_true((int) $row['redaction_schema_version'] === 2, "bypass row {$row['id']} must be indexed as verified");
+    }
+
+    assert_true(
+        !\Slotera\Application\Security\DataRedactor::has_current_activity_schema(['_sltr_redaction_schema' => '2']),
+        'string schema marker must not pass structural validation'
+    );
+    assert_true(
+        \Slotera\Application\Security\DataRedactor::has_current_activity_schema(['_sltr_redaction_schema' => 2]),
+        'integer top-level schema marker must pass structural validation'
+    );
 
     echo "OK: RC67.3 privacy migration processed 205 rows in 3 bounded batches\n";
 }

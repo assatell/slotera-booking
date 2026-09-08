@@ -54,7 +54,8 @@ final class DataRedactor
     /** @param array<mixed> $payload */
     public static function has_current_activity_schema(array $payload): bool
     {
-        return (int) ($payload[self::ACTIVITY_PAYLOAD_SCHEMA_KEY] ?? 0) === self::ACTIVITY_PAYLOAD_SCHEMA_VERSION;
+        return array_key_exists(self::ACTIVITY_PAYLOAD_SCHEMA_KEY, $payload)
+            && $payload[self::ACTIVITY_PAYLOAD_SCHEMA_KEY] === self::ACTIVITY_PAYLOAD_SCHEMA_VERSION;
     }
 
     public static function text(string $value): string

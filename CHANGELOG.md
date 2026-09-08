@@ -1,3 +1,12 @@
+## 1.0.1054 RC67.14 — Indexed activity-log privacy migration
+
+- Replace substring JSON marker detection with strict top-level integer schema validation.
+- Track verified activity-log rows in an indexed `redaction_schema_version` column that defaults fail-closed for legacy and imported rows.
+- Process privacy repair in bounded batches with an existing lease, persistent diagnostics and WP-Cron continuation.
+- Atomically mark a row verified only after raw IP/user-agent removal and structural payload redaction succeed.
+- Cover version `20`, nested/string/duplicate markers, whitespace, malformed JSON, late rows, concurrent workers and database failures.
+- Keep signed automatic updates, revocation and rollback documented as a stable-production milestone.
+
 ## 1.0.1053 RC67.13 — Release integrity and privacy completion
 
 - Commit release provenance and checksums before tagging so clean exact-tag QA is read-only and self-contained.

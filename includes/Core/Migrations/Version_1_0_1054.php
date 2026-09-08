@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Slotera\Core\Migrations;
+
+if (!defined('ABSPATH')) { exit; }
+
+/** Re-run the indexed structural activity-log privacy verification. */
+final class Version_1_0_1054 implements MigrationInterface
+{
+    public static function apply(): void
+    {
+        Version_1_0_1043::apply();
+    }
+
+    public static function is_complete(): bool
+    {
+        return Version_1_0_1043::is_complete();
+    }
+}
