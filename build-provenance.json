@@ -3,9 +3,9 @@
   "version": "1.0.1055",
   "candidate": "RC67.15",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-09T14:21:00Z",
+  "generated_at_utc": "2026-09-09T14:41:58Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "4472736244ba51a9523454a06f97e08e1fcf534c88f8a718bb5ee5b3f2cce4d4",
+  "release_manifest_sha256": "d5f7911a8f2f50287157937b229431a7aa6b0c00eb0741d5b9753a8b7bab4179",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.7.0",
@@ -24,7 +24,7 @@
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
     "tag": "v1.0.1055-rc67.15",
-    "release_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7"
+    "release_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a"
   },
   "lineage": {
     "previous_source": {
@@ -40,13 +40,13 @@
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
     "output": "slotera-booking-1.0.1055-rc67.15.zip",
-    "source_date_epoch_utc": "2026-09-09T14:21:00Z"
+    "source_date_epoch_utc": "2026-09-09T14:41:58Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "4472736244ba51a9523454a06f97e08e1fcf534c88f8a718bb5ee5b3f2cce4d4",
-    "pre_version_sync_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
-    "release_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7"
+    "release_manifest_sha256": "d5f7911a8f2f50287157937b229431a7aa6b0c00eb0741d5b9753a8b7bab4179",
+    "pre_version_sync_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
+    "release_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a"
   },
   "transformation_chain": [
     {
@@ -61,23 +61,23 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
-      "changes_manifest_sha256": "4472736244ba51a9523454a06f97e08e1fcf534c88f8a718bb5ee5b3f2cce4d4",
-      "latest_change": "1.0.1055 RC67.15: defer Contact page insertion until WordPress permalink initialization is complete",
+      "output_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
+      "changes_manifest_sha256": "d5f7911a8f2f50287157937b229431a7aa6b0c00eb0741d5b9753a8b7bab4179",
+      "latest_change": "1.0.1055 RC67.15: apply the shared Booking form width to the standalone Contact layout",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
     {
       "order": 3,
       "name": "manifest-version-sync",
       "version": "1.0.1055",
-      "input_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
-      "output_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
+      "input_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
+      "output_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
       "generated_targets": []
     },
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
+      "output_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
       "file_count": 395
     },
     {

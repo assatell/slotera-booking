@@ -10,7 +10,7 @@ $sltr_contact_social_labels = [
     'tiktok' => 'TikTok',
 ];
 ?>
-<div class="sltr-contact-page-block sltr-package-contact-block">
+<div class="sltr-contact-page-block sltr-package-contact-block" style="<?php echo esc_attr($style); ?>">
     <div class="sltr-package-contact-form">
         <?php echo $contact_form_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- rendered Slotera form view ?>
     </div>

@@ -62,6 +62,7 @@ test('Standalone Contact uses global details while Solo pages keep package detai
   const shortcode = read('includes/Frontend/Shortcodes/BookingShortcode.php');
   const contactView = read('includes/Frontend/Views/contact-page.php');
   const packageView = read('includes/Frontend/Views/package-detail.php');
+  const css = read('assets/css/frontend.css');
 
   assert.match(shortcode, /\$GLOBALS\['sltr_current_package'\]/);
   assert.match(shortcode, /contact_page_details_json/);
@@ -71,6 +72,10 @@ test('Standalone Contact uses global details while Solo pages keep package detai
   assert.match(contactView, /sltr-contact-page-block/);
   assert.match(contactView, />Google Maps<\/a>/);
   assert.match(contactView, /target="_blank" rel="noopener noreferrer"/);
+  assert.match(contactView, /sltr-contact-page-block[\s\S]*?style="<\?php echo esc_attr\(\$style\); \?>"/);
+  assert.match(shortcode, /--sltr-booking-form-max-width/);
+  assert.match(css, /\.sltr-contact-page-block\s*\{[\s\S]*?max-width:\s*var\(--sltr-booking-form-max-width, 1280px\) !important/);
+  assert.doesNotMatch(css, /--sltr-booking-width/);
   assert.match(packageView, /solo_contact_details_json/);
   assert.match(packageView, /solo_contact_image_id/);
   assert.match(packageView, /solo_contact_map/);

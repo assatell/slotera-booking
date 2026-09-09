@@ -152,7 +152,8 @@
 "1.0.1054 RC67.14: replace substring payload checks with structural redaction and an indexed per-row migration invariant",
 "1.0.1055 RC67.15: align package card rows, restore light calendar chevrons and use full-screen Solo media",
 "1.0.1055 RC67.15: add Contact as the seventh required system page with independent contact-block settings",
-"1.0.1055 RC67.15: defer Contact page insertion until WordPress permalink initialization is complete"
+"1.0.1055 RC67.15: defer Contact page insertion until WordPress permalink initialization is complete",
+"1.0.1055 RC67.15: apply the shared Booking form width to the standalone Contact layout"
   ],
   "release_notes": "RC67.15 gives package cards stable semantic rows, moves package information beside the booking CTA, restores visible calendar chevrons in light presets, opens Solo images full screen, removes the custom video sound button, and adds Contact as the seventh required system page with dedicated contact-block settings.",
   "candidate": "RC67.15",

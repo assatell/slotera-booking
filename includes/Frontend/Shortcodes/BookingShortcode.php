@@ -286,7 +286,17 @@ final class BookingShortcode
     private function contact_form_style_vars(array $settings): string
     {
         $appearance_theme = (string) ($settings['appearance_theme'] ?? 'light');
+        $booking_form_width_mode = sanitize_key((string) ($settings['booking_form_width_mode'] ?? '1280'));
+        if (!in_array($booking_form_width_mode, ['full', '1100', '1280', 'custom'], true)) {
+            $booking_form_width_mode = '1280';
+        }
+        $booking_form_custom_width = max(800, min(2400, (int) ($settings['booking_form_custom_width'] ?? 1280)));
+        $booking_form_max_width = $booking_form_width_mode === 'custom'
+            ? $booking_form_custom_width . 'px'
+            : ($booking_form_width_mode === 'full' ? 'none' : $booking_form_width_mode . 'px');
         $vars = [
+            '--sltr-booking-form-width' => '100%',
+            '--sltr-booking-form-max-width' => $booking_form_max_width,
             '--sltr-form-bg' => '#ffffff',
             '--sltr-form-text' => '#0f172a',
             '--sltr-card-bg' => '#ffffff',
