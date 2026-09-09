@@ -1708,13 +1708,4 @@
         }
     });
 
-    document.addEventListener('click', function (event) {
-        var button = event.target && event.target.closest ? event.target.closest('[data-sltr-video-unmute]') : null;
-        if (!button) return;
-        var wrapper = button.closest('.sltr-package-media-video'), video = wrapper ? wrapper.querySelector('video') : null;
-        if (!video) return;
-        video.muted = false; video.volume = 1; button.hidden = true;
-        var promise = video.play();
-        if (promise && typeof promise.catch === 'function') promise.catch(function () {});
-    });
 })();

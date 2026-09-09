@@ -17,6 +17,9 @@ const bookingForm = read('includes/Frontend/Views/booking-form.php');
 
 assert.doesNotMatch(systemPages, /Create \/ bind missing pages/);
 assert.match(systemPages, /creates the required booking pages automatically during installation/);
+assert.match(systemPages, /NB!/);
+assert.match(systemPages, /For correct and reliable plugin operation/);
+assert.match(systemPages, /sltr-system-pages-notice/);
 assert.doesNotMatch(systemPages, /Packages page \(optional\)|packages_page_id|\[slotera_packages\]/);
 assert.doesNotMatch(settingsController, /post_int\('packages_page_id'\)/);
 assert.match(systemPages, /place the corresponding Slotera shortcode/);
@@ -24,7 +27,7 @@ assert.doesNotMatch(settingsController, /sltr_create_required_pages/);
 
 for (const code of [
   'slotera_booking','slotera_categories','slotera_thank_you',
-  'slotera_checkout','slotera_login','slotera_account'
+  'slotera_checkout','slotera_login','slotera_account','slotera_contact'
 ]) {
   assert.match(legacy, new RegExp(`\\[${code}\\]`));
 }

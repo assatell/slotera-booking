@@ -1,7 +1,7 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
 ?>
-<div class="sltr-contact-form-wrap" style="<?php echo esc_attr($style); ?>">
+<div class="sltr-contact-form-wrap">
     <form class="sltr-contact-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"<?php echo $security_captcha_provider === 'recaptcha_v3' ? ' data-sltr-recaptcha-v3-action="slotera_contact"' : ''; ?> novalidate>
         <input type="hidden" name="action" value="sltr_contact_form_submit">
         <?php wp_nonce_field('sltr_contact_form_submit'); ?>

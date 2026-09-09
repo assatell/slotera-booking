@@ -121,6 +121,10 @@ final class SettingsController
             'checkout_page_id' => $this->request->post_int('checkout_page_id'),
             'login_page_id' => $this->request->post_int('login_page_id'),
             'account_page_id' => $this->request->post_int('account_page_id'),
+            'contact_page_id' => $this->request->post_int('contact_page_id'),
+            'contact_page_image_id' => $this->request->post_int('contact_page_image_id'),
+            'contact_page_map' => $this->request->post_text('contact_page_map'),
+            'contact_page_details_json' => $this->request->post_textarea('contact_page_details_json', '[]'),
         ]);
 
         $this->redirect_saved();

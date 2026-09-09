@@ -91,7 +91,6 @@ final class HtmlSanitizer
                 'aria-label' => true,
                 'class' => true,
                 'data-full' => true,
-                'data-sltr-video-unmute' => true,
                 'type' => true,
             ],
             'form' => [

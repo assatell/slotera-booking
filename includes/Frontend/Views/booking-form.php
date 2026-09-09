@@ -333,27 +333,20 @@ $get_date_flow = static function (array $package): string {
                             <span class="sltr-badge-discount"><?php echo esc_html($discount_label); ?></span>
                         <?php endif; ?>
 
-                        <?php if ($booking_card_image_url) : ?>
-                            <div class="sltr-package-card-media"><img src="<?php echo esc_url($booking_card_image_url); ?>" alt="<?php echo esc_attr((string) ($package['title'] ?? '')); ?>" loading="lazy" style="--sltr-image-focus:<?php echo esc_attr($booking_focus); ?>;object-position:var(--sltr-image-focus)"></div>
-                        <?php endif; ?>
+                        <div class="sltr-package-card-media<?php echo $booking_card_image_url ? '' : ' is-empty'; ?>"<?php echo $booking_card_image_url ? '' : ' aria-hidden="true"'; ?>>
+                            <?php if ($booking_card_image_url) : ?><img src="<?php echo esc_url($booking_card_image_url); ?>" alt="<?php echo esc_attr((string) ($package['title'] ?? '')); ?>" loading="lazy" style="--sltr-image-focus:<?php echo esc_attr($booking_focus); ?>;object-position:var(--sltr-image-focus)"><?php endif; ?>
+                        </div>
 
                         <div class="sltr-package-title-row">
-                            <?php if (!empty($package['info_tooltip'])) : ?>
-                                <button type="button" class="sltr-package-info-button" style="--sltr-tooltip-size-ratio:<?php echo esc_attr((string) max(0.8, min(2.0, (float) ($package['tooltip_size_ratio'] ?? 1.15)))); ?>;--sltr-tooltip-text-size:<?php echo esc_attr((string) max(10, min(24, (int) ($package['tooltip_text_size'] ?? 13)))); ?>px;" aria-label="<?php echo esc_attr(sltr_t('Package information')); ?>"><span aria-hidden="true">i</span><span class="sltr-tooltip-content" role="tooltip"><?php echo esc_html(wp_strip_all_tags((string) $package['info_tooltip'])); ?></span></button>
-                            <?php endif; ?>
                             <strong style="<?php echo esc_attr(trim(((string) ($package['title_font_family'] ?? '') !== '' ? 'font-family:' . (string) $package['title_font_family'] . ';' : '') . 'font-size:' . (string) max(12, min(48, (int) (($package['title_font_size'] ?? 24) ?: 24))) . 'px;')); ?>"><?php echo esc_html($package['title']); ?></strong>
                         </div>
 
-                        <?php if ($show_duration_for_package) : ?>
-                            <span class="sltr-package-meta"><?php echo esc_html($format_duration($package['duration_minutes'] ?? 0)); ?></span>
-                        <?php endif; ?>
+                        <div class="sltr-package-card-meta-row<?php echo $show_duration_for_package ? '' : ' is-empty'; ?>">
+                            <?php if ($show_duration_for_package) : ?><span class="sltr-package-meta"><?php echo esc_html($format_duration($package['duration_minutes'] ?? 0)); ?></span><?php endif; ?>
+                        </div>
 
-                        <?php if ($campaign_note !== '') : ?>
-                            <span class="sltr-urgency-note"><?php echo esc_html($campaign_note); ?></span>
-                        <?php endif; ?>
-
-                        <?php if (!$hide_price_on_frontend) : ?>
-                        <span class="sltr-package-price">
+                        <div class="sltr-package-card-price-row<?php echo $hide_price_on_frontend ? ' is-empty' : ''; ?>">
+                        <?php if (!$hide_price_on_frontend) : ?><span class="sltr-package-price">
                             <?php if ($booking_mode === 'simple' && $simple_price_mode === 'request') : ?>
                                 <b><?php echo esc_html(sltr_t('Price on request')); ?></b>
                             <?php elseif ($booking_mode === 'simple' && $simple_price_mode === 'from') : ?>
@@ -366,20 +359,24 @@ $get_date_flow = static function (array $package): string {
                             <?php endif; ?>
                         </span>
                         <?php endif; ?>
-                        <?php if (!$hide_price_on_frontend && $dynamic_label_preview !== '') : ?>
-                            <span class="sltr-dynamic-offer-note"><?php echo esc_html($dynamic_label_preview); ?></span>
-                        <?php endif; ?>
-                        <?php if (!$hide_price_on_frontend && $tax_amount_preview > 0) : ?>
-                            <span class="sltr-tax-note"><?php echo esc_html(sprintf(sltr_t('%s included in total'), $tax_label_preview)); ?></span>
-                        <?php endif; ?>
-
-                        <?php if (!empty($package['show_more_info']) && $package_url !== '') : ?>
-                            <div class="sltr-package-card-link-row">
+                        </div>
+                        <div class="sltr-package-card-promo-row<?php echo ($campaign_note !== '' || (!$hide_price_on_frontend && ($dynamic_label_preview !== '' || $tax_amount_preview > 0))) ? '' : ' is-empty'; ?>">
+                            <?php if ($campaign_note !== '') : ?><span class="sltr-urgency-note"><?php echo esc_html($campaign_note); ?></span><?php endif; ?>
+                            <?php if (!$hide_price_on_frontend && $dynamic_label_preview !== '') : ?><span class="sltr-dynamic-offer-note"><?php echo esc_html($dynamic_label_preview); ?></span><?php endif; ?>
+                            <?php if (!$hide_price_on_frontend && $tax_amount_preview > 0) : ?><span class="sltr-tax-note"><?php echo esc_html(sprintf(sltr_t('%s included in total'), $tax_label_preview)); ?></span><?php endif; ?>
+                        </div>
+                        <div class="sltr-package-card-link-row<?php echo (!empty($package['show_more_info']) && $package_url !== '') ? '' : ' is-empty'; ?>">
+                            <?php if (!empty($package['show_more_info']) && $package_url !== '') : ?>
                                 <a class="sltr-more-info-link" href="<?php echo esc_url($package_url); ?>"><?php echo esc_html(sltr_t('More info')); ?></a>
-                            </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
 
-                        <button type="button" class="sltr-button sltr-select-button sltr-package-select"><?php echo esc_html($cta_label); ?></button>
+                        <div class="sltr-package-card-actions">
+                            <button type="button" class="sltr-button sltr-select-button sltr-package-select"><?php echo esc_html($cta_label); ?></button>
+                            <?php if (!empty($package['info_tooltip'])) : ?>
+                                <button type="button" class="sltr-package-info-button" style="--sltr-tooltip-size-ratio:<?php echo esc_attr((string) max(0.8, min(2.0, (float) ($package['tooltip_size_ratio'] ?? 1.15)))); ?>;--sltr-tooltip-text-size:<?php echo esc_attr((string) max(10, min(24, (int) ($package['tooltip_text_size'] ?? 13)))); ?>px;" aria-label="<?php echo esc_attr(sltr_t('Package information')); ?>"><span aria-hidden="true">i</span><span class="sltr-tooltip-content" role="tooltip"><?php echo esc_html(wp_strip_all_tags((string) $package['info_tooltip'])); ?></span></button>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             <?php else : ?>

@@ -132,6 +132,7 @@ final class DiagnosticsService
             'checkout_page_id' => ['Checkout page', '[slotera_checkout]', 'checkout'],
             'login_page_id' => ['Login page', '[slotera_login]', 'login'],
             'account_page_id' => ['Account page', '[slotera_account]', 'account'],
+            'contact_page_id' => ['Contact page', '[slotera_contact]', 'contact'],
         ];
         $checks = [];
         foreach ($required as $key => [$label, $shortcode, $page_key]) {
