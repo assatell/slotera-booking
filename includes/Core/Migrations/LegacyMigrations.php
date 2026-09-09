@@ -371,6 +371,7 @@ final class LegacyMigrations {
             'checkout_page_id' => ['Slotera Checkout', 'slotera-checkout', '[slotera_checkout]'],
             'login_page_id' => ['Slotera Login', 'slotera-login', '[slotera_login]'],
             'account_page_id' => ['Client Account', 'client-account', '[slotera_account]'],
+            'contact_page_id' => ['Slotera Contact', 'slotera-contact', '[slotera_contact]'],
         ];
 
         $changed = false;
@@ -385,6 +386,32 @@ final class LegacyMigrations {
         if ($changed) {
             update_option('sltr_settings', $settings, false);
         }
+
+        if (absint($settings['contact_page_id'] ?? 0) > 0) {
+            update_option('sltr_contact_system_page_setup', '1', false);
+        }
+    }
+
+    public static function ensure_contact_system_page(): int {
+        $settings = get_option('sltr_settings', []);
+        if (!is_array($settings)) { $settings = []; }
+
+        $configured_id = absint($settings['contact_page_id'] ?? 0);
+        if ($configured_id > 0) {
+            $configured_page = get_post($configured_id);
+            if ($configured_page && $configured_page->post_type === 'page' && $configured_page->post_status === 'publish') {
+                update_option('sltr_contact_system_page_setup', '1', false);
+                return $configured_id;
+            }
+        }
+
+        $page_id = self::ensure_shortcode_page('Slotera Contact', 'slotera-contact', '[slotera_contact]', 0);
+        if ($page_id > 0) {
+            $settings['contact_page_id'] = $page_id;
+            update_option('sltr_settings', $settings, false);
+            update_option('sltr_contact_system_page_setup', '1', false);
+        }
+        return $page_id;
     }
 
     private static function ensure_shortcode_page(string $title, string $slug, string $shortcode, int $configured_id): int {

@@ -80,6 +80,38 @@ final class BookingShortcode
         $style = $this->contact_form_style_vars($settings);
         ob_start();
         include SLTR_PLUGIN_DIR . 'includes/Frontend/Views/contact-form.php';
+        $contact_form_html = (string) ob_get_clean();
+
+        // Package Solo pages provide their own package-specific contact aside.
+        if (!empty($GLOBALS['sltr_current_package'])) {
+            return $contact_form_html;
+        }
+
+        $contact_page_rows = json_decode((string) ($settings['contact_page_details_json'] ?? '[]'), true);
+        $contact_page_rows = is_array($contact_page_rows) ? $contact_page_rows : [];
+        $contact_page_address = '';
+        $contact_page_details = [];
+        $contact_page_socials = [];
+        foreach ($contact_page_rows as $contact_page_row) {
+            if (!is_array($contact_page_row)) { continue; }
+            $contact_page_type = (string) ($contact_page_row['type'] ?? 'contact');
+            if ($contact_page_type === 'address') {
+                $contact_page_address = (string) ($contact_page_row['value'] ?? '');
+            } elseif ($contact_page_type === 'social') {
+                $contact_page_socials[] = $contact_page_row;
+            } else {
+                $contact_page_details[] = $contact_page_row;
+            }
+        }
+        $contact_page_image_id = (int) ($settings['contact_page_image_id'] ?? 0);
+        $contact_page_image_url = $contact_page_image_id > 0 ? wp_get_attachment_image_url($contact_page_image_id, 'large') : '';
+        if (!$contact_page_image_url) {
+            $contact_page_image_url = SLTR_PLUGIN_URL . 'assets/images/contact-block-default.webp';
+        }
+        $contact_page_map_url = esc_url((string) ($settings['contact_page_map'] ?? ''));
+
+        ob_start();
+        include SLTR_PLUGIN_DIR . 'includes/Frontend/Views/contact-page.php';
         return (string) ob_get_clean();
     }
 

@@ -4516,6 +4516,8 @@ body.sltr-media-lightbox-open { overflow: hidden; }
     align-items: stretch;
     overflow: visible !important;
 }
+.sltr-contact-page-block { width:min(100%,var(--sltr-booking-width,1280px)); margin:24px auto; }
+.sltr-contact-page-block .sltr-contact-form-wrap { max-width:none; margin:0; }
 .sltr-package-contact-form,
 .sltr-package-contact-aside { min-width: 0; }
 .sltr-package-contact-aside {
@@ -4582,8 +4584,6 @@ body.sltr-media-lightbox-open { overflow: hidden; }
         grid-template-columns: 1fr !important;
     }
 }
-
-
 /* Canonical stacked Solo DOM order. */
 .sltr-package-landing-layout-stacked.sltr-package-landing-has-top-content > .sltr-package-landing-top-content,
 .sltr-package-landing-layout-stacked.sltr-package-landing-has-top-content > .sltr-package-landing-hero,

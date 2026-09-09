@@ -150,9 +150,10 @@
 "1.0.1052 RC67.12: center calendar navigation, add Fixed multi-day labels, remove the obsolete package image control and replace Solo contact Open labels",
 "1.0.1053 RC67.13: commit immutable release metadata, revalidate activity-log payload privacy, normalize Python discovery, preserve Unicode labels and correct the Slotera platform URL",
 "1.0.1054 RC67.14: replace substring payload checks with structural redaction and an indexed per-row migration invariant",
-"1.0.1055 RC67.15: align package card rows, restore light calendar chevrons and use full-screen Solo media"
+"1.0.1055 RC67.15: align package card rows, restore light calendar chevrons and use full-screen Solo media",
+"1.0.1055 RC67.15: add Contact as the seventh required system page with independent contact-block settings"
   ],
-  "release_notes": "RC67.15 gives package cards stable semantic rows, moves package information beside the booking CTA, restores visible calendar chevrons in light presets, opens Solo images full screen and removes the custom video sound button.",
+  "release_notes": "RC67.15 gives package cards stable semantic rows, moves package information beside the booking CTA, restores visible calendar chevrons in light presets, opens Solo images full screen, removes the custom video sound button, and adds Contact as the seventh required system page with dedicated contact-block settings.",
   "candidate": "RC67.15",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"

@@ -40,6 +40,12 @@ final class Plugin
         if (version_compare($db_version, SLTR_VERSION, '<')) {
             Migrator::migrate();
         }
+
+        // RC67.15 adds Contact to existing installations without relying on a
+        // version bump inside the same release-candidate line.
+        if (get_option('sltr_contact_system_page_setup') !== '1') {
+            \Slotera\Core\Migrations\LegacyMigrations::ensure_contact_system_page();
+        }
     }
 
 
@@ -523,6 +529,7 @@ final class Plugin
             (int) ($settings['checkout_page_id'] ?? 0),
             (int) ($settings['login_page_id'] ?? 0),
             (int) ($settings['account_page_id'] ?? 0),
+            (int) ($settings['contact_page_id'] ?? 0),
         ];
 
         return in_array((int) $post->ID, array_filter($configured_page_ids), true);

@@ -5,6 +5,8 @@
 - Move the package information tooltip to the right of the booking button.
 - Replace Solo image zoom with native full-screen presentation and a safe overlay fallback.
 - Remove the custom `Turn on sound` control while retaining the browser's native video controls.
+- Promote Contact to the seventh required system page with automatic creation and dedicated image, address, Google Maps, contact-detail and social-link settings.
+- Make the Booking pages shortcode guidance prominent and recommend creating the custom page with its matching shortcode before binding it.
 
 ## 1.0.1054 RC67.14 — Indexed activity-log privacy migration
 

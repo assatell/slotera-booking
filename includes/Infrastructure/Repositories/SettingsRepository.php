@@ -317,6 +317,7 @@ final class SettingsRepository
             'checkout' => 'slotera_checkout',
             'login' => 'slotera_login',
             'account' => 'slotera_account',
+            'contact' => 'slotera_contact',
         ];
 
         return (string) ($map[$key] ?? '');
@@ -334,6 +335,10 @@ final class SettingsRepository
             'checkout_page_id' => 0,
             'login_page_id' => 0,
             'account_page_id' => 0,
+            'contact_page_id' => 0,
+            'contact_page_image_id' => 0,
+            'contact_page_map' => '',
+            'contact_page_details_json' => '[]',
 
             'package_columns_desktop' => 3,
             'package_columns_tablet' => 2,
@@ -655,8 +660,18 @@ final class SettingsRepository
                 continue;
             }
 
-            if (in_array($key, ['booking_page_id', 'packages_page_id', 'categories_page_id', 'thank_you_page_id', 'checkout_page_id', 'login_page_id', 'account_page_id'], true)) {
+            if (in_array($key, ['booking_page_id', 'packages_page_id', 'categories_page_id', 'thank_you_page_id', 'checkout_page_id', 'login_page_id', 'account_page_id', 'contact_page_id', 'contact_page_image_id'], true)) {
                 $clean[$key] = max(0, (int) $value);
+                continue;
+            }
+
+            if ($key === 'contact_page_map') {
+                $clean[$key] = $this->sanitize_google_maps_link((string) $value);
+                continue;
+            }
+
+            if ($key === 'contact_page_details_json') {
+                $clean[$key] = $this->sanitize_contact_details_json((string) $value);
                 continue;
             }
 
@@ -1262,5 +1277,58 @@ final class SettingsRepository
         }
 
         return $clean;
+    }
+
+    private function sanitize_google_maps_link(string $url): string
+    {
+        $url = esc_url_raw(trim($url), ['http', 'https']);
+        if ($url === '') { return ''; }
+        $parts = wp_parse_url($url);
+        if (!is_array($parts)) { return ''; }
+
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        $path = (string) ($parts['path'] ?? '');
+        $is_google_maps_host =
+            preg_match('/(^|\.)google\.(?:com|[a-z]{2}|co\.[a-z]{2})$/i', $host) === 1
+            || preg_match('/(^|\.)maps\.google\.(?:com|[a-z]{2}|co\.[a-z]{2})$/i', $host) === 1
+            || in_array($host, ['maps.app.goo.gl', 'goo.gl'], true);
+        $is_maps_path = strpos($host, 'maps.app.goo.gl') !== false
+            || strpos($path, '/maps') === 0
+            || strpos($path, '/maps/') !== false
+            || strpos($path, '/maps?') !== false;
+
+        return ($is_google_maps_host && $is_maps_path) ? $url : '';
+    }
+
+    private function sanitize_contact_details_json(string $json): string
+    {
+        $decoded = json_decode($json, true);
+        if (!is_array($decoded)) { return '[]'; }
+        $clean = [];
+        $social_platforms = ['instagram', 'facebook', 'linkedin', 'x', 'youtube', 'tiktok'];
+
+        foreach ($decoded as $row) {
+            if (!is_array($row)) { continue; }
+            $type = sanitize_key((string) ($row['type'] ?? 'contact'));
+            if ($type === 'address') {
+                $value = sanitize_text_field((string) ($row['value'] ?? ''));
+                if ($value !== '') { $clean[] = ['type' => 'address', 'value' => $value]; }
+            } elseif ($type === 'social') {
+                $platform = sanitize_key((string) ($row['platform'] ?? ''));
+                $url = esc_url_raw((string) ($row['url'] ?? ''), ['http', 'https']);
+                if (in_array($platform, $social_platforms, true) && $url !== '') {
+                    $clean[] = ['type' => 'social', 'platform' => $platform, 'url' => $url];
+                }
+            } else {
+                $label = sanitize_text_field((string) ($row['label'] ?? ''));
+                $value = sanitize_text_field((string) ($row['value'] ?? ''));
+                if ($label !== '' || $value !== '') {
+                    $clean[] = ['type' => 'contact', 'label' => $label, 'value' => $value];
+                }
+            }
+            if (count($clean) >= 20) { break; }
+        }
+
+        return wp_json_encode($clean, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '[]';
     }
 }

@@ -159,7 +159,7 @@ final class AdminServiceProvider
 
         wp_enqueue_style('sltr-admin', SLTR_PLUGIN_URL . 'assets/css/admin.css', [], SLTR_VERSION);
 
-        if (strpos($hook, 'slotera-packages') !== false || strpos($hook, 'slotera-categories') !== false || strpos($hook, 'slotera-locations') !== false) {
+        if (strpos($hook, 'slotera-settings') !== false || strpos($hook, 'slotera-packages') !== false || strpos($hook, 'slotera-categories') !== false || strpos($hook, 'slotera-locations') !== false) {
             wp_enqueue_media();
         }
 
@@ -213,6 +213,10 @@ final class AdminServiceProvider
 
         if (strpos($hook, 'slotera-settings') !== false || strpos($hook, 'slotera-booking-form') !== false || strpos($hook, 'slotera-emails') !== false) {
             $scripts['sltr-admin-appearance'] = 'assets/js/admin-appearance.js';
+        }
+
+        if (strpos($hook, 'slotera-settings') !== false) {
+            $scripts['sltr-admin-contact-page'] = 'assets/js/admin-contact-page.js';
         }
 
         if (strpos($hook, 'slotera-packages') !== false || strpos($hook, 'slotera-categories') !== false || strpos($hook, 'slotera-locations') !== false || strpos($hook, 'slotera-marketing') !== false) {
