@@ -7,6 +7,7 @@
 - Remove the custom `Turn on sound` control while retaining the browser's native video controls.
 - Promote Contact to the seventh required system page with automatic creation and dedicated image, address, Google Maps, contact-detail and social-link settings.
 - Make the Booking pages shortcode guidance prominent and recommend creating the custom page with its matching shortcode before binding it.
+- Create the Contact page on `init`, after WordPress permalink globals are available, so same-version RC upgrades cannot trigger an early-bootstrap fatal error.
 
 ## 1.0.1054 RC67.14 — Indexed activity-log privacy migration
 

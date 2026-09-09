@@ -28,6 +28,11 @@ test('Contact is the seventh and last required system page', () => {
   assert.match(repository, /'contact_page_id'\s*=>\s*0/);
   assert.match(diagnostics, /'contact_page_id'\s*=>\s*\['Contact page', '\[slotera_contact\]', 'contact'\]/);
   assert.match(plugin, /\$settings\['contact_page_id'\]/);
+  assert.match(plugin, /add_action\('init', \[\$this, 'maybe_ensure_contact_system_page'\], 5\)/);
+  const migrationsAt = plugin.indexOf('public function maybe_run_migrations');
+  const contactSetupAt = plugin.indexOf('public function maybe_ensure_contact_system_page');
+  assert.ok(migrationsAt >= 0 && contactSetupAt > migrationsAt);
+  assert.doesNotMatch(plugin.slice(migrationsAt, contactSetupAt), /ensure_contact_system_page/);
 });
 
 test('Contact page settings mirror the approved Solo contact controls', () => {

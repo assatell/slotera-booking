@@ -16,6 +16,7 @@ final class Plugin
         add_filter('gettext', [$this, 'translate_slotera_text'], 20, 3);
         add_action('plugins_loaded', [$this, 'maybe_run_migrations']);
         add_action('admin_init', ['Slotera\\Core\\Capabilities', 'install']);
+        add_action('init', [$this, 'maybe_ensure_contact_system_page'], 5);
         add_action('init', [$this, 'register_image_sizes']);
         add_action('init', [$this, 'init']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
@@ -40,14 +41,16 @@ final class Plugin
         if (version_compare($db_version, SLTR_VERSION, '<')) {
             Migrator::migrate();
         }
+    }
 
-        // RC67.15 adds Contact to existing installations without relying on a
-        // version bump inside the same release-candidate line.
+    public function maybe_ensure_contact_system_page(): void
+    {
+        // Page insertion needs rewrite/permalink globals, which are not ready
+        // during plugins_loaded but are available by init.
         if (get_option('sltr_contact_system_page_setup') !== '1') {
             \Slotera\Core\Migrations\LegacyMigrations::ensure_contact_system_page();
         }
     }
-
 
     public function register_image_sizes(): void
     {

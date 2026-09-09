@@ -3,9 +3,9 @@
   "version": "1.0.1055",
   "candidate": "RC67.15",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-09T13:52:18Z",
+  "generated_at_utc": "2026-09-09T14:21:00Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "4653c44bc58125b13a8f3b96a3858e2f559db021fbabaa0a39c10ca8b8a25663",
+  "release_manifest_sha256": "4472736244ba51a9523454a06f97e08e1fcf534c88f8a718bb5ee5b3f2cce4d4",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.7.0",
@@ -24,7 +24,7 @@
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
     "tag": "v1.0.1055-rc67.15",
-    "release_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3"
+    "release_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7"
   },
   "lineage": {
     "previous_source": {
@@ -40,13 +40,13 @@
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
     "output": "slotera-booking-1.0.1055-rc67.15.zip",
-    "source_date_epoch_utc": "2026-09-09T13:52:18Z"
+    "source_date_epoch_utc": "2026-09-09T14:21:00Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "4653c44bc58125b13a8f3b96a3858e2f559db021fbabaa0a39c10ca8b8a25663",
-    "pre_version_sync_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3",
-    "release_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3"
+    "release_manifest_sha256": "4472736244ba51a9523454a06f97e08e1fcf534c88f8a718bb5ee5b3f2cce4d4",
+    "pre_version_sync_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
+    "release_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7"
   },
   "transformation_chain": [
     {
@@ -61,33 +61,23 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3",
-      "changes_manifest_sha256": "4653c44bc58125b13a8f3b96a3858e2f559db021fbabaa0a39c10ca8b8a25663",
-      "latest_change": "1.0.1055 RC67.15: add Contact as the seventh required system page with independent contact-block settings",
+      "output_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
+      "changes_manifest_sha256": "4472736244ba51a9523454a06f97e08e1fcf534c88f8a718bb5ee5b3f2cce4d4",
+      "latest_change": "1.0.1055 RC67.15: defer Contact page insertion until WordPress permalink initialization is complete",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
     {
       "order": 3,
       "name": "manifest-version-sync",
       "version": "1.0.1055",
-      "input_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3",
-      "output_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3",
-      "generated_targets": [
-        "slotera-booking.php:update-uri-bound",
-        "slotera-booking.php:plugin-header",
-        "slotera-booking.php:SLTR_VERSION",
-        "includes/build.php:SLTR_BUILD_VERSION",
-        "includes/build.php:SLTR_BUILD_ID",
-        "package.json:version",
-        "sbom.cdx.json:component-version",
-        "sbom.cdx.json:release-candidate",
-        "README.md:package-version"
-      ]
+      "input_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
+      "output_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
+      "generated_targets": []
     },
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "6c0332755af9f57a648b5358cd3f7c44d2c98f0ab386f826f858c39bb10202c3",
+      "output_tree_sha256": "8ef8bd44faf16ae0c0319c3886bffb2d3213c5a7553e3cdafa5c43d3b3f79cf7",
       "file_count": 395
     },
     {
