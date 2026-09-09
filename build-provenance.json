@@ -3,7 +3,7 @@
   "version": "1.0.1055",
   "candidate": "RC67.15",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-09T14:41:58Z",
+  "generated_at_utc": "2026-09-09T15:10:04Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
   "release_manifest_sha256": "d5f7911a8f2f50287157937b229431a7aa6b0c00eb0741d5b9753a8b7bab4179",
   "builder": {
@@ -24,7 +24,7 @@
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
     "tag": "v1.0.1055-rc67.15",
-    "release_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a"
+    "release_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98"
   },
   "lineage": {
     "previous_source": {
@@ -40,13 +40,13 @@
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
     "output": "slotera-booking-1.0.1055-rc67.15.zip",
-    "source_date_epoch_utc": "2026-09-09T14:41:58Z"
+    "source_date_epoch_utc": "2026-09-09T15:10:04Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
     "release_manifest_sha256": "d5f7911a8f2f50287157937b229431a7aa6b0c00eb0741d5b9753a8b7bab4179",
-    "pre_version_sync_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
-    "release_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a"
+    "pre_version_sync_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98",
+    "release_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98"
   },
   "transformation_chain": [
     {
@@ -61,7 +61,7 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
+      "output_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98",
       "changes_manifest_sha256": "d5f7911a8f2f50287157937b229431a7aa6b0c00eb0741d5b9753a8b7bab4179",
       "latest_change": "1.0.1055 RC67.15: apply the shared Booking form width to the standalone Contact layout",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
@@ -70,14 +70,14 @@
       "order": 3,
       "name": "manifest-version-sync",
       "version": "1.0.1055",
-      "input_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
-      "output_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
+      "input_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98",
+      "output_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98",
       "generated_targets": []
     },
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "d964c37fdc37b095fb4bef938b13e123ad02a26f7aff744d3d7576d72444c25a",
+      "output_tree_sha256": "cf5d9e0250c938e0301f52679207c86a7a1306118c42be6a88f1c5d41608db98",
       "file_count": 395
     },
     {

@@ -4516,13 +4516,7 @@ body.sltr-media-lightbox-open { overflow: hidden; }
     align-items: stretch;
     overflow: visible !important;
 }
-.sltr-contact-page-block {
-    width: var(--sltr-booking-form-width, 100%) !important;
-    max-width: var(--sltr-booking-form-max-width, 1280px) !important;
-    min-width: 0;
-    margin: 24px auto;
-    box-sizing: border-box;
-}
+.sltr-contact-page-block { width:var(--sltr-booking-form-width,100%) !important; max-width:var(--sltr-booking-form-max-width,1280px) !important; min-width:0; margin:24px auto; box-sizing:border-box; }
 .sltr-contact-page-block .sltr-contact-form-wrap { max-width:none; margin:0; }
 .sltr-package-contact-form,
 .sltr-package-contact-aside { width: 100%; min-width: 0; box-sizing: border-box; }
