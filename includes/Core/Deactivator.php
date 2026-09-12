@@ -7,6 +7,7 @@ final class Deactivator
 {
     public static function deactivate(): void
     {
+        if (class_exists('Slotera\\Application\\Services\\LicenseService')) { \Slotera\Application\Services\LicenseService::deactivate(); }
         if (class_exists('Slotera\\Application\\Services\\EmailReminderService')) { \Slotera\Application\Services\EmailReminderService::deactivate(); }
         if (class_exists('Slotera\\Application\\Services\\MarketingEmailService')) { \Slotera\Application\Services\MarketingEmailService::deactivate(); }
         if (class_exists('Slotera\\Application\\Services\\MarketingAutomationService')) { \Slotera\Application\Services\MarketingAutomationService::deactivate(); }

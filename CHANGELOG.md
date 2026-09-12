@@ -1,3 +1,9 @@
+## 1.0.1056 RC67.16 — Licensing and signed update trust hardening
+
+- Keep customer functionality enabled during licensing-server outages and make expiry/revocation server-authoritative.
+- Add signed trust-chain key rotation for license and update verification while preserving separate signing roles.
+- Add explicitly signed bounded rollback tied to the exact installed source version.
+- Enforce signed update freshness, monotonic sequencing and anti-replay protection.
 ## 1.0.1055 RC67.15 — Card alignment and Solo full-screen media
 
 - Keep calendar month chevrons visible against every built-in light preset.

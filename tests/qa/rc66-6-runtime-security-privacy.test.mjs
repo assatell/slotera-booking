@@ -87,15 +87,18 @@ test('RC66.6 every admin PHP view fails closed on direct web execution', () => {
   assert.deepEqual(missing, []);
 });
 
-test('RC66.6 licensing is explicitly a non-enforcing development placeholder', () => {
+test('license client verifies signed server certificates and fails open on outages', () => {
   const service = read('includes/Application/Services/LicenseService.php');
+  const verifier = read('includes/Application/Services/LicenseCertificateVerifier.php');
   const view = read('includes/Admin/Views/license.php');
-  assert.match(service, /'state' => 'development_placeholder'/);
-  assert.match(service, /Licensing: development placeholder \/ enforcement disabled/);
-  assert.match(service, /'license_status' => 'development_placeholder'/);
-  assert.match(service, /development_placeholder_key_saved/);
-  assert.match(service, /development_placeholder_key_cleared/);
-  assert.match(view, /Licensing: development placeholder \/ enforcement disabled/);
-  assert.match(view, /does not validate or enforce licenses/);
-  assert.doesNotMatch(view, /entering any non-empty key activates the license for one year/);
+  assert.match(service, /license-api-test\.getslotera\.com\/wp-json\/slotera\/v1\/license/);
+  assert.match(service, /Fail open: retain the last valid signed certificate and state indefinitely/);
+  assert.match(service, /SecretStore::encrypt_string\(\$key\)/);
+ assert.match(verifier, /\(new SigningKeyRing\(\)\)->resolve\('license', \$keyId, self::KEY_ID, self::PUBLIC_KEY\)/);
+ assert.match(verifier, /openssl_verify\(\$bytes, \$signature, \$pem, OPENSSL_ALGO_SHA256\)/);
+  assert.match(verifier, /sha256:ecadf72a744b506b38c64b3898df0d5d97a7e15fcf46ba356c083f2d9583917c/);
+  assert.match(verifier, /\$issued < \$lastIssued/);
+  assert.match(verifier, /str_ends_with\(\$host, '\.' \. \$root\)/);
+  assert.match(view, /Start 30-day trial/);
+  assert.doesNotMatch(view, /development placeholder/i);
 });
