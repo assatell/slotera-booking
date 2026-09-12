@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1056",
+  "version": "1.0.1057",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1056-rc67.16"
+    "tag": "v1.0.1057-rc67.17"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -157,10 +157,13 @@
     "1.0.1056 RC67.16: make license enforcement server-authoritative and fail open during licensing-server outages",
     "1.0.1056 RC67.16: add signed trust-chain key rotation for license and update verification",
     "1.0.1056 RC67.16: add explicitly signed bounded rollback tied to the exact installed source version",
-    "1.0.1056 RC67.16: enforce signed update freshness, monotonic sequencing and anti-replay protection"
+    "1.0.1056 RC67.16: enforce signed update freshness, monotonic sequencing and anti-replay protection",
+    "1.0.1057 RC67.17: enforce licensed feature boundaries across Marketing, Payments, Analytics, Shared Database Network and White Label",
+    "1.0.1057 RC67.17: preserve core booking and customer-safe payment fallback while licensed features are locked",
+    "1.0.1057 RC67.17: preserve safe stop, pause, cleanup, history, invoice and refund operations after authoritative license revocation"
   ],
-  "release_notes": "RC67.16 hardens licensing and signed updates with fail-open licensing-server outage behavior, signed trust-chain key rotation, explicitly signed bounded rollback tied to the installed source version, and freshness plus anti-replay enforcement for update metadata.",
-  "candidate": "RC67.16",
+  "release_notes": "RC67.17 enforces licensed feature boundaries consistently while preserving core booking, customer-safe payment fallback, operational cleanup actions, payment history and saved White Label configuration.",
+  "candidate": "RC67.17",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

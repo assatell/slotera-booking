@@ -32,6 +32,17 @@ final class MarketingPage
         if ($section === '') { $section = 'coupons'; }
         if (!in_array($section, ['coupons', 'automation', 'promotions'], true)) { $section = 'coupons'; }
 
+        $license_policy = new \Slotera\Application\Services\LicenseFeaturePolicy();
+        if (!$license_policy->allows(\Slotera\Application\Services\LicenseFeaturePolicy::MARKETING)) {
+            ?>
+            <div class="wrap sltr-admin-wrap sltr-marketing-page sltr-pro-feature-page sltr-full-width-admin sltr-page-stack">
+                <?php $sltr_marketing_section = $section; require SLTR_PLUGIN_DIR . 'includes/Admin/Views/marketing-shell-tabs.php'; ?>
+                <div class="notice notice-warning"><p><strong><?php echo esc_html($license_policy->locked_message(__('Marketing', 'slotera-booking'))); ?></strong> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
+            </div>
+            <?php
+            return;
+        }
+
         if ($section === 'coupons') {
             (new CouponsPage())->render(true);
             return;

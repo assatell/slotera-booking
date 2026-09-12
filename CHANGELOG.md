@@ -1,3 +1,13 @@
+## 1.0.1057 RC67.17 - Licensed feature enforcement
+
+- Enforce licensed feature boundaries consistently across Marketing, Payments, Analytics, Shared Database Network and White Label.
+- Keep core booking available while licensed features are locked by a verified revoked, expired or otherwise unusable license state.
+- Preserve safe stop, pause and cleanup actions for existing marketing data after revocation.
+- Disable payment gateways for locked license states and fall back new bookings to booking-only / pay-on-arrival behavior.
+- Preserve payment history, invoices and refund/support operations when payment configuration is locked.
+- Stop applying White Label branding while locked without deleting the saved White Label configuration.
+- Block Promotion sends and settings writes at service level and stop unlicensed marketing cron processing.
+- Add RC67.17 regression coverage for central policy, admin-action enforcement and customer-safe fallbacks.
 ## 1.0.1056 RC67.16 — Licensing and signed update trust hardening
 
 - Keep customer functionality enabled during licensing-server outages and make expiry/revocation server-authoritative.

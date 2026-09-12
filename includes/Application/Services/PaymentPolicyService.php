@@ -25,7 +25,8 @@ final class PaymentPolicyService
     /** @return array<int,array<string,mixed>> */
     public function get_available_options(array $package, float $total_amount, array $context = []): array
     {
-        if (function_exists('sltr_mvp_online_payments_disabled') && \sltr_mvp_online_payments_disabled()) {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::PAYMENTS)
+            || (function_exists('sltr_mvp_online_payments_disabled') && \sltr_mvp_online_payments_disabled())) {
             $decision = $this->choose_option($package, self::CHOICE_PAY_LATER, $total_amount, $context);
             return is_wp_error($decision) ? [] : [$decision];
         }
@@ -45,7 +46,8 @@ final class PaymentPolicyService
     public function choose_option(array $package, string $choice, float $total_amount, array $context = [])
     {
         $total_amount = round(max(0, $total_amount), 2);
-        if (function_exists('sltr_mvp_online_payments_disabled') && \sltr_mvp_online_payments_disabled()) {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::PAYMENTS)
+            || (function_exists('sltr_mvp_online_payments_disabled') && \sltr_mvp_online_payments_disabled())) {
             $policy = self::CHOICE_PAY_LATER;
             $choice = self::CHOICE_PAY_LATER;
         } else {
