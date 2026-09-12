@@ -25,6 +25,9 @@ final class WhiteLabelService
 
     public function enabled(): bool
     {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::WHITE_LABEL)) {
+            return false;
+        }
         return (int) ($this->settings()['white_label_enabled'] ?? 0) === 1;
     }
 
@@ -55,6 +58,9 @@ final class WhiteLabelService
 
     public function hide_vendor_branding(): bool
     {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::WHITE_LABEL)) {
+            return false;
+        }
         return (int) ($this->settings()['white_label_hide_vendor_branding'] ?? 0) === 1;
     }
 

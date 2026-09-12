@@ -20,6 +20,10 @@ final class PaymentMethodService
     /** @return array<string,PaymentMethod> */
     public function enabled_methods(): array
     {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::PAYMENTS)) {
+            return [];
+        }
+
         $settings = $this->settings->all();
         $ids = array_filter(array_map('sanitize_key', preg_split('/[\s,]+/', (string) ($settings['payment_enabled_gateways'] ?? '')) ?: []));
         $methods = [];

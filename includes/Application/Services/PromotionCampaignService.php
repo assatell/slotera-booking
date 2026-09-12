@@ -57,6 +57,10 @@ final class PromotionCampaignService
 
     public function save_settings(array $input): void
     {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::MARKETING)) {
+            return;
+        }
+
         $frequency = sanitize_key((string) ($input['promotion_digest_frequency'] ?? 'manual'));
         if (!in_array($frequency, ['manual', 'weekly', 'biweekly', 'monthly'], true)) { $frequency = 'manual'; }
         $this->settings->update([
@@ -104,6 +108,10 @@ final class PromotionCampaignService
 
     public function send_now(string $reason = 'manual', array $input = []): array
     {
+        if (!(new LicenseFeaturePolicy())->allows(LicenseFeaturePolicy::MARKETING)) {
+            return ['queued' => 0, 'skipped' => 0, 'reason' => 'license_limited'];
+        }
+
         $offers = $this->active_offers();
         if ($offers === []) {
             $this->record_run('Skipped — no active offers');

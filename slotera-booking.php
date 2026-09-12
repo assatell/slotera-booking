@@ -44,6 +44,10 @@ require_once SLTR_PLUGIN_DIR . 'includes/build.php';
 require_once SLTR_PLUGIN_DIR . 'includes/autoload.php';
 require_once SLTR_PLUGIN_DIR . 'includes/helpers.php';
 
+if (class_exists('Slotera\\Application\\Services\\LicenseFeatureEnforcer')) {
+    (new Slotera\Application\Services\LicenseFeatureEnforcer())->register_hooks();
+}
+
 function sltr_load_textdomain(): void
 {
     load_plugin_textdomain(

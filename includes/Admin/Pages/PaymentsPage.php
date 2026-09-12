@@ -31,6 +31,24 @@ final class PaymentsPage
             $tab = 'settings';
         }
 
+        if ($tab === 'settings') {
+            $license_policy = new \Slotera\Application\Services\LicenseFeaturePolicy();
+            if (!$license_policy->allows(\Slotera\Application\Services\LicenseFeaturePolicy::PAYMENTS)) {
+                ?>
+                <div class="wrap sltr-admin-wrap">
+                    <h1><?php esc_html_e('Payments', 'slotera-booking'); ?></h1>
+                    <div class="notice notice-warning"><p><strong><?php echo esc_html($license_policy->locked_message(__('Payments', 'slotera-booking'))); ?></strong> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
+                    <p>
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-payments&sltr_payment_tab=transactions')); ?>"><?php esc_html_e('Transactions', 'slotera-booking'); ?></a>
+                        &nbsp;&middot;&nbsp;
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-payments&sltr_payment_tab=invoices')); ?>"><?php esc_html_e('Invoices', 'slotera-booking'); ?></a>
+                    </p>
+                </div>
+                <?php
+                return;
+            }
+        }
+
         if ($tab === 'transactions') {
             $filters = [
                 'status' => sanitize_key((string) ($_GET['sltr_payment_status'] ?? 'all')),
