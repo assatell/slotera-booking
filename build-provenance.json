@@ -1,11 +1,11 @@
 {
   "schema": "slotera-build-provenance/v4",
-  "version": "1.0.1056",
-  "candidate": "RC67.16",
+  "version": "1.0.1057",
+  "candidate": "RC67.17",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-12T14:32:05Z",
+  "generated_at_utc": "2026-09-12T17:40:27Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "74204027a13a316abfc8a867a5def29f25140e1f52235eb4b58abef4c1ab919e",
+  "release_manifest_sha256": "ad9e0bd4a899c2435727ff47bfacf945948a8bb5ead53d2d79bcda142fb28853",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.7.0",
@@ -17,14 +17,14 @@
   },
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking",
-    "expected_tag": "v1.0.1056-rc67.16",
+    "expected_tag": "v1.0.1057-rc67.17",
     "binding": "The clean exact tag and commit are verified at QA/build time; the actual commit is recorded in the detached signed attestation to avoid an in-commit self-reference."
   },
   "source": {
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
-    "tag": "v1.0.1056-rc67.16",
-    "release_tree_sha256": "f4b4b9f8b5a9a193f76481e1f362c2746700ce7e5195bd5366e07ef105052d4d"
+    "tag": "v1.0.1057-rc67.17",
+    "release_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019"
   },
   "lineage": {
     "previous_source": {
@@ -36,17 +36,17 @@
     }
   },
   "build": {
-    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1056-rc67.16.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1057-rc67.17.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
-    "output": "slotera-booking-1.0.1056-rc67.16.zip",
-    "source_date_epoch_utc": "2026-09-12T14:32:05Z"
+    "output": "slotera-booking-1.0.1057-rc67.17.zip",
+    "source_date_epoch_utc": "2026-09-12T17:40:27Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "74204027a13a316abfc8a867a5def29f25140e1f52235eb4b58abef4c1ab919e",
-    "pre_version_sync_tree_sha256": "3decef371db784a9298a9a6d3140cc00f6f1768190042c2e2dbde7994ca9ebe2",
-    "release_tree_sha256": "f4b4b9f8b5a9a193f76481e1f362c2746700ce7e5195bd5366e07ef105052d4d"
+    "release_manifest_sha256": "ad9e0bd4a899c2435727ff47bfacf945948a8bb5ead53d2d79bcda142fb28853",
+    "pre_version_sync_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019",
+    "release_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019"
   },
   "transformation_chain": [
     {
@@ -61,17 +61,17 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "3decef371db784a9298a9a6d3140cc00f6f1768190042c2e2dbde7994ca9ebe2",
-      "changes_manifest_sha256": "74204027a13a316abfc8a867a5def29f25140e1f52235eb4b58abef4c1ab919e",
-      "latest_change": "1.0.1056 RC67.16: enforce signed update freshness, monotonic sequencing and anti-replay protection",
+      "output_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019",
+      "changes_manifest_sha256": "ad9e0bd4a899c2435727ff47bfacf945948a8bb5ead53d2d79bcda142fb28853",
+      "latest_change": "1.0.1057 RC67.17: preserve safe stop, pause, cleanup, history, invoice and refund operations after authoritative license revocation",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
     {
       "order": 3,
       "name": "manifest-version-sync",
-      "version": "1.0.1056",
-      "input_tree_sha256": "3decef371db784a9298a9a6d3140cc00f6f1768190042c2e2dbde7994ca9ebe2",
-      "output_tree_sha256": "f4b4b9f8b5a9a193f76481e1f362c2746700ce7e5195bd5366e07ef105052d4d",
+      "version": "1.0.1057",
+      "input_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019",
+      "output_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019",
       "generated_targets": [
         "slotera-booking.php:update-uri-bound",
         "slotera-booking.php:plugin-header",
@@ -87,8 +87,8 @@
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "f4b4b9f8b5a9a193f76481e1f362c2746700ce7e5195bd5366e07ef105052d4d",
-      "file_count": 399
+      "output_tree_sha256": "8b493e15bc5d450447a390eafb4ea9c18cc8cec3095b06d6c21e076e62d85019",
+      "file_count": 401
     },
     {
       "order": 5,
@@ -106,8 +106,8 @@
     {
       "order": 6,
       "name": "archive-packaging",
-      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1056-rc67.16.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
-      "output": "slotera-booking-1.0.1056-rc67.16.zip",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1057-rc67.17.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
+      "output": "slotera-booking-1.0.1057-rc67.17.zip",
       "signing_policy": {
         "algorithm": "RSA-PSS-SHA256",
         "key_id": "sha256:c3272d14be785233f096bd11ef478a85b12b889bb3e7b7930993c440b1275603",
@@ -116,7 +116,7 @@
       "note": "Official releases are signed after packaging. The final archive SHA-256 is recorded outside the ZIP in the detached attestation to avoid self-reference."
     }
   ],
-  "file_count": 399,
+  "file_count": 401,
   "tree_manifest": {
     "path": "checksums.sha256",
     "semantics": "canonical UTF-8 path ordered SHA-256 manifest; its digest is bound by the detached release attestation"
