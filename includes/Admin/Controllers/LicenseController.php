@@ -23,6 +23,16 @@ final class LicenseController
         add_action('admin_post_sltr_activate_license', [$this, 'activate']);
         add_action('admin_post_sltr_deactivate_license', [$this, 'deactivate']);
         add_action('admin_post_sltr_check_license_local', [$this, 'check_local']);
+        add_action('admin_post_sltr_start_license_trial', [$this, 'start_trial']);
+    }
+
+    public function start_trial(): void
+    {
+        $this->request->require_admin(\Slotera\Core\Capabilities::MANAGE_SETTINGS);
+        $this->request->verify_admin_nonce('sltr_start_license_trial');
+        $ok = (new LicenseService())->start_trial();
+        wp_safe_redirect(admin_url('admin.php?page=slotera-license&trial_' . ($ok ? 'started=1' : 'error=1')));
+        exit;
     }
 
     public function activate(): void
@@ -48,8 +58,8 @@ final class LicenseController
     {
         $this->request->require_admin(\Slotera\Core\Capabilities::MANAGE_SETTINGS);
         $this->request->verify_admin_nonce('sltr_check_license_local');
-        (new LicenseService())->check_license_locally();
-        wp_safe_redirect(admin_url('admin.php?page=slotera-license&license_checked=1'));
+        $ok = (new LicenseService())->refresh();
+        wp_safe_redirect(admin_url('admin.php?page=slotera-license&license_' . ($ok ? 'checked=1' : 'error=1')));
         exit;
     }
 }

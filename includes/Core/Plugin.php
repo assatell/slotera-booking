@@ -64,7 +64,9 @@ final class Plugin
         $profile_token = \Slotera\Application\Services\PerformanceProfiler::start();
 
         $this->register_component('license', static function (): void {
-            (new \Slotera\Application\Services\LicenseService())->ensure_initialized();
+            $license = new \Slotera\Application\Services\LicenseService();
+            $license->ensure_initialized();
+            $license->register_hooks();
         });
         $this->register_component('translation_maintenance', function (): void {
             $this->maybe_run_translation_maintenance();
