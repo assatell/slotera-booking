@@ -68,6 +68,9 @@ final class Plugin
             $license->ensure_initialized();
             $license->register_hooks();
         });
+        $this->register_component('signed_updates', static function (): void {
+            (new \Slotera\Application\Services\UpdateService())->register_hooks();
+        });
         $this->register_component('translation_maintenance', function (): void {
             $this->maybe_run_translation_maintenance();
         });
