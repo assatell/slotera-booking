@@ -22,16 +22,18 @@ PEM;
 
     public function verify(array $envelope): ?array
     {
+        $keyId = is_string($envelope['key_id'] ?? null) ? $envelope['key_id'] : '';
         if (($envelope['schema'] ?? '') !== 'slotera-signed-update-envelope/v1'
-            || ($envelope['key_id'] ?? '') !== self::KEY_ID
             || ($envelope['algorithm'] ?? '') !== 'RSA-SHA256') { return null; }
+        $pem = (new SigningKeyRing())->resolve('update', $keyId, self::KEY_ID, self::PUBLIC_KEY);
+        if ($pem === null) { return null; }
         $payload64 = $envelope['payload'] ?? null;
         $signature64 = $envelope['signature'] ?? null;
         if (!is_string($payload64) || !is_string($signature64) || !function_exists('openssl_verify')) { return null; }
         $bytes = base64_decode($payload64, true);
         $signature = base64_decode($signature64, true);
         if (!is_string($bytes) || !is_string($signature)
-            || openssl_verify($bytes, $signature, self::PUBLIC_KEY, OPENSSL_ALGO_SHA256) !== 1) { return null; }
+            || openssl_verify($bytes, $signature, $pem, OPENSSL_ALGO_SHA256) !== 1) { return null; }
         $payload = json_decode($bytes, true);
         if (!is_array($payload)
             || ($payload['schema'] ?? '') !== 'slotera-update/v1'
@@ -40,7 +42,27 @@ PEM;
             || !preg_match('/^\d+\.\d+\.\d+$/', (string) ($payload['version'] ?? ''))
             || !preg_match('/^[a-f0-9]{64}$/', (string) ($payload['package_sha256'] ?? ''))
             || !is_string($payload['package_url'] ?? null)
-            || !$this->safePackageUrl((string) $payload['package_url'])) { return null; }
+            || !$this->safePackageUrl((string) $payload['package_url'])
+            || !is_int($payload['sequence'] ?? null) || $payload['sequence'] < 1
+            || !is_string($payload['issued_at'] ?? null)
+            || !is_string($payload['expires_at'] ?? null)) { return null; }
+        try {
+            $issued = (new \DateTimeImmutable($payload['issued_at']))->getTimestamp();
+            $expires = (new \DateTimeImmutable($payload['expires_at']))->getTimestamp();
+        } catch (\Throwable $error) {
+            return null;
+        }
+        $now = time();
+        if ($issued > $now + 300 || $expires <= $now || $expires <= $issued || $expires - $issued > 7 * DAY_IN_SECONDS) { return null; }
+        if (isset($payload['rollback'])) {
+            $rollback = $payload['rollback'];
+            if (!is_array($rollback)
+                || ($rollback['schema'] ?? '') !== 'slotera-update-rollback/v1'
+                || !preg_match('/^\d+\.\d+\.\d+$/', (string) ($rollback['from_version'] ?? ''))
+                || !is_string($rollback['reason'] ?? null) || trim($rollback['reason']) === ''
+                || version_compare((string) $payload['version'], (string) $rollback['from_version'], '>=')) { return null; }
+        }
+        (new SigningKeyRing())->acceptTransition('update', $payload, $keyId);
         return $payload;
     }
 

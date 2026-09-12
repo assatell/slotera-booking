@@ -22,21 +22,23 @@ PEM;
 
     public function verify(array $envelope, string $siteHost, string $lastIssuedAt = ''): ?array
     {
+        $keyId = is_string($envelope['key_id'] ?? null) ? $envelope['key_id'] : '';
         if (($envelope['schema'] ?? '') !== 'slotera-signed-envelope/v1'
-            || ($envelope['key_id'] ?? '') !== self::KEY_ID
             || ($envelope['algorithm'] ?? '') !== 'RSA-SHA256') { return null; }
+        $pem = (new SigningKeyRing())->resolve('license', $keyId, self::KEY_ID, self::PUBLIC_KEY);
+        if ($pem === null) { return null; }
         $payload64 = $envelope['payload'] ?? null;
         $signature64 = $envelope['signature'] ?? null;
         if (!is_string($payload64) || !is_string($signature64) || !function_exists('openssl_verify')) { return null; }
         $bytes = base64_decode($payload64, true);
         $signature = base64_decode($signature64, true);
         if (!is_string($bytes) || !is_string($signature)
-            || openssl_verify($bytes, $signature, self::PUBLIC_KEY, OPENSSL_ALGO_SHA256) !== 1) { return null; }
+            || openssl_verify($bytes, $signature, $pem, OPENSSL_ALGO_SHA256) !== 1) { return null; }
         $payload = json_decode($bytes, true);
         if (!is_array($payload)
             || ($payload['schema'] ?? '') !== 'slotera-license-certificate/v1'
             || ($payload['plugin'] ?? '') !== 'slotera-booking'
-            || !in_array($payload['state'] ?? '', ['active', 'trial', 'revoked'], true)
+            || !in_array($payload['state'] ?? '', ['active', 'trial', 'grace', 'expired', 'revoked'], true)
             || !in_array($payload['plan'] ?? '', ['monthly', 'yearly', 'lifetime', 'trial'], true)
             || !is_string($payload['license_id'] ?? null)
             || !is_string($payload['licensed_root'] ?? null)
@@ -58,6 +60,7 @@ PEM;
         $host = strtolower(rtrim($siteHost, '.'));
         $root = strtolower(rtrim((string) $payload['licensed_root'], '.'));
         if ($host === '' || $root === '' || ($host !== $root && !str_ends_with($host, '.' . $root))) { return null; }
+        (new SigningKeyRing())->acceptTransition('license', $payload, $keyId);
         return $payload;
     }
 }

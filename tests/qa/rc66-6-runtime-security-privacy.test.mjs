@@ -94,7 +94,8 @@ test('license client verifies signed server certificates and fails open on outag
   assert.match(service, /license-api-test\.getslotera\.com\/wp-json\/slotera\/v1\/license/);
   assert.match(service, /Fail open: retain the last valid signed certificate and state indefinitely/);
   assert.match(service, /SecretStore::encrypt_string\(\$key\)/);
-  assert.match(verifier, /openssl_verify\(\$bytes, \$signature, self::PUBLIC_KEY, OPENSSL_ALGO_SHA256\)/);
+ assert.match(verifier, /\(new SigningKeyRing\(\)\)->resolve\('license', \$keyId, self::KEY_ID, self::PUBLIC_KEY\)/);
+ assert.match(verifier, /openssl_verify\(\$bytes, \$signature, \$pem, OPENSSL_ALGO_SHA256\)/);
   assert.match(verifier, /sha256:ecadf72a744b506b38c64b3898df0d5d97a7e15fcf46ba356c083f2d9583917c/);
   assert.match(verifier, /\$issued < \$lastIssued/);
   assert.match(verifier, /str_ends_with\(\$host, '\.' \. \$root\)/);

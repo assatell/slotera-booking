@@ -60,13 +60,15 @@ final class LicenseService
     public function status(): array
     {
         $data = $this->data();
+        // Server-authoritative state: local time alone never converts an active/trial
+        // signed certificate into an expired state. A signed expired/revoked response
+        // is required, so a licensing outage cannot disable customer functionality.
         $state = (string) ($data['license_status'] ?? 'unverified');
         $expires = (string) ($data['license_expires_at'] ?? '');
-        if (in_array($state, ['active', 'trial'], true) && $expires !== '' && strtotime($expires) < time()) { $state = 'expired'; }
         $allowed = in_array($state, ['active', 'trial', 'grace'], true);
         return [
             'state' => $state, 'label' => $this->state_label($state),
-            'days_left' => $expires !== '' ? max(0, (int) ceil((strtotime($expires) - time()) / DAY_IN_SECONDS)) : null,
+            'days_left' => $expires !== '' && strtotime($expires) !== false ? max(0, (int) ceil((strtotime($expires) - time()) / DAY_IN_SECONDS)) : null,
             'trial_started_at' => (string) ($data['trial_started_at'] ?? ''),
             'trial_ends_at' => $state === 'trial' ? $expires : '', 'grace_ends_at' => '',
             'license_expires_at' => $expires,

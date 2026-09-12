@@ -29,10 +29,35 @@ test('installer verifies SHA-256 and deletes a mismatched archive', () => {
   assert.match(source, /sltr_update_hash_mismatch/);
 });
 
-test('release tool signs update metadata with the offline release key', () => {
+test('update metadata is fresh, monotonic and replay-resistant', () => {
+  const verifier = read('includes/Application/Services/UpdateEnvelopeVerifier.php');
+  const service = read('includes/Application/Services/UpdateService.php');
+  assert.match(verifier, /\$payload\['sequence'\] < 1/);
+  assert.match(verifier, /\$expires <= \$now/);
+  assert.match(verifier, /7 \* DAY_IN_SECONDS/);
+  assert.match(service, /ACCEPTANCE_OPTION/);
+  assert.match(service, /\$sequence < \$lastSequence/);
+  assert.match(service, /hash_equals\(\$lastFingerprint, \$fingerprint\)/);
+  assert.match(service, /\['envelope' => \$envelope\]/);
+});
+
+test('signed rollback is restricted to the exact installed source version', () => {
+  const verifier = read('includes/Application/Services/UpdateEnvelopeVerifier.php');
+  const service = read('includes/Application/Services/UpdateService.php');
+  assert.match(verifier, /slotera-update-rollback\/v1/);
+  assert.match(verifier, /version_compare\(\(string\) \$payload\['version'\], \(string\) \$rollback\['from_version'\], '>='\)/);
+  assert.match(service, /hash_equals\(\(string\) \(\$rollback\['from_version'\] \?\? ''\), SLTR_VERSION\)/);
+  assert.match(service, /version_compare\(\$target, SLTR_VERSION, '<'\)/);
+});
+
+test('release tool signs freshness, rollback and optional key rotation with the offline release key', () => {
   const source = read('tools/update-envelope.mjs');
   assert.match(source, /RSA_PKCS1_PADDING/);
   assert.match(source, /manifest\.signing\?\.key_id/);
   assert.match(source, /package_sha256/);
+  assert.match(source, /sequence/);
+  assert.match(source, /expires_at/);
+  assert.match(source, /slotera-update-rollback\/v1/);
+  assert.match(source, /slotera-next-signing-key\/v1/);
   assert.doesNotMatch(source, /license/i);
 });
