@@ -1,14 +1,15 @@
-﻿import test from 'node:test';
+import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const fixture = path.join(root, 'tests', 'runtime', 'rc67-3-privacy-resumable.php');
 
 test('RC67.3 privacy migration processes 205 rows in exactly three bounded batches', () => {
-  const php = process.env.PHP_BINARY || 'php';
+  const php = resolvePhpExecutable();
   const run = spawnSync(php, [fixture], {
     cwd: root,
     encoding: 'utf8',

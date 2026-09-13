@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolvePhpExecutable } from '../../tools/php-runtime.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8');
@@ -13,7 +14,7 @@ test('RC67.7 stores missing ordinary-booking end dates as NULL', () => {
   assert.match(repository, /'end_date'\s*=>\s*\$this->normalize_end_date\(\$data\['end_date'\] \?\? null\)/);
   assert.match(repository, /case 'end_date':\s*\$allowed\[\$column\] = \$this->normalize_end_date\(\$value\)/s);
 
-  const php = process.env.PHP_BINARY || 'php';
+  const php = resolvePhpExecutable();
   const fixture = path.join(root, 'tests', 'runtime', 'rc67-7-end-date-normalization.php');
   const run = spawnSync(php, [fixture], { cwd: root, encoding: 'utf8' });
   assert.equal(run.status, 0, `PHP fixture failed.\nstdout=${run.stdout || ''}\nstderr=${run.stderr || ''}`);
