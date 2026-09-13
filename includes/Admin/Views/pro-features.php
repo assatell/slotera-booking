@@ -1,7 +1,7 @@
 <?php if (!defined('ABSPATH')) { exit; } ?>
 <div class="wrap sltr-admin-wrap sltr-pro-feature-page sltr-full-width-admin sltr-page-stack">
     <?php if (empty($features)) : ?>
-        <div class="sltr-empty-state"><h2 class="sltr-empty-state__title"><?php esc_html_e('No PRO features are available', 'slotera-booking'); ?></h2><p><?php esc_html_e('Features will appear here when modules are enabled.', 'slotera-booking'); ?></p></div>
+        <div class="sltr-empty-state"><h2 class="sltr-empty-state__title"><?php esc_html_e('No additional features are available', 'slotera-booking'); ?></h2><p><?php esc_html_e('Features will appear here when modules are enabled.', 'slotera-booking'); ?></p></div>
     <?php else : ?>
         <div class="sltr-component-grid sltr-component-grid--3">
             <?php foreach ($features as $key => $feature) : $status = (string) ($feature['status'] ?? 'available'); $slug = (string) ($feature['menu_slug'] ?? ''); $url = $slug !== '' ? admin_url('admin.php?page=' . $slug) : ''; $label = $status === 'active' ? __('Active', 'slotera-booking') : ($status === 'testable' ? __('Testable', 'slotera-booking') : ($status === 'soon' ? __('Coming soon', 'slotera-booking') : ($status === 'later' ? __('Later', 'slotera-booking') : __('Available', 'slotera-booking')))); ?>

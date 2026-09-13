@@ -5,7 +5,7 @@ $config_line = (string) ($report['config_line'] ?? "define('SLTR_SHARED_TABLE_PR
 $config_anchor = (string) ($report['config_anchor'] ?? "/* That's all, stop editing! Happy publishing. */");
 $developer_subject = __('Slotera Shared Database Network setup', 'slotera-booking');
 $developer_message = sprintf(
-    "Hello,\n\nPlease configure Slotera Shared Database Network for this WordPress site.\n\nAdd this line to wp-config.php on every connected website, using the same value on all sites:\n\n%s\n\nPlace it above this line:\n%s\n\nCurrent WordPress DB_NAME: %s\nCurrent WordPress table prefix: %s\nExpected shared Slotera table prefix: sltr_\n\nAfter saving wp-config.php, open WordPress admin > Slotera > PRO > Shared Database Network and run Check/create Slotera tables now.\n\nThank you.",
+    "Hello,\n\nPlease configure Slotera Shared Database Network for this WordPress site.\n\nAdd this line to wp-config.php on every connected website, using the same value on all sites:\n\n%s\n\nPlace it above this line:\n%s\n\nCurrent WordPress DB_NAME: %s\nCurrent WordPress table prefix: %s\nExpected shared Slotera table prefix: sltr_\n\nAfter saving wp-config.php, open WordPress admin > Slotera > Shared Database Network and run Check/create Slotera tables now.\n\nThank you.",
     $config_line,
     $config_anchor,
     (string) ($report['database_name'] ?? ''),
