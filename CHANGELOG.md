@@ -1,3 +1,9 @@
+## 1.0.1058 RC67.18 - License gettext recursion fix
+
+- Prevent infinite WordPress gettext recursion introduced by licensed White Label enforcement.
+- Make central license feature checks read the raw stored signed license state instead of translated status labels.
+- Preserve the existing active, trial and grace feature-access semantics.
+- Add regression coverage that forbids LicenseFeaturePolicy::allows() from calling translated LicenseService::status().
 ## 1.0.1057 RC67.17 - Licensed feature enforcement
 
 - Enforce licensed feature boundaries consistently across Marketing, Payments, Analytics, Shared Database Network and White Label.
