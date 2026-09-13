@@ -3,9 +3,9 @@
   "version": "1.0.1060",
   "candidate": "RC67.20",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-13T08:26:08Z",
+  "generated_at_utc": "2026-09-13T08:41:15Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "b6d3a07092df9593c6cfa432492b3a2d12c9d0946b9d122347533d0d0c90f6a8",
+  "release_manifest_sha256": "2e66cbcb35193846c47ad7b9470a8e5714047f3845335c7887cb643deaf36fbd",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.7.0",
@@ -24,7 +24,7 @@
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
     "tag": "v1.0.1060-rc67.20",
-    "release_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8"
+    "release_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c"
   },
   "lineage": {
     "previous_source": {
@@ -40,13 +40,13 @@
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
     "output": "slotera-booking-1.0.1060-rc67.20.zip",
-    "source_date_epoch_utc": "2026-09-13T08:26:08Z"
+    "source_date_epoch_utc": "2026-09-13T08:41:15Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "b6d3a07092df9593c6cfa432492b3a2d12c9d0946b9d122347533d0d0c90f6a8",
-    "pre_version_sync_tree_sha256": "1d68386341d420fef7457b692a66e54c90943ec8c74c6d0ea35be30dcf90ec40",
-    "release_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8"
+    "release_manifest_sha256": "2e66cbcb35193846c47ad7b9470a8e5714047f3845335c7887cb643deaf36fbd",
+    "pre_version_sync_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c",
+    "release_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c"
   },
   "transformation_chain": [
     {
@@ -61,8 +61,8 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "1d68386341d420fef7457b692a66e54c90943ec8c74c6d0ea35be30dcf90ec40",
-      "changes_manifest_sha256": "b6d3a07092df9593c6cfa432492b3a2d12c9d0946b9d122347533d0d0c90f6a8",
+      "output_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c",
+      "changes_manifest_sha256": "2e66cbcb35193846c47ad7b9470a8e5714047f3845335c7887cb643deaf36fbd",
       "latest_change": "1.0.1060 RC67.20: remove remaining visible PRO product markers and enlarge the public Powered by Slotera attribution",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
@@ -70,8 +70,8 @@
       "order": 3,
       "name": "manifest-version-sync",
       "version": "1.0.1060",
-      "input_tree_sha256": "1d68386341d420fef7457b692a66e54c90943ec8c74c6d0ea35be30dcf90ec40",
-      "output_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8",
+      "input_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c",
+      "output_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c",
       "generated_targets": [
         "slotera-booking.php:update-uri-bound",
         "slotera-booking.php:plugin-header",
@@ -87,7 +87,7 @@
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8",
+      "output_tree_sha256": "7398cb658e45f68c22e07f172cd0cb924f838e50e93a7688ba4ae9c61527de9c",
       "file_count": 401
     },
     {
