@@ -8,7 +8,6 @@ final class LicenseService
 {
     public const OPTION_NAME = 'sltr_license';
     public const CRON_HOOK = 'sltr_refresh_license';
-    public const API_URL = 'https://license-api-test.getslotera.com/wp-json/slotera/v1/license';
     public const FULL_TRIAL_DAYS = 30;
     public const GRACE_DAYS = 0;
 
@@ -134,7 +133,7 @@ final class LicenseService
     {
         $body = ['schema' => 'slotera-license-request/v1', 'plugin' => 'slotera-booking', 'operation' => $operation, 'site_url' => home_url('/')];
         if ($key !== '') { $body['license_key'] = $key; }
-        $response = wp_safe_remote_post(self::API_URL, [
+        $response = wp_safe_remote_post(sltr_license_api_url(), [
             'timeout' => 15, 'redirection' => 0, 'headers' => ['Content-Type' => 'application/json'],
             'body' => wp_json_encode($body), 'data_format' => 'body',
         ]);

@@ -5,7 +5,6 @@ if (!defined('ABSPATH')) { exit; }
 
 final class UpdateService
 {
-    private const API_URL = 'https://license-api-test.getslotera.com/wp-json/slotera/v1/update';
     private const CACHE_KEY = 'sltr_verified_update_v2';
     private const ACCEPTANCE_OPTION = 'sltr_update_acceptance_v1';
 
@@ -63,7 +62,7 @@ final class UpdateService
     {
         $cached = $this->cachedVerified();
         if ($cached !== null) { return $cached; }
-        $response = wp_safe_remote_post(self::API_URL, [
+        $response = wp_safe_remote_post(sltr_update_api_url(), [
             'timeout' => 10, 'redirection' => 0, 'limit_response_size' => 65536,
             'headers' => ['Content-Type' => 'application/json'],
             'body' => wp_json_encode([
