@@ -34,8 +34,13 @@ final class LicenseFeaturePolicy
             return false;
         }
 
-        $status = $this->license->status();
-        return in_array((string) ($status['state'] ?? 'unverified'), ['active', 'trial', 'grace'], true);
+        // This method is called from WhiteLabelService's gettext filter.
+        // Do not call LicenseService::status() here: status() builds translated
+        // labels via __(), which re-enters gettext and causes infinite recursion.
+        $data = $this->license->data();
+        $state = (string) ($data['license_status'] ?? 'unverified');
+
+        return in_array($state, ['active', 'trial', 'grace'], true);
     }
 
     public function status(): array
