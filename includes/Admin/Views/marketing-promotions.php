@@ -13,6 +13,9 @@ $fallback_url = $fallback_id > 0 ? (string) (wp_get_attachment_image_url($fallba
 ?>
 <div class="wrap sltr-admin-wrap sltr-marketing-page sltr-full-width-admin sltr-page-stack">
     <?php $sltr_marketing_section = 'promotions'; require SLTR_PLUGIN_DIR . 'includes/Admin/Views/marketing-shell-tabs.php'; ?>
+    <?php if (!empty($sltr_marketing_locked)) : ?>
+        <div class="notice notice-warning"><p><strong><?php echo esc_html($sltr_marketing_locked_message); ?></strong> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
+    <?php endif; ?>
     <?php if (!empty($sltr_get['promotion_saved'])) : ?><div class="notice notice-success"><p>Promotion settings saved.</p></div><?php endif; ?>
     <?php if (!empty($sltr_get['promotion_test_sent'])) : ?><div class="notice notice-success"><p>Test promotion email sent.</p></div><?php endif; ?>
     <?php if (!empty($sltr_get['promotion_test_failed'])) : ?><div class="notice notice-error"><p>Test promotion email could not be sent.</p></div><?php endif; ?>
@@ -24,6 +27,7 @@ $fallback_url = $fallback_id > 0 ? (string) (wp_get_attachment_image_url($fallba
     <form id="sltr-promotion-settings-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" class="sltr-card" style="padding:20px;max-width:1100px;">
         <input type="hidden" name="action" value="sltr_save_promotion_digest">
         <?php wp_nonce_field('sltr_save_promotion_digest'); ?>
+        <fieldset <?php disabled(!empty($sltr_marketing_locked)); ?>>
         <h3>Schedule</h3>
         <p><label><strong>Frequency</strong><br>
             <select name="promotion_digest_frequency">
@@ -71,7 +75,10 @@ $fallback_url = $fallback_id > 0 ? (string) (wp_get_attachment_image_url($fallba
         <?php endif; ?>
 
         <p><strong>Eligible marketing recipients:</strong> <?php echo esc_html((string) $promotion_recipients); ?></p>
+        <?php if (empty($sltr_marketing_locked)) : ?>
         <p><button type="submit" class="button button-primary">Save promotion settings</button></p>
+        <?php endif; ?>
+            </fieldset>
     </form>
 
     <div class="sltr-card" style="padding:20px;max-width:1100px;margin-top:20px;">
@@ -79,15 +86,19 @@ $fallback_url = $fallback_id > 0 ? (string) (wp_get_attachment_image_url($fallba
         <?php $promotion_preview = $promotion_service->preview((string) ($promotion_settings['test_email'] ?? '')); ?>
         <p><strong>Subject:</strong> <?php echo esc_html((string) ($promotion_preview['subject'] ?? '')); ?></p>
         <iframe title="Promotion email preview" style="width:100%;height:720px;border:1px solid #ccd0d4;background:#fff" srcdoc="<?php echo esc_attr((string) ($promotion_preview['body'] ?? '')); ?>"></iframe>
+        <?php if (empty($sltr_marketing_locked)) : ?>
         <form id="sltr-promotion-test-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top:16px;display:flex;gap:8px;align-items:end;flex-wrap:wrap;">
             <input type="hidden" name="action" value="sltr_send_promotion_test"><?php wp_nonce_field('sltr_send_promotion_test'); ?>
             <label><strong>Test email</strong><br><input type="email" name="promotion_test_email" value="<?php echo esc_attr((string) $promotion_settings['test_email']); ?>" required></label>
             <button type="submit" class="button">Send test email</button>
         </form>
+        <?php endif; ?>
+        <?php if (empty($sltr_marketing_locked)) : ?>
         <form id="sltr-promotion-send-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin-top:12px;">
             <input type="hidden" name="action" value="sltr_send_promotion_now"><?php wp_nonce_field('sltr_send_promotion_now'); ?>
             <button type="submit" class="button button-primary" <?php disabled($promotion_offers === []); ?>>Send now</button>
         </form>
+        <?php endif; ?>
     </div>
 </div>
 <script>

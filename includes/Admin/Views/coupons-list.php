@@ -27,12 +27,17 @@
     <?php if (!empty($sltr_get['campaign_deleted'])) : ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e('Campaign deleted.', 'slotera-booking'); ?></p></div><?php endif; ?>
     <header class="sltr-page-header">
         <div class="sltr-page-header__content"><h1 class="sltr-page-header__title"><?php esc_html_e('Coupons', 'slotera-booking'); ?></h1></div>
-        <div class="sltr-page-header__actions"><a href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&action=new')); ?>" class="page-title-action"><?php esc_html_e('Add New', 'slotera-booking'); ?></a></div>
+        <?php if (empty($sltr_marketing_locked)) : ?>
+            <div class="sltr-page-header__actions"><a href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&action=new')); ?>" class="page-title-action"><?php esc_html_e('Add New', 'slotera-booking'); ?></a></div>
+        <?php endif; ?>
     </header>
     <nav class="nav-tab-wrapper sltr-admin-tabs" aria-label="<?php esc_attr_e('Coupons sections', 'slotera-booking'); ?>">
         <a class="nav-tab nav-tab-active" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing')); ?>"><?php esc_html_e('Coupons', 'slotera-booking'); ?></a>
         <a class="nav-tab" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&sltr_coupon_tab=campaigns')); ?>"><?php esc_html_e('Coupon Campaigns', 'slotera-booking'); ?></a>
     </nav>
+    <?php if (!empty($sltr_marketing_locked)) : ?>
+        <div class="notice notice-warning"><p><strong><?php echo esc_html($license_policy->locked_message(__('Marketing', 'slotera-booking'))); ?></strong> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
+    <?php endif; ?>
     <?php if (!empty($sltr_get['updated'])) : ?><div class="notice notice-success"><p><?php esc_html_e('Coupon saved.', 'slotera-booking'); ?></p></div><?php endif; ?>
     <?php if (!empty($sltr_get['deleted'])) : ?><div class="notice notice-success"><p><?php esc_html_e('Coupon deleted.', 'slotera-booking'); ?></p></div><?php endif; ?>
     <table class="widefat striped">
@@ -49,17 +54,24 @@
                     <?php $sltr_campaign = $coupon_campaigns[(int) $coupon['id']] ?? null; ?>
                     <?php if ($sltr_campaign) : $sltr_campaign_id = (int) ($sltr_campaign['id'] ?? 0); $sltr_campaign_status = sanitize_key((string) ($sltr_campaign['status'] ?? 'draft')); ?>
                         <div class="sltr-form-actions sltr-form-actions--compact">
+                            <?php if (empty($sltr_marketing_locked)) : ?>
                             <a class="button button-small" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&sltr_coupon_tab=campaigns&action=edit&id=' . $sltr_campaign_id)); ?>"><?php esc_html_e('View', 'slotera-booking'); ?></a>
                             <?php if (in_array($sltr_campaign_status, ['draft', 'completed'], true)) : ?>
                                 <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_send_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $sltr_campaign_id); ?>"><input type="hidden" name="return_coupons" value="1"><?php wp_nonce_field('sltr_send_marketing_campaign_' . $sltr_campaign_id); ?><button class="button button-small button-primary" type="submit"><?php esc_html_e('Send now', 'slotera-booking'); ?></button></form>
                             <?php else : ?>
                                 <span class="sltr-status-badge sltr-status-badge--<?php echo esc_attr(sanitize_html_class($sltr_campaign_status)); ?>"><?php echo esc_html($sltr_campaign_status); ?></span>
                             <?php endif; ?>
+                        <?php else : ?>
+                            <span class="sltr-status-badge sltr-status-badge--<?php echo esc_attr(sanitize_html_class($sltr_campaign_status)); ?>"><?php echo esc_html($sltr_campaign_status); ?></span>
+                        <?php endif; ?>
+
                             <a class="button button-small submitdelete" data-sltr-confirm="<?php echo esc_attr(__('Delete this campaign and its sending history? The coupon will remain active until its own expiry or deactivation.', 'slotera-booking')); ?>" data-sltr-confirm-title="<?php esc_attr_e('Confirm action', 'slotera-booking'); ?>" data-sltr-confirm-button="<?php esc_attr_e('Confirm', 'slotera-booking'); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=sltr_delete_marketing_campaign&id=' . $sltr_campaign_id . '&return_coupons=1'), 'sltr_delete_marketing_campaign_' . $sltr_campaign_id)); ?>"><?php esc_html_e('Delete campaign', 'slotera-booking'); ?></a>
                         </div>
                     <?php else : ?>
                         <div class="sltr-form-actions sltr-form-actions--compact">
-                            <a class="button button-small" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&sltr_coupon_tab=campaigns&action=new&coupon_id=' . (int) $coupon['id'])); ?>"><?php esc_html_e('Create campaign', 'slotera-booking'); ?></a>
+                            <?php if (empty($sltr_marketing_locked)) : ?>
+                                <a class="button button-small" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&sltr_coupon_tab=campaigns&action=new&coupon_id=' . (int) $coupon['id'])); ?>"><?php esc_html_e('Create campaign', 'slotera-booking'); ?></a>
+                            <?php endif; ?>
                             <a class="button button-small submitdelete" data-sltr-confirm="<?php echo esc_attr(__('Delete this coupon? Any customer holding this code will no longer be able to use it.', 'slotera-booking')); ?>" data-sltr-confirm-title="<?php esc_attr_e('Confirm action', 'slotera-booking'); ?>" data-sltr-confirm-button="<?php esc_attr_e('Confirm', 'slotera-booking'); ?>" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=sltr_delete_coupon&id=' . (int) $coupon['id']), 'sltr_delete_coupon_' . (int) $coupon['id'])); ?>"><?php esc_html_e('Delete coupon', 'slotera-booking'); ?></a>
                         </div>
                     <?php endif; ?>

@@ -32,9 +32,13 @@ $preview_url = wp_nonce_url(
 <section class="sltr-panel sltr-marketing-panel">
     <h2><?php echo esc_html($sltr_title); ?></h2>
     <p class="description"><?php echo esc_html($sltr_description); ?></p>
+    <?php if (!empty($sltr_marketing_locked)) : ?>
+        <div class="notice notice-warning inline"><p><strong><?php echo esc_html($sltr_marketing_locked_message); ?></strong> <?php esc_html_e('Saved automation settings remain visible but cannot be changed or started.', 'slotera-booking'); ?> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
+    <?php endif; ?>
     <form id="sltr-automation-settings-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <input type="hidden" name="action" value="<?php echo esc_attr($sltr_save_action); ?>">
         <?php wp_nonce_field($sltr_save_action); ?>
+        <fieldset <?php disabled(!empty($sltr_marketing_locked)); ?>>
         <table class="form-table" role="presentation"><tbody>
             <tr><th scope="row"><?php esc_html_e('Offer', 'slotera-booking'); ?></th><td>
                 <p><strong><?php esc_html_e('Every recipient receives a unique one-use coupon automatically.', 'slotera-booking'); ?></strong></p>
@@ -92,8 +96,10 @@ $preview_url = wp_nonce_url(
             </td></tr>
             <tr><th scope="row"><?php esc_html_e('Schedule', 'slotera-booking'); ?></th><td><p class="description"><?php printf(esc_html__('Automation check runs hourly. Next check: %s. Last run: %s.', 'slotera-booking'), !empty($automation_next_run) ? esc_html(wp_date('Y-m-d H:i', (int) $automation_next_run)) : esc_html__('not scheduled', 'slotera-booking'), esc_html((string) ($settings[$sltr_prefix . 'last_run'] ?? 'never'))); ?></p></td></tr>
         </tbody></table>
+            </fieldset>
     </form>
 
+    <?php if (empty($sltr_marketing_locked)) : ?>
     <div class="sltr-panel__body">
         <h3><?php esc_html_e('Preview and test', 'slotera-booking'); ?></h3>
         <p class="description"><?php esc_html_e('Preview and test use the saved automation settings. They do not create a campaign or real personal coupons.', 'slotera-booking'); ?></p>
@@ -109,4 +115,5 @@ $preview_url = wp_nonce_url(
             <?php submit_button(__('Run now', 'slotera-booking'), 'secondary', 'submit', false, $marketing_allowed && $automation_allowed ? [] : ['disabled' => 'disabled']); ?>
         </form>
     </div>
+    <?php endif; ?>
 </section>
