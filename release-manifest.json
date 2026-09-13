@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1057",
+  "version": "1.0.1058",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1057-rc67.17"
+    "tag": "v1.0.1058-rc67.18"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -160,10 +160,13 @@
     "1.0.1056 RC67.16: enforce signed update freshness, monotonic sequencing and anti-replay protection",
     "1.0.1057 RC67.17: enforce licensed feature boundaries across Marketing, Payments, Analytics, Shared Database Network and White Label",
     "1.0.1057 RC67.17: preserve core booking and customer-safe payment fallback while licensed features are locked",
-    "1.0.1057 RC67.17: preserve safe stop, pause, cleanup, history, invoice and refund operations after authoritative license revocation"
+    "1.0.1057 RC67.17: preserve safe stop, pause, cleanup, history, invoice and refund operations after authoritative license revocation",
+    "1.0.1058 RC67.18: prevent infinite gettext recursion in licensed White Label enforcement",
+    "1.0.1058 RC67.18: read raw signed license state in central feature policy without translated status re-entry",
+    "1.0.1058 RC67.18: add regression coverage for gettext-safe license feature checks"
   ],
-  "release_notes": "RC67.17 enforces licensed feature boundaries consistently while preserving core booking, customer-safe payment fallback, operational cleanup actions, payment history and saved White Label configuration.",
-  "candidate": "RC67.17",
+  "release_notes": "RC67.18 fixes an infinite WordPress gettext recursion in licensed White Label enforcement while preserving the RC67.17 feature-boundary policy and signed license-state semantics.",
+  "candidate": "RC67.18",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },
