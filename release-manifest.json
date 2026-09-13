@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1059",
+  "version": "1.0.1060",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1059-rc67.19"
+    "tag": "v1.0.1060-rc67.20"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -166,10 +166,11 @@
     "1.0.1058 RC67.18: add regression coverage for gettext-safe license feature checks",
     "1.0.1059 RC67.19: keep revoked Marketing pages and existing data visible in read-only mode",
     "1.0.1059 RC67.19: preserve safe stop, pause, cancel and delete actions while blocking create, edit, send, run, resume and retry",
-    "1.0.1059 RC67.19: make Marketing automations and Promotions read-only under locked license states and add regression coverage"
+    "1.0.1059 RC67.19: make Marketing automations and Promotions read-only under locked license states and add regression coverage",
+    "1.0.1060 RC67.20: remove remaining visible PRO product markers and enlarge the public Powered by Slotera attribution"
   ],
-  "release_notes": "RC67.19 keeps existing Marketing data visible after authoritative license revocation while allowing only safe cleanup actions and making configuration, creation, sending and restart operations read-only or unavailable.",
-  "candidate": "RC67.19",
+ "release_notes": "RC67.20 removes the remaining visible PRO product wording from the admin UI, preserves internal compatibility identifiers, and increases the public Powered by Slotera attribution from 12px to 14px.",
+  "candidate": "RC67.20",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

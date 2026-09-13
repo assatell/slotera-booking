@@ -1,11 +1,11 @@
 {
   "schema": "slotera-build-provenance/v4",
-  "version": "1.0.1059",
-  "candidate": "RC67.19",
+  "version": "1.0.1060",
+  "candidate": "RC67.20",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-13T06:38:59Z",
+  "generated_at_utc": "2026-09-13T08:26:08Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "21cdf45e0cc3ea9e366bdc44f2228e81a4c5276ad80558d6a8324b5f61a19e9e",
+  "release_manifest_sha256": "b6d3a07092df9593c6cfa432492b3a2d12c9d0946b9d122347533d0d0c90f6a8",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.7.0",
@@ -17,14 +17,14 @@
   },
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking",
-    "expected_tag": "v1.0.1059-rc67.19",
+    "expected_tag": "v1.0.1060-rc67.20",
     "binding": "The clean exact tag and commit are verified at QA/build time; the actual commit is recorded in the detached signed attestation to avoid an in-commit self-reference."
   },
   "source": {
     "type": "git-tag-target",
     "repository": "https://github.com/assatell/slotera-booking",
-    "tag": "v1.0.1059-rc67.19",
-    "release_tree_sha256": "715af39f50740e6f09617f549c6cdcf6775bbec7ed8e948a3835b0bc576a730d"
+    "tag": "v1.0.1060-rc67.20",
+    "release_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8"
   },
   "lineage": {
     "previous_source": {
@@ -36,17 +36,17 @@
     }
   },
   "build": {
-    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1059-rc67.19.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1060-rc67.20.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
-    "output": "slotera-booking-1.0.1059-rc67.19.zip",
-    "source_date_epoch_utc": "2026-09-13T06:38:59Z"
+    "output": "slotera-booking-1.0.1060-rc67.20.zip",
+    "source_date_epoch_utc": "2026-09-13T08:26:08Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "21cdf45e0cc3ea9e366bdc44f2228e81a4c5276ad80558d6a8324b5f61a19e9e",
-    "pre_version_sync_tree_sha256": "d02f65f63893b7deef7dfc2997ee9d6b997e6d2b20ab08a6dc4f416bb9f4a2da",
-    "release_tree_sha256": "715af39f50740e6f09617f549c6cdcf6775bbec7ed8e948a3835b0bc576a730d"
+    "release_manifest_sha256": "b6d3a07092df9593c6cfa432492b3a2d12c9d0946b9d122347533d0d0c90f6a8",
+    "pre_version_sync_tree_sha256": "1d68386341d420fef7457b692a66e54c90943ec8c74c6d0ea35be30dcf90ec40",
+    "release_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8"
   },
   "transformation_chain": [
     {
@@ -61,17 +61,17 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "d02f65f63893b7deef7dfc2997ee9d6b997e6d2b20ab08a6dc4f416bb9f4a2da",
-      "changes_manifest_sha256": "21cdf45e0cc3ea9e366bdc44f2228e81a4c5276ad80558d6a8324b5f61a19e9e",
-      "latest_change": "1.0.1059 RC67.19: make Marketing automations and Promotions read-only under locked license states and add regression coverage",
+      "output_tree_sha256": "1d68386341d420fef7457b692a66e54c90943ec8c74c6d0ea35be30dcf90ec40",
+      "changes_manifest_sha256": "b6d3a07092df9593c6cfa432492b3a2d12c9d0946b9d122347533d0d0c90f6a8",
+      "latest_change": "1.0.1060 RC67.20: remove remaining visible PRO product markers and enlarge the public Powered by Slotera attribution",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
     {
       "order": 3,
       "name": "manifest-version-sync",
-      "version": "1.0.1059",
-      "input_tree_sha256": "d02f65f63893b7deef7dfc2997ee9d6b997e6d2b20ab08a6dc4f416bb9f4a2da",
-      "output_tree_sha256": "715af39f50740e6f09617f549c6cdcf6775bbec7ed8e948a3835b0bc576a730d",
+      "version": "1.0.1060",
+      "input_tree_sha256": "1d68386341d420fef7457b692a66e54c90943ec8c74c6d0ea35be30dcf90ec40",
+      "output_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8",
       "generated_targets": [
         "slotera-booking.php:update-uri-bound",
         "slotera-booking.php:plugin-header",
@@ -87,7 +87,7 @@
     {
       "order": 4,
       "name": "release-tree-snapshot",
-      "output_tree_sha256": "715af39f50740e6f09617f549c6cdcf6775bbec7ed8e948a3835b0bc576a730d",
+      "output_tree_sha256": "13a61d656c635c873021f35b0fd4fc60095754538427e9fd6cdc7189d73592e8",
       "file_count": 401
     },
     {
@@ -106,8 +106,8 @@
     {
       "order": 6,
       "name": "archive-packaging",
-      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1059-rc67.19.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
-      "output": "slotera-booking-1.0.1059-rc67.19.zip",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/build-release.ps1 -OutputPath \"C:\\Slotera\\Releases\\slotera-booking-1.0.1060-rc67.20.zip\" -SigningKeyPath \"C:\\Slotera\\ReleaseSigner\\slotera-release-private.pem\" -NodePath \"node\"",
+      "output": "slotera-booking-1.0.1060-rc67.20.zip",
       "signing_policy": {
         "algorithm": "RSA-PSS-SHA256",
         "key_id": "sha256:c3272d14be785233f096bd11ef478a85b12b889bb3e7b7930993c440b1275603",
