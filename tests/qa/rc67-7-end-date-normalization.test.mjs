@@ -26,6 +26,7 @@ test('RC67.7 migrates legacy zero dates before advancing DB version', () => {
   const migration = read('includes/Core/Migrations/Version_1_0_1047.php');
   assert.match(registry, /'1\.0\.1047'\s*=>\s*Version_1_0_1047::class/);
   assert.match(migration, /SET end_date = NULL/);
-  assert.match(migration, /CAST\(end_date AS CHAR\) = '0000-00-00'/);
+  assert.match(migration, /end_date < '1000-01-01'/);
+  assert.match(migration, /SELECT id[\s\S]*LIMIT 1/);
   assert.match(migration, /public static function is_complete\(\): bool/);
 });
