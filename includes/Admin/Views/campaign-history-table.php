@@ -75,7 +75,7 @@ $sltr_history_label = $sltr_history_context === 'automation' ? __('Automation ca
                                         <?php wp_nonce_field('sltr_marketing_automation_toggle_' . $id); ?>
                                         <button class="button button-small" type="submit"><?php esc_html_e('Stop', 'slotera-booking'); ?></button>
                                     </form>
-                                <?php else : ?>
+                                <?php elseif (empty($sltr_marketing_locked)) : ?>
                                     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                                         <input type="hidden" name="action" value="sltr_run_marketing_automation">
                                         <input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>">
@@ -84,18 +84,26 @@ $sltr_history_label = $sltr_history_context === 'automation' ? __('Automation ca
                                     </form>
                                 <?php endif; ?>
                             <?php else : ?>
-                                <a class="button button-small" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&sltr_coupon_tab=campaigns&action=edit&id=' . $id)); ?>"><?php esc_html_e('View', 'slotera-booking'); ?></a>
+                                <?php if (empty($sltr_marketing_locked)) : ?>
+                                    <a class="button button-small" href="<?php echo esc_url(admin_url('admin.php?page=slotera-marketing&sltr_coupon_tab=campaigns&action=edit&id=' . $id)); ?>"><?php esc_html_e('View', 'slotera-booking'); ?></a>
+                                <?php endif; ?>
                                 <?php if ($active) : ?>
-                                    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_process_marketing_queue_now"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_process_marketing_queue_now_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Run batch now', 'slotera-booking'); ?></button></form>
+                                    <?php if (empty($sltr_marketing_locked)) : ?>
+                                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_process_marketing_queue_now"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_process_marketing_queue_now_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Run batch now', 'slotera-booking'); ?></button></form>
+                                    <?php endif; ?>
                                     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_pause_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_marketing_status_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Pause', 'slotera-booking'); ?></button></form>
                                 <?php elseif ($paused) : ?>
-                                    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_resume_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_marketing_status_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Resume', 'slotera-booking'); ?></button></form>
+                                    <?php if (empty($sltr_marketing_locked)) : ?>
+                                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_resume_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_marketing_status_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Resume', 'slotera-booking'); ?></button></form>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                                 <?php if (($active || $paused) && !$cancelled) : ?>
                                     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" data-sltr-confirm="<?php echo esc_attr(__('Cancel this campaign? Pending emails will remain in history but will not be sent.', 'slotera-booking')); ?>" data-sltr-confirm-title="<?php esc_attr_e('Confirm action', 'slotera-booking'); ?>" data-sltr-confirm-button="<?php esc_attr_e('Confirm', 'slotera-booking'); ?>"><input type="hidden" name="action" value="sltr_stop_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_marketing_status_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Cancel', 'slotera-booking'); ?></button></form>
                                 <?php endif; ?>
                                 <?php if ($failed > 0 && !$active && !$paused && !$cancelled) : ?>
-                                    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_retry_failed_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_retry_failed_marketing_campaign_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Retry failed', 'slotera-booking'); ?></button></form>
+                                    <?php if (empty($sltr_marketing_locked)) : ?>
+                                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>"><input type="hidden" name="action" value="sltr_retry_failed_marketing_campaign"><input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>"><input type="hidden" name="return_history" value="1"><?php wp_nonce_field('sltr_retry_failed_marketing_campaign_' . $id); ?><button class="button button-small" type="submit"><?php esc_html_e('Retry failed', 'slotera-booking'); ?></button></form>
+                                    <?php endif; ?>
                                 <?php endif; ?>
                             <?php endif; ?>
                             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" data-sltr-confirm="<?php echo esc_attr($sltr_history_context === 'automation' ? __('Delete this automation and its campaign history?', 'slotera-booking') : __('Delete this campaign and its sending history?', 'slotera-booking')); ?>" data-sltr-confirm-title="<?php esc_attr_e('Confirm action', 'slotera-booking'); ?>" data-sltr-confirm-button="<?php esc_attr_e('Confirm', 'slotera-booking'); ?>">

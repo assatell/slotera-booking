@@ -21,8 +21,8 @@ if (!in_array($sltr_marketing_tab, $sltr_marketing_tabs, true)) { $sltr_marketin
     <?php if ($sltr_external_mail_plugins !== []) : ?>
         <div class="notice notice-info"><p><strong><?php esc_html_e('External email delivery detected:', 'slotera-booking'); ?></strong> <?php echo esc_html($sltr_external_mail_names); ?>. <?php esc_html_e('Marketing Emails remain available. Slotera sends through wp_mail(), so your existing email delivery plugin can handle transport. To avoid conflicts, leave Slotera SMTP disabled; disable the external delivery plugin first only if you intentionally want Slotera to manage SMTP.', 'slotera-booking'); ?></p></div>
     <?php endif; ?>
-    <?php if (!empty($sltr_get['license_limited']) || (isset($license_status) && empty($license_status['marketing_allowed']))) : ?>
-        <div class="notice notice-warning"><p><?php esc_html_e('Marketing is paused because the license period has expired. Bookings continue to work. Activate the yearly license to resume campaigns and automations.', 'slotera-booking'); ?> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
+    <?php if (!empty($sltr_marketing_locked)) : ?>
+        <div class="notice notice-warning"><p><strong><?php echo esc_html($sltr_marketing_locked_message); ?></strong> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Open License', 'slotera-booking'); ?></a></p></div>
     <?php elseif (isset($license_status) && ($license_status['state'] ?? '') === 'grace') : ?>
         <div class="notice notice-warning"><p><?php esc_html_e('Limited grace period: basic manual campaigns remain available. Automations, advanced filters, personal coupons and queue tuning are locked until license activation.', 'slotera-booking'); ?> <a href="<?php echo esc_url(admin_url('admin.php?page=slotera-license')); ?>"><?php esc_html_e('Activate license', 'slotera-booking'); ?></a></p></div>
     <?php endif; ?>

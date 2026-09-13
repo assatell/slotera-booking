@@ -31,6 +31,15 @@ final class CouponsPage
         $this->request->require_admin(\Slotera\Core\Capabilities::MANAGE_MARKETING);
         $sltr_embedded_in_marketing = $embedded_in_marketing;
         $action = $this->request->get_key('action');
+
+        $license_policy = new \Slotera\Application\Services\LicenseFeaturePolicy();
+        $sltr_marketing_locked = !$license_policy->allows(
+            \Slotera\Application\Services\LicenseFeaturePolicy::MARKETING
+        );
+
+        if ($sltr_marketing_locked && in_array($action, ['new', 'edit'], true)) {
+            $action = '';
+        }
         $tab = $this->request->get_key('sltr_coupon_tab');
         if ($tab === 'campaigns') {
             $campaign_repo = new MarketingCampaignRepository();
