@@ -1,3 +1,10 @@
+## 1.0.1060 RC67.20 - PRO marker cleanup and attribution polish
+
+- Remove the remaining visible PRO product wording from additional-features, Shared Database Network and White Label admin text.
+- Preserve internal legacy class names, slugs and file names where they are not user-visible to avoid unnecessary compatibility risk.
+- Increase the public Powered by Slotera attribution from 12px to 14px for better visibility.
+- Update the existing public-attribution regression and add RC67.20 coverage preventing visible PRO wording from returning.
+
 ## 1.0.1059 RC67.19 - Revoked Marketing read-only access
 
 - Keep Coupons, Coupon Campaigns, Marketing automation history and Promotions visible after authoritative license revocation.

@@ -67,7 +67,7 @@ final class ProFeatureRegistry
                 'title' => __('White Label', 'slotera-booking'),
                 'status' => 'active',
                 'menu_slug' => 'slotera-white-label',
-                'description' => __('Agency/client branding options for Pro installations: product name, admin logo, footer text and plugin-list branding.', 'slotera-booking'),
+                'description' => __('Agency/client branding options: product name, admin logo, footer text and plugin-list branding.', 'slotera-booking'),
                 'items' => [
                     __('Custom brand and product names', 'slotera-booking'),
                     __('Admin logo URL and footer text', 'slotera-booking'),
