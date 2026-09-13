@@ -1,7 +1,7 @@
 {
   "schema": "slotera-release-manifest/v2",
   "package": "slotera-booking",
-  "version": "1.0.1058",
+  "version": "1.0.1059",
   "channel": "release-candidate",
   "builder": {
     "name": "slotera-release-builder",
@@ -12,7 +12,7 @@
     "type": "git",
     "repository": "https://github.com/assatell/slotera-booking",
     "required": true,
-    "tag": "v1.0.1058-rc67.18"
+    "tag": "v1.0.1059-rc67.19"
   },
   "update_uri": "https://getslotera.com/?plugin=slotera-booking",
   "archive": {
@@ -163,10 +163,13 @@
     "1.0.1057 RC67.17: preserve safe stop, pause, cleanup, history, invoice and refund operations after authoritative license revocation",
     "1.0.1058 RC67.18: prevent infinite gettext recursion in licensed White Label enforcement",
     "1.0.1058 RC67.18: read raw signed license state in central feature policy without translated status re-entry",
-    "1.0.1058 RC67.18: add regression coverage for gettext-safe license feature checks"
+    "1.0.1058 RC67.18: add regression coverage for gettext-safe license feature checks",
+    "1.0.1059 RC67.19: keep revoked Marketing pages and existing data visible in read-only mode",
+    "1.0.1059 RC67.19: preserve safe stop, pause, cancel and delete actions while blocking create, edit, send, run, resume and retry",
+    "1.0.1059 RC67.19: make Marketing automations and Promotions read-only under locked license states and add regression coverage"
   ],
-  "release_notes": "RC67.18 fixes an infinite WordPress gettext recursion in licensed White Label enforcement while preserving the RC67.17 feature-boundary policy and signed license-state semantics.",
-  "candidate": "RC67.18",
+  "release_notes": "RC67.19 keeps existing Marketing data visible after authoritative license revocation while allowing only safe cleanup actions and making configuration, creation, sending and restart operations read-only or unavailable.",
+  "candidate": "RC67.19",
   "vcs": {
     "repository": "https://github.com/assatell/slotera-booking"
   },

@@ -1,3 +1,11 @@
+## 1.0.1059 RC67.19 - Revoked Marketing read-only access
+
+- Keep Coupons, Coupon Campaigns, Marketing automation history and Promotions visible after authoritative license revocation.
+- Block creation, editing, sending, running, resuming, retrying and licensed Marketing configuration while locked.
+- Preserve safe Stop, Pause, Cancel and Delete actions for existing Marketing data.
+- Make automation settings and Promotions configuration read-only while keeping saved values and previews visible.
+- Replace stale expired/yearly-license warnings with the actual signed license-state message.
+- Add RC67.19 regression coverage for read-only Marketing access and safe cleanup actions.
 ## 1.0.1058 RC67.18 - License gettext recursion fix
 
 - Prevent infinite WordPress gettext recursion introduced by licensed White Label enforcement.
