@@ -1,3 +1,10 @@
+## 1.0.1061 RC67.21 - Production readiness hardening
+
+- Switch license and signed-update clients to production-safe first-party API endpoints while permitting explicit HTTPS-only getslotera.com test overrides.
+- Use the shared PHP runtime resolver in the remaining runtime QA fixtures so PHP and PHP_BINARY configurations behave consistently.
+- Optimize the legacy zero end-date migration to use the indexed end_date range and a LIMIT 1 completion check instead of CAST and COUNT scans.
+- Validate privacy and end-date migration query plans and representative 100,000-row workloads against MariaDB 11.4.12 on an isolated test database.
+
 ## 1.0.1060 RC67.20 - PRO marker cleanup and attribution polish
 
 - Remove the remaining visible PRO product wording from additional-features, Shared Database Network and White Label admin text.
