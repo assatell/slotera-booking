@@ -19,7 +19,7 @@ final class Version_1_0_1047 implements MigrationInterface
             "UPDATE {$table}
              SET end_date = NULL
              WHERE end_date IS NOT NULL
-               AND CAST(end_date AS CHAR) = '0000-00-00'"
+               AND end_date < '1000-01-01'"
         );
     }
 
@@ -29,12 +29,14 @@ final class Version_1_0_1047 implements MigrationInterface
 
         $table = Database::bookings_table();
         $remaining = $wpdb->get_var(
-            "SELECT COUNT(*)
+            "SELECT id
              FROM {$table}
              WHERE end_date IS NOT NULL
-               AND CAST(end_date AS CHAR) = '0000-00-00'"
+               AND end_date < '1000-01-01'
+             ORDER BY end_date ASC
+             LIMIT 1"
         );
 
-        return $remaining !== null && (int) $remaining === 0;
+        return $remaining === null;
     }
 }

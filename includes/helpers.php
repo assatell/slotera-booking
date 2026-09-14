@@ -296,6 +296,54 @@ if (!function_exists('sltr_activity_event_label')) {
     }
 }
 
+if (!function_exists('sltr_slotera_api_url_allowed')) {
+    function sltr_slotera_api_url_allowed(string $url): bool
+    {
+        $parts = wp_parse_url($url);
+        if (!is_array($parts)
+            || strtolower((string) ($parts['scheme'] ?? '')) !== 'https'
+            || isset($parts['user'])
+            || isset($parts['pass'])) {
+            return false;
+        }
+
+        $host = strtolower(rtrim((string) ($parts['host'] ?? ''), '.'));
+        return $host === 'getslotera.com' || str_ends_with($host, '.getslotera.com');
+    }
+}
+
+if (!function_exists('sltr_slotera_api_endpoint')) {
+    function sltr_slotera_api_endpoint(string $constantName, string $default): string
+    {
+        $candidate = defined($constantName) ? constant($constantName) : $default;
+        if (!is_string($candidate)) {
+            return $default;
+        }
+
+        $candidate = trim($candidate);
+        return sltr_slotera_api_url_allowed($candidate) ? $candidate : $default;
+    }
+}
+
+if (!function_exists('sltr_license_api_url')) {
+    function sltr_license_api_url(): string
+    {
+        return sltr_slotera_api_endpoint(
+            'SLTR_LICENSE_API_URL',
+            'https://api.getslotera.com/wp-json/slotera/v1/license'
+        );
+    }
+}
+
+if (!function_exists('sltr_update_api_url')) {
+    function sltr_update_api_url(): string
+    {
+        return sltr_slotera_api_endpoint(
+            'SLTR_UPDATE_API_URL',
+            'https://api.getslotera.com/wp-json/slotera/v1/update'
+        );
+    }
+}
 if (!function_exists('sltr_feature_hard_disabled')) {
     /**
      * MVP hard-disable switch for unfinished attack-surface-heavy modules.

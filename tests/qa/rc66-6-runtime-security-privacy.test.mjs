@@ -91,7 +91,8 @@ test('license client verifies signed server certificates and fails open on outag
   const service = read('includes/Application/Services/LicenseService.php');
   const verifier = read('includes/Application/Services/LicenseCertificateVerifier.php');
   const view = read('includes/Admin/Views/license.php');
-  assert.match(service, /license-api-test\.getslotera\.com\/wp-json\/slotera\/v1\/license/);
+  assert.match(service, /sltr_license_api_url\(\)/);
+  assert.doesNotMatch(service, /license-api-test\.getslotera\.com/);
   assert.match(service, /Fail open: retain the last valid signed certificate and state indefinitely/);
   assert.match(service, /SecretStore::encrypt_string\(\$key\)/);
  assert.match(verifier, /\(new SigningKeyRing\(\)\)->resolve\('license', \$keyId, self::KEY_ID, self::PUBLIC_KEY\)/);
