@@ -3,9 +3,9 @@
   "version": "1.0.1061",
   "candidate": "RC67.21",
   "channel": "release-candidate",
-  "generated_at_utc": "2026-09-14T13:51:20Z",
+  "generated_at_utc": "2026-09-14T14:01:29Z",
   "timestamp_semantics": "generated_at_utc is the reproducible SOURCE_DATE_EPOCH selected for this build, not a VCS commit time",
-  "release_manifest_sha256": "694139a74352d41d639119aee2b17facc8968d4e6c8b42d511a91d8debaab67e",
+  "release_manifest_sha256": "93bc126d3373381658d022dd27c3bc80f397fe3955421e71f5cbba1f1bb9ee83",
   "builder": {
     "name": "slotera-release-builder",
     "version": "2.7.0",
@@ -40,12 +40,12 @@
     "metadata_command": "node tools/release-metadata.mjs prepare (before the release commit); node tools/release-metadata.mjs verify (on the clean exact tag)",
     "archive_root": "slotera-booking/",
     "output": "slotera-booking-1.0.1061-rc67.21.zip",
-    "source_date_epoch_utc": "2026-09-14T13:51:20Z"
+    "source_date_epoch_utc": "2026-09-14T14:01:29Z"
   },
   "hashes": {
     "source_artifact_sha256": null,
-    "release_manifest_sha256": "694139a74352d41d639119aee2b17facc8968d4e6c8b42d511a91d8debaab67e",
-    "pre_version_sync_tree_sha256": "df52305ea29b26d5356fb67b87f43994c1d55d3a17fc238a7d660791e8ea3795",
+    "release_manifest_sha256": "93bc126d3373381658d022dd27c3bc80f397fe3955421e71f5cbba1f1bb9ee83",
+    "pre_version_sync_tree_sha256": "7567baaa0e05d97828ef0fae6dbbca9349359d6f894c83f7c8308509b5d8adf6",
     "release_tree_sha256": "7567baaa0e05d97828ef0fae6dbbca9349359d6f894c83f7c8308509b5d8adf6"
   },
   "transformation_chain": [
@@ -61,8 +61,8 @@
       "order": 2,
       "name": "source-to-release-working-tree",
       "input_tree_sha256": "1c86c9fbf28d014a3b176e80e64918434b0373f1569d0b454e91d732fc341763",
-      "output_tree_sha256": "df52305ea29b26d5356fb67b87f43994c1d55d3a17fc238a7d660791e8ea3795",
-      "changes_manifest_sha256": "694139a74352d41d639119aee2b17facc8968d4e6c8b42d511a91d8debaab67e",
+      "output_tree_sha256": "7567baaa0e05d97828ef0fae6dbbca9349359d6f894c83f7c8308509b5d8adf6",
+      "changes_manifest_sha256": "93bc126d3373381658d022dd27c3bc80f397fe3955421e71f5cbba1f1bb9ee83",
       "latest_change": "1.0.1061 RC67.21: optimize legacy end-date migration for indexed MariaDB range lookup and bounded completion checks",
       "note": "The complete ordered release change history is bound by release_manifest_sha256; only the latest transformation label is repeated here to avoid duplicating the signed manifest."
     },
@@ -70,7 +70,7 @@
       "order": 3,
       "name": "manifest-version-sync",
       "version": "1.0.1061",
-      "input_tree_sha256": "df52305ea29b26d5356fb67b87f43994c1d55d3a17fc238a7d660791e8ea3795",
+      "input_tree_sha256": "7567baaa0e05d97828ef0fae6dbbca9349359d6f894c83f7c8308509b5d8adf6",
       "output_tree_sha256": "7567baaa0e05d97828ef0fae6dbbca9349359d6f894c83f7c8308509b5d8adf6",
       "generated_targets": [
         "slotera-booking.php:update-uri-bound",
