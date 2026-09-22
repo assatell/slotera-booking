@@ -335,6 +335,26 @@ if (!function_exists('sltr_license_api_url')) {
     }
 }
 
+if (!function_exists('sltr_license_api_operation_url')) {
+    function sltr_license_api_operation_url(string $operation): string
+    {
+        $operation = strtolower(trim($operation));
+
+        if (!in_array(
+            $operation,
+            ['activate', 'refresh', 'trial'],
+            true
+        )) {
+            return '';
+        }
+
+        return rtrim(
+            sltr_license_api_url(),
+            '/'
+        ) . '/' . $operation;
+    }
+}
+
 if (!function_exists('sltr_update_api_url')) {
     function sltr_update_api_url(): string
     {

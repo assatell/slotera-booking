@@ -35,6 +35,24 @@ test('production API endpoints are default and test endpoints require explicit s
   assert.doesNotMatch(license, /license-api-test\.getslotera\.com/);
   assert.doesNotMatch(update, /license-api-test\.getslotera\.com/);
 
-  assert.match(license, /sltr_license_api_url\(\)/);
+  assert.match(
+    license,
+    /sltr_license_api_operation_url\(\$operation\)/
+  );
   assert.match(update, /sltr_update_api_url\(\)/);
+
+  assert.match(
+    helpers,
+    /function sltr_license_api_operation_url\(string \$operation\): string/
+  );
+
+  assert.match(
+    helpers,
+    /\['activate', 'refresh', 'trial'\]/
+  );
+
+  assert.match(
+    helpers,
+    /rtrim\(\s*sltr_license_api_url\(\),\s*'\/'\s*\)\s*\.\s*'\/'\s*\.\s*\$operation/
+  );
 });

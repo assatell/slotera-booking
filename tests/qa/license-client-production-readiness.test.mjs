@@ -21,7 +21,10 @@ test('embedded license public key matches the deployed Zone key ID', () => {
 
 test('license transport is key-scoped and update checks cannot inherit a license key', () => {
   const service = read('includes/Application/Services/LicenseService.php');
-  assert.match(service, /if \(\$key !== ''\) \{ \$body\['license_key'\] = \$key; \}/);
+  assert.match(
+    service,
+    /if\s*\(\$key\s*!==\s*''\)\s*\{[\s\S]*?\$body\['license_key'\]\s*=\s*\$key;[\s\S]*?\}/
+  );
 });
 
 test('deactivation is local and automatic refresh is daily', () => {
@@ -49,5 +52,8 @@ test('license and update signing keys can rotate only through a signed transitio
   assert.match(ring, /signed_by/);
   assert.match(ring, /pemMatchesId/);
   assert.match(ring, /retire_current_after/);
-  assert.match(verifier, /acceptTransition\('license', \$payload, \$keyId\)/);
+  assert.match(
+    verifier,
+    /acceptTransition\(\s*'license',\s*\$payload,\s*\$keyId\s*\)/
+  );
 });

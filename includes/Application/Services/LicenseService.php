@@ -31,6 +31,7 @@ final class LicenseService
             'license_plan' => '', 'license_id' => '', 'license_activated_at' => '',
             'license_expires_at' => '', 'trial_started_at' => '', 'license_last_checked_at' => '',
             'license_last_check_result' => 'not_checked', 'certificate_envelope' => [], 'certificate_issued_at' => '',
+            'license_state_version' => 0,
         ];
         $next = array_merge($defaults, $stored);
         if ($next !== $stored) { update_option(self::OPTION_NAME, $next, false); }
@@ -78,15 +79,22 @@ final class LicenseService
     }
     public function activate_license(string $key): bool
     {
-        $key = strtoupper(trim(sanitize_text_field($key)));
-        if (!preg_match('/^SLTR-[A-F0-9]{8}-[A-F0-9]{8}-[A-F0-9]{8}$/', $key) || !SecretStore::encryption_available()) { return false; }
+        $key = trim(sanitize_text_field($key));
+
+        if (
+            !$this->is_valid_license_key($key)
+            || !SecretStore::encryption_available()
+        ) {
+            return false;
+        }
+
         return $this->request_and_store('activate', $key);
     }
     public function start_trial(): bool
     {
         $data = $this->data();
         if ((string) ($data['license_key'] ?? '') !== '' || (string) ($data['license_status'] ?? '') !== 'unverified') { return false; }
-        return $this->request_and_store('start_trial', '');
+        return $this->request_and_store('trial', '');
     }
     public function refresh(): bool
     {
@@ -103,6 +111,7 @@ final class LicenseService
         $data['license_last_check_result'] = 'local_key_removed';
         $data['certificate_envelope'] = [];
         $data['certificate_issued_at'] = '';
+        $data['license_state_version'] = 0;
         $this->store($data);
     }
     public function prepared_license_fields(): array
@@ -129,48 +138,306 @@ final class LicenseService
     public function marketing_batch_limit(): int { return (int) $this->status()['marketing_batch_limit']; }
     public function is_grace_limited(): bool { return $this->status()['state'] === 'grace'; }
 
-    private function request_and_store(string $operation, string $key): bool
-    {
-        $body = ['schema' => 'slotera-license-request/v1', 'plugin' => 'slotera-booking', 'operation' => $operation, 'site_url' => home_url('/')];
-        if ($key !== '') { $body['license_key'] = $key; }
-        $response = wp_safe_remote_post(sltr_license_api_url(), [
-            'timeout' => 15, 'redirection' => 0, 'headers' => ['Content-Type' => 'application/json'],
-            'body' => wp_json_encode($body), 'data_format' => 'body',
-        ]);
-        if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
-            $this->record_failed_check(is_wp_error($response) ? 'server_unavailable' : 'request_rejected');
-            return false;
-        }
-        $envelope = json_decode((string) wp_remote_retrieve_body($response), true);
-        if (!is_array($envelope)) { $this->record_failed_check('invalid_response'); return false; }
-        $data = $this->data();
-        $payload = (new LicenseCertificateVerifier())->verify($envelope, $this->current_domain(), (string) ($data['certificate_issued_at'] ?? ''));
-        if ($payload === null) { $this->record_failed_check('signature_rejected'); return false; }
-        $previousIssued = (string) ($data['certificate_issued_at'] ?? '');
-        $previousEnvelope = $data['certificate_envelope'] ?? [];
-        if ($previousIssued !== '' && hash_equals($previousIssued, (string) $payload['issued_at'])
-            && is_array($previousEnvelope) && $previousEnvelope !== $envelope) {
-            $this->record_failed_check('replay_rejected');
-            return false;
-        }
+    private function is_valid_license_key(
+        string $key
+    ): bool {
+        return preg_match(
+            '/^sltr_[A-Za-z0-9_-]+$/D',
+            $key
+        ) === 1
+            && strlen($key) >= 32
+            && strlen($key) <= 128;
+    }
+    private function request_and_store(
+        string $operation,
+        string $key
+    ): bool {
+        $body = [
+            'root_host' => $this->current_domain(),
+        ];
+
         if ($key !== '') {
-            $encrypted = SecretStore::encrypt_string($key);
-            if (!SecretStore::is_current_encrypted($encrypted)) { return false; }
-            $data['license_key'] = $encrypted;
+            $body['license_key'] = $key;
         }
-        $data['licensed_domain'] = (string) $payload['licensed_root'];
-        $data['license_status'] = (string) $payload['state'];
-        $data['license_plan'] = (string) ($payload['plan'] ?? '');
-        $data['license_id'] = (string) ($payload['license_id'] ?? '');
-        $data['license_expires_at'] = (string) ($payload['expires_at'] ?? '');
-        $data['trial_started_at'] = (string) ($payload['trial_started_at'] ?? '');
-        if ($operation === 'activate') { $data['license_activated_at'] = gmdate('c'); }
-        $data['license_last_checked_at'] = gmdate('c');
-        $data['license_last_check_result'] = 'verified';
-        $data['certificate_envelope'] = $envelope;
-        $data['certificate_issued_at'] = (string) $payload['issued_at'];
+
+        $endpoint =
+            sltr_license_api_operation_url($operation);
+
+        if ($endpoint === '') {
+            $this->record_failed_check(
+                'invalid_operation'
+            );
+            return false;
+        }
+
+        $response = wp_safe_remote_post(
+            $endpoint,
+            [
+                'timeout' => 15,
+                'redirection' => 0,
+                'headers' => [
+                    'Content-Type'
+                        => 'application/json',
+                ],
+                'body' => wp_json_encode($body),
+                'data_format' => 'body',
+            ]
+        );
+
+        if (
+            is_wp_error($response)
+            || wp_remote_retrieve_response_code(
+                $response
+            ) !== 200
+        ) {
+            $this->record_failed_check(
+                is_wp_error($response)
+                    ? 'server_unavailable'
+                    : 'request_rejected'
+            );
+            return false;
+        }
+
+        $responseData = json_decode(
+            (string) wp_remote_retrieve_body(
+                $response
+            ),
+            true
+        );
+
+        if (!is_array($responseData)) {
+            $this->record_failed_check(
+                'invalid_response'
+            );
+            return false;
+        }
+
+        $trialKey = '';
+
+        if ($operation === 'trial') {
+            $trialKey =
+                is_string(
+                    $responseData['license_key']
+                        ?? null
+                )
+                    ? $responseData['license_key']
+                    : '';
+
+            $envelope =
+                $responseData['envelope']
+                    ?? null;
+
+            if (
+                !$this->is_valid_license_key($trialKey)
+                || !is_array($envelope)
+            ) {
+                $this->record_failed_check(
+                    'invalid_response'
+                );
+                return false;
+            }
+
+            $key = $trialKey;
+        } else {
+            $envelope = $responseData;
+        }
+
+        $data = $this->data();
+
+        $payload =
+            (new LicenseCertificateVerifier())
+                ->verify(
+                    $envelope,
+                    $this->current_domain()
+                );
+
+        if ($payload === null) {
+            $this->record_failed_check(
+                'signature_rejected'
+            );
+            return false;
+        }
+
+        $incomingVersion =
+            (int) $payload['state_version'];
+
+        $previousVersion =
+            (int) (
+                $data['license_state_version']
+                    ?? 0
+            );
+
+        if (
+            $incomingVersion
+                < $previousVersion
+        ) {
+            $this->record_failed_check(
+                'replay_rejected'
+            );
+            return false;
+        }
+
+        if (
+            $incomingVersion
+                === $previousVersion
+            && $previousVersion > 0
+            && !$this
+                ->same_state_version_is_consistent(
+                    $data,
+                    $payload
+                )
+        ) {
+            $this->record_failed_check(
+                'replay_rejected'
+            );
+            return false;
+        }
+
+        $previousIssued =
+            (string) (
+                $data['certificate_issued_at']
+                    ?? ''
+            );
+
+        $previousEnvelope =
+            $data['certificate_envelope']
+                ?? [];
+
+        if (
+            $previousIssued !== ''
+            && hash_equals(
+                $previousIssued,
+                (string) $payload['issued_at']
+            )
+            && is_array($previousEnvelope)
+            && $previousEnvelope !== $envelope
+        ) {
+            $this->record_failed_check(
+                'replay_rejected'
+            );
+            return false;
+        }
+
+        if ($key !== '') {
+            $encrypted =
+                SecretStore::encrypt_string(
+                    $key
+                );
+
+            if (
+                !SecretStore
+                    ::is_current_encrypted(
+                        $encrypted
+                    )
+            ) {
+                return false;
+            }
+
+            $data['license_key'] =
+                $encrypted;
+        }
+
+        $data['licensed_domain'] =
+            (string) $payload['root_host'];
+
+        $data['license_status'] =
+            (string) $payload['state'];
+
+        $data['license_plan'] =
+            (string) $payload['plan'];
+
+        $data['license_id'] =
+            (string) $payload[
+                'license_public_id'
+            ];
+
+        $data['license_expires_at'] =
+            $payload['expires_at'] === null
+                ? ''
+                : (string) $payload[
+                    'expires_at'
+                ];
+
+        $data['license_state_version'] =
+            $incomingVersion;
+
+        if (
+            $operation === 'activate'
+            || $operation === 'trial'
+        ) {
+            $data['license_activated_at'] =
+                gmdate('c');
+        }
+
+        $data['license_last_checked_at'] =
+            gmdate('c');
+
+        $data['license_last_check_result'] =
+            'verified';
+
+        $data['certificate_envelope'] =
+            $envelope;
+
+        $data['certificate_issued_at'] =
+            (string) $payload['issued_at'];
+
         $this->store($data);
+
         return true;
+    }
+
+    private function same_state_version_is_consistent(
+        array $data,
+        array $payload
+    ): bool {
+        return hash_equals(
+            (string) (
+                $data['license_id'] ?? ''
+            ),
+            (string) $payload[
+                'license_public_id'
+            ]
+        )
+            && hash_equals(
+                strtolower(
+                    (string) (
+                        $data[
+                            'licensed_domain'
+                        ] ?? ''
+                    )
+                ),
+                strtolower(
+                    (string) $payload[
+                        'root_host'
+                    ]
+                )
+            )
+            && hash_equals(
+                (string) (
+                    $data['license_status']
+                        ?? ''
+                ),
+                (string) $payload['state']
+            )
+            && hash_equals(
+                (string) (
+                    $data['license_plan']
+                        ?? ''
+                ),
+                (string) $payload['plan']
+            )
+            && hash_equals(
+                (string) (
+                    $data[
+                        'license_expires_at'
+                    ] ?? ''
+                ),
+                $payload['expires_at'] === null
+                    ? ''
+                    : (string) $payload[
+                        'expires_at'
+                    ]
+            );
     }
     private function record_failed_check(string $result): void
     {
