@@ -20,47 +20,258 @@ f2uH8zWf1dlEMYAqs0lCogktcXARgGD1NszN2ra4hwE7AgMBAAE=
 -----END PUBLIC KEY-----
 PEM;
 
-    public function verify(array $envelope, string $siteHost, string $lastIssuedAt = ''): ?array
-    {
-        $keyId = is_string($envelope['key_id'] ?? null) ? $envelope['key_id'] : '';
-        if (($envelope['schema'] ?? '') !== 'slotera-signed-envelope/v1'
-            || ($envelope['algorithm'] ?? '') !== 'RSA-SHA256') { return null; }
-        $pem = (new SigningKeyRing())->resolve('license', $keyId, self::KEY_ID, self::PUBLIC_KEY);
-        if ($pem === null) { return null; }
-        $payload64 = $envelope['payload'] ?? null;
-        $signature64 = $envelope['signature'] ?? null;
-        if (!is_string($payload64) || !is_string($signature64) || !function_exists('openssl_verify')) { return null; }
-        $bytes = base64_decode($payload64, true);
-        $signature = base64_decode($signature64, true);
-        if (!is_string($bytes) || !is_string($signature)
-            || openssl_verify($bytes, $signature, $pem, OPENSSL_ALGO_SHA256) !== 1) { return null; }
-        $payload = json_decode($bytes, true);
-        if (!is_array($payload)
-            || ($payload['schema'] ?? '') !== 'slotera-license-certificate/v1'
-            || ($payload['plugin'] ?? '') !== 'slotera-booking'
-            || !in_array($payload['state'] ?? '', ['active', 'trial', 'grace', 'expired', 'revoked'], true)
-            || !in_array($payload['plan'] ?? '', ['monthly', 'yearly', 'lifetime', 'trial'], true)
-            || !is_string($payload['license_id'] ?? null)
-            || !is_string($payload['licensed_root'] ?? null)
-            || !is_string($payload['issued_at'] ?? null)
-            || !is_string($payload['expires_at'] ?? null)
-            || !is_string($payload['trial_started_at'] ?? null)) { return null; }
+    public function verify(
+        array $envelope,
+        string $siteHost
+    ): ?array {
+        $keyId = is_string(
+            $envelope['key_id'] ?? null
+        )
+            ? $envelope['key_id']
+            : '';
+
+        if (
+            ($envelope['envelope_schema'] ?? '')
+                !== 'slotera-license-envelope-v1'
+            || ($envelope['payload_schema'] ?? '')
+                !== 'slotera-license-state-v1'
+            || ($envelope['algorithm'] ?? '')
+                !== 'RSA-SHA256'
+            || !is_string($envelope['issued_at'] ?? null)
+        ) {
+            return null;
+        }
+
+        $pem = (new SigningKeyRing())->resolve(
+            'license',
+            $keyId,
+            self::KEY_ID,
+            self::PUBLIC_KEY
+        );
+
+        if ($pem === null) {
+            return null;
+        }
+
+        $payload64 =
+            $envelope['payload_base64'] ?? null;
+
+        $signature64 =
+            $envelope['signature_base64'] ?? null;
+
+        if (
+            !is_string($payload64)
+            || !is_string($signature64)
+            || !function_exists('openssl_verify')
+        ) {
+            return null;
+        }
+
+        $bytes = base64_decode(
+            $payload64,
+            true
+        );
+
+        $signature = base64_decode(
+            $signature64,
+            true
+        );
+
+        if (
+            !is_string($bytes)
+            || !is_string($signature)
+        ) {
+            return null;
+        }
+
+        $signedMessage =
+            "slotera-license-response-v1\n"
+            . $bytes;
+
+        if (
+            openssl_verify(
+                $signedMessage,
+                $signature,
+                $pem,
+                OPENSSL_ALGO_SHA256
+            ) !== 1
+        ) {
+            return null;
+        }
+
+        $payload = json_decode(
+            $bytes,
+            true
+        );
+
+        if (
+            !is_array($payload)
+            || ($payload['schema'] ?? '')
+                !== 'slotera-license-state-v1'
+            || !in_array(
+                $payload['state'] ?? '',
+                [
+                    'active',
+                    'trial',
+                    'expired',
+                    'suspended',
+                    'revoked',
+                ],
+                true
+            )
+            || !in_array(
+                $payload['plan'] ?? '',
+                [
+                    'monthly',
+                    'yearly',
+                    'lifetime',
+                    'trial',
+                ],
+                true
+            )
+            || !is_string(
+                $payload['license_public_id']
+                    ?? null
+            )
+            || !is_string(
+                $payload['root_host']
+                    ?? null
+            )
+            || !is_int(
+                $payload['state_version']
+                    ?? null
+            )
+            || $payload['state_version'] < 1
+            || !is_string(
+                $payload['issued_at']
+                    ?? null
+            )
+            || !is_string(
+                $payload['key_id']
+                    ?? null
+            )
+            || !is_string(
+                $payload['algorithm']
+                    ?? null
+            )
+            || !array_key_exists(
+                'expires_at',
+                $payload
+            )
+            || (
+                $payload['expires_at'] !== null
+                && !is_string(
+                    $payload['expires_at']
+                )
+            )
+        ) {
+            return null;
+        }
+
+        if (
+            !hash_equals(
+                $keyId,
+                $payload['key_id']
+            )
+            || !hash_equals(
+                (string) $envelope[
+                    'payload_schema'
+                ],
+                (string) $payload['schema']
+            )
+            || !hash_equals(
+                (string) $envelope[
+                    'algorithm'
+                ],
+                (string) $payload['algorithm']
+            )
+            || !hash_equals(
+                (string) $envelope[
+                    'issued_at'
+                ],
+                (string) $payload['issued_at']
+            )
+        ) {
+            return null;
+        }
+
         try {
-            $issuedDate = new \DateTimeImmutable((string) $payload['issued_at']);
-            $issued = (float) $issuedDate->format('U.u');
-            $lastIssued = $lastIssuedAt !== '' ? (float) (new \DateTimeImmutable($lastIssuedAt))->format('U.u') : 0.0;
+            $issuedDate =
+                new \DateTimeImmutable(
+                    $payload['issued_at']
+                );
+
+            $issued =
+                (float) $issuedDate->format(
+                    'U.u'
+                );
+
+
         } catch (\Throwable $error) {
             return null;
         }
-        if ($issued < $lastIssued || $issued > microtime(true) + 300) { return null; }
-        $expires = (string) $payload['expires_at'];
-        if (($payload['plan'] ?? '') !== 'lifetime' && ($expires === '' || strtotime($expires) === false)) { return null; }
-        if (($payload['plan'] ?? '') === 'lifetime' && $expires !== '') { return null; }
-        if (($payload['plan'] ?? '') === 'trial' && strtotime((string) $payload['trial_started_at']) === false) { return null; }
-        $host = strtolower(rtrim($siteHost, '.'));
-        $root = strtolower(rtrim((string) $payload['licensed_root'], '.'));
-        if ($host === '' || $root === '' || ($host !== $root && !str_ends_with($host, '.' . $root))) { return null; }
-        (new SigningKeyRing())->acceptTransition('license', $payload, $keyId);
+
+        if (
+            $issued > microtime(true) + 300
+        ) {
+            return null;
+        }
+
+        $expires =
+            $payload['expires_at'];
+
+        if (
+            $expires !== null
+            && strtotime($expires) === false
+        ) {
+            return null;
+        }
+
+        if (
+            $payload['plan'] === 'lifetime'
+            && $expires !== null
+        ) {
+            return null;
+        }
+
+        if (
+            $payload['plan'] !== 'lifetime'
+            && $expires === null
+        ) {
+            return null;
+        }
+
+        $host = strtolower(
+            rtrim($siteHost, '.')
+        );
+
+        $root = strtolower(
+            rtrim(
+                $payload['root_host'],
+                '.'
+            )
+        );
+
+        if (
+            $host === ''
+            || $root === ''
+            || (
+                $host !== $root
+                && !str_ends_with(
+                    $host,
+                    '.' . $root
+                )
+            )
+        ) {
+            return null;
+        }
+
+        (new SigningKeyRing())->acceptTransition(
+            'license',
+            $payload,
+            $keyId
+        );
+
         return $payload;
     }
 }

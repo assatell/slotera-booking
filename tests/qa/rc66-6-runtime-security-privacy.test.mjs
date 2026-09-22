@@ -91,15 +91,62 @@ test('license client verifies signed server certificates and fails open on outag
   const service = read('includes/Application/Services/LicenseService.php');
   const verifier = read('includes/Application/Services/LicenseCertificateVerifier.php');
   const view = read('includes/Admin/Views/license.php');
-  assert.match(service, /sltr_license_api_url\(\)/);
-  assert.doesNotMatch(service, /license-api-test\.getslotera\.com/);
-  assert.match(service, /Fail open: retain the last valid signed certificate and state indefinitely/);
-  assert.match(service, /SecretStore::encrypt_string\(\$key\)/);
- assert.match(verifier, /\(new SigningKeyRing\(\)\)->resolve\('license', \$keyId, self::KEY_ID, self::PUBLIC_KEY\)/);
- assert.match(verifier, /openssl_verify\(\$bytes, \$signature, \$pem, OPENSSL_ALGO_SHA256\)/);
-  assert.match(verifier, /sha256:ecadf72a744b506b38c64b3898df0d5d97a7e15fcf46ba356c083f2d9583917c/);
-  assert.match(verifier, /\$issued < \$lastIssued/);
-  assert.match(verifier, /str_ends_with\(\$host, '\.' \. \$root\)/);
+
+  assert.match(
+    service,
+    /sltr_license_api_operation_url\(\$operation\)/
+  );
+
+  assert.doesNotMatch(
+    service,
+    /license-api-test\.getslotera\.com/
+  );
+
+  assert.match(
+    service,
+    /Fail open: retain the last valid signed certificate and state indefinitely/
+  );
+
+  assert.match(
+    service,
+    /SecretStore::encrypt_string\(\s*\$key\s*\)/
+  );
+
+  assert.match(
+    verifier,
+    /SigningKeyRing\(\).*resolve\(\s*'license',\s*\$keyId,\s*self::KEY_ID,\s*self::PUBLIC_KEY\s*\)/s
+  );
+
+  assert.match(
+    verifier,
+    /"slotera-license-response-v1\\n"\s*\.\s*\$bytes/
+  );
+
+  assert.match(
+    verifier,
+    /openssl_verify\(\s*\$signedMessage,\s*\$signature,\s*\$pem,\s*OPENSSL_ALGO_SHA256\s*\)/
+  );
+
+  assert.match(
+    verifier,
+    /sha256:ecadf72a744b506b38c64b3898df0d5d97a7e15fcf46ba356c083f2d9583917c/
+  );
+
+  assert.match(
+    verifier,
+    /microtime\(true\)\s*\+\s*300/
+  );
+
+  assert.doesNotMatch(
+    verifier,
+    /\$lastIssuedAt|\$issued\s*<\s*\$lastIssued/
+  );
+
+  assert.match(
+    verifier,
+    /str_ends_with\(\s*\$host,\s*'\.'\s*\.\s*\$root\s*\)/
+  );
+
   assert.match(view, /Start 30-day trial/);
   assert.doesNotMatch(view, /development placeholder/i);
 });
