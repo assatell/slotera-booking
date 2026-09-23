@@ -355,6 +355,15 @@ if (!function_exists('sltr_license_api_operation_url')) {
     }
 }
 
+if (!function_exists('sltr_license_api_recovery_url')) {
+    function sltr_license_api_recovery_url(): string
+    {
+        return rtrim(
+            sltr_license_api_url(),
+            '/'
+        ) . '/recovery';
+    }
+}
 if (!function_exists('sltr_update_api_url')) {
     function sltr_update_api_url(): string
     {

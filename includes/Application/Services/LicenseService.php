@@ -170,6 +170,7 @@ final class LicenseService
             return false;
         }
 
+
         $response = wp_safe_remote_post(
             $endpoint,
             [
@@ -243,6 +244,14 @@ final class LicenseService
         }
 
         $data = $this->data();
+
+        /*
+         * The normal license transport has already succeeded.
+         * Emergency recovery is now attempted before verifying that
+         * response so a replacement signing key can become trusted
+         * first. Recovery failure remains completely fail-open.
+         */
+        $this->try_emergency_recovery();
 
         $payload =
             (new LicenseCertificateVerifier())
@@ -386,6 +395,90 @@ final class LicenseService
         return true;
     }
 
+    private function try_emergency_recovery(): void
+    {
+        /*
+         * Keep this path independent from normal license bookkeeping:
+         * recovery availability/failure must not update
+         * license_last_checked_at, license_last_check_result or any
+         * certificate/state fields.
+         */
+        if (
+            !function_exists(
+                'wp_safe_remote_get'
+            )
+            || !function_exists(
+                'sltr_license_api_recovery_url'
+            )
+        ) {
+            return;
+        }
+
+        $endpoint =
+            sltr_license_api_recovery_url();
+
+        if (
+            !is_string($endpoint)
+            || $endpoint === ''
+        ) {
+            return;
+        }
+
+        try {
+            $response =
+                wp_safe_remote_get(
+                    $endpoint,
+                    [
+                        'timeout' => 5,
+                        'redirection' => 0,
+                    ]
+                );
+        } catch (\Throwable $error) {
+            return;
+        }
+
+        if (is_wp_error($response)) {
+            return;
+        }
+
+        $status =
+            wp_remote_retrieve_response_code(
+                $response
+            );
+
+        /*
+         * 404 means no emergency recovery is currently published.
+         * Every other non-200 response is equally non-authoritative
+         * and therefore ignored.
+         */
+        if ($status !== 200) {
+            return;
+        }
+
+        $decoded =
+            json_decode(
+                (string)
+                wp_remote_retrieve_body(
+                    $response
+                ),
+                true
+            );
+
+        if (!is_array($decoded)) {
+            return;
+        }
+
+        try {
+            (new EmergencyLicenseRecoveryService())
+                ->apply($decoded);
+        } catch (\Throwable $error) {
+            /*
+             * Fail open. Only a successfully verified recovery
+             * envelope may mutate signing trust state.
+             */
+            return;
+        }
+    }
     private function same_state_version_is_consistent(
         array $data,
         array $payload
